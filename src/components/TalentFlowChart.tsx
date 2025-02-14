@@ -78,31 +78,6 @@ export default function TalentFlowChart() {
           .attr("style", "max-width: 100%; height: auto; font: 16px montserrat;")
           .attr("z-index", "1");
 
-        // Create a white background circle for the center text
-        const centerTextGroup = svg.append("g")
-          .attr("text-anchor", "middle")
-          .attr("transform", "translate(0, 0)")
-          .attr("class", "center-text")
-          .raise(); // Bring to front
-
-        // Add white circular background
-        centerTextGroup.append("circle")
-          .attr("r", 80)
-          .attr("fill", "white");
-
-        centerTextGroup.append("text")
-          .attr("dy", "-0.2em")
-          .attr("fill", COLOR_TEXT)
-          .attr("font-size", "48px")
-          .attr("font-weight", "bold")
-          .text(totalChanges.toLocaleString());
-
-        centerTextGroup.append("text")
-          .attr("dy", "1.5em")
-          .attr("fill", COLOR_TEXT)
-          .attr("font-size", "24px")
-          .text("AI Job Changes");
-
         const line = d3.lineRadial()
           .curve(d3.curveBundle.beta(0.85))
           .radius((d: any) => d.y)
@@ -242,14 +217,13 @@ export default function TalentFlowChart() {
             .style("opacity", 1);
         }
 
-        // Keep this declaration
+        // KEEP THIS centerTextGroup BLOCK
         const centerTextGroup = svg.append("g")
           .attr("text-anchor", "middle")
           .attr("transform", "translate(0, 0)")
           .attr("class", "center-text")
-          .raise(); // Ensure it's on top
+          .raise();
 
-        // Add semi-transparent white circular background
         centerTextGroup.append("circle")
           .attr("r", 90)
           .attr("fill", "white")
