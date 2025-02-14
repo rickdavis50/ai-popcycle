@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { fetchStats } from '../services/airtable';
 
 export function useAirtableData() {
   const [data, setData] = useState({
@@ -18,7 +17,11 @@ export function useAirtableData() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const stats = await fetchStats();
+        const response = await fetch('/api/airtable');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const stats = await response.json();
         setData({
           yoyGrowth: stats.yoyGrowth,
           engineerGrowth: stats.engineerGrowth,
@@ -31,16 +34,11 @@ export function useAirtableData() {
         });
       } catch (error) {
         console.error('Error in useAirtableData:', error);
-        setData({
-          yoyGrowth: 0,
-          engineerGrowth: 0,
-          companyCount: 0,
-          peopleCount: 0,
-          engineerCount: 0,
-          insights: [],
+        setData(prev => ({
+          ...prev,
           loading: false,
           error: error.message
-        });
+        }));
       }
     };
 
