@@ -18,6 +18,35 @@ export default function TalentFlowChart() {
   const chartRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Move center text creation to a separate function
+  const addCenterText = (svg: any, totalChanges: number) => {
+    const group = svg.append("g")
+      .attr("text-anchor", "middle")
+      .attr("transform", "translate(0, 0)")
+      .attr("class", "center-text");
+
+    group.append("circle")
+      .attr("r", 90)
+      .attr("fill", "white")
+      .attr("fill-opacity", 0.9);
+
+    group.append("text")
+      .attr("dy", "-0.2em")
+      .attr("fill", COLOR_TEXT)
+      .attr("font-size", "48px")
+      .attr("font-weight", "bold")
+      .text(totalChanges.toLocaleString());
+
+    group.append("text")
+      .attr("dy", "1.5em")
+      .attr("fill", COLOR_TEXT)
+      .attr("font-size", "24px")
+      .text("AI Job Changes");
+
+    group.raise();
+    return group;
+  };
+
   useEffect(() => {
     const loadAndDrawChart = async () => {
       try {
@@ -79,34 +108,6 @@ export default function TalentFlowChart() {
           .style("top", "24px")
           .style("z-index", "2");
 
-        // Create the center text group
-        const createCenterText = () => {
-          const group = svg.append("g")
-            .attr("text-anchor", "middle")
-            .attr("transform", "translate(0, 0)")
-            .attr("class", "center-text");
-
-          group.append("circle")
-            .attr("r", 90)
-            .attr("fill", "white")
-            .attr("fill-opacity", 0.9);
-
-          group.append("text")
-            .attr("dy", "-0.2em")
-            .attr("fill", COLOR_TEXT)
-            .attr("font-size", "48px")
-            .attr("font-weight", "bold")
-            .text(totalChanges.toLocaleString());
-
-          group.append("text")
-            .attr("dy", "1.5em")
-            .attr("fill", COLOR_TEXT)
-            .attr("font-size", "24px")
-            .text("AI Job Changes");
-
-          return group;
-        };
-
         // Draw the connections
         const line = d3.lineRadial()
           .curve(d3.curveBundle.beta(0.85))
@@ -123,9 +124,8 @@ export default function TalentFlowChart() {
           .attr("d", ([i, o]: any) => line(i.path(o)))
           .each(function(this: any, d: any) { d.path = this; });
 
-        // Create and position the center text group
-        const centerText = createCenterText();
-        centerText.raise();
+        // Add center text after drawing connections
+        addCenterText(svg, totalChanges);
 
         const node = svg.append("g")
           .selectAll("g")
