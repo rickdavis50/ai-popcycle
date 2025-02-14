@@ -3,10 +3,5 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["sfo1"],
-  "env": {
-    "AIRTABLE_API_KEY": "@airtable-api-key",
-    "AIRTABLE_BASE_ID": "@airtable-base-id",
-    "AIRTABLE_TABLE_ID": "@airtable-table-id"
-  }
+  "regions": ["sfo1"]
 } 
