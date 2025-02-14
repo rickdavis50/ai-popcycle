@@ -1,28 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack(config) {
-    // Modify the rule for SVG files
-    const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg'),
-    )
-    config.module.rules.push(
-      {
-        ...fileLoaderRule,
-        test: /\.svg$/i,
-        resourceQuery: /url/, // *.svg?url
-      },
-      {
-        test: /\.svg$/i,
-        issuer: /\.[jt]sx?$/,
-        resourceQuery: { not: /url/ }, // exclude if *.svg?url
-        use: ['@svgr/webpack'],
-      },
-    )
-    return config
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack']
+    });
+    return config;
   },
   images: {
-    disableStaticImages: false,
-  }
+    domains: ['vercel.com'], // Add any external image domains you're using
+    unoptimized: process.env.NODE_ENV === 'development'
+  },
+  // Add output configuration for better static optimization
+  output: 'standalone',
 };
 
 module.exports = nextConfig; 
