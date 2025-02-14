@@ -5,8 +5,8 @@
   "framework": "nextjs",
   "regions": ["sfo1"],
   "env": {
-    "NEXT_PUBLIC_AIRTABLE_API_KEY": "@airtable-api-key",
-    "NEXT_PUBLIC_AIRTABLE_BASE_ID": "@airtable-base-id",
-    "NEXT_PUBLIC_AIRTABLE_TABLE_ID": "@airtable-table-id"
+    "AIRTABLE_API_KEY": "@airtable-api-key",
+    "AIRTABLE_BASE_ID": "@airtable-base-id",
+    "AIRTABLE_TABLE_ID": "@airtable-table-id"
   }
 } 
