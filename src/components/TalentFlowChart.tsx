@@ -78,7 +78,6 @@ export default function TalentFlowChart() {
           .attr("style", "max-width: 100%; height: auto; font: 16px montserrat;")
           .attr("z-index", "1");
 
-        // Move the center text creation before the paths to ensure it's behind
         // Create a white background circle for the center text
         const centerTextGroup = svg.append("g")
           .attr("text-anchor", "middle")
@@ -243,7 +242,7 @@ export default function TalentFlowChart() {
             .style("opacity", 1);
         }
 
-        // Move this code after all the paths and nodes are drawn
+        // Keep this declaration
         const centerTextGroup = svg.append("g")
           .attr("text-anchor", "middle")
           .attr("transform", "translate(0, 0)")
@@ -254,7 +253,7 @@ export default function TalentFlowChart() {
         centerTextGroup.append("circle")
           .attr("r", 90)
           .attr("fill", "white")
-          .attr("fill-opacity", 0.9); // Slightly transparent
+          .attr("fill-opacity", 0.9);
 
         centerTextGroup.append("text")
           .attr("dy", "-0.2em")
