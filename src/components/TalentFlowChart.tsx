@@ -24,7 +24,7 @@ export default function TalentFlowChart() {
         const data = await fetchIndustryMap();
         if (!chartRef.current) return;
 
-        // Calculate total job changes from the raw children strings
+        // Calculate total job changes
         const totalChanges = data.children[0].children.reduce((total, company) => {
           const childCount = company.imports 
             ? company.imports.length 
@@ -42,8 +42,8 @@ export default function TalentFlowChart() {
         d3.select(chartRef.current).selectAll("*").remove();
 
         const width = 954;
-        const height = 800;  // Explicit height for better centering
-        const radius = (width / 2) * 0.60;  // Slightly smaller to move up
+        const height = 800;
+        const radius = (width / 2) * 0.60;
 
         const tree = d3.cluster()
           .size([2 * Math.PI, radius - 100]);
@@ -54,7 +54,16 @@ export default function TalentFlowChart() {
             d3.ascending(a.data.name, b.data.name)
           )));
 
-        // Add tooltip div with fixed position in top right
+        // Create SVG
+        const svg = d3.select(chartRef.current)
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .attr("viewBox", [-width / 2, -height / 2 + 60, width, height])
+          .attr("style", "max-width: 100%; height: auto; font: 16px montserrat;")
+          .attr("z-index", "1");
+
+        // Create tooltip
         const tooltip = d3.select(chartRef.current)
           .append("div")
           .attr("class", "tooltip")
@@ -70,14 +79,35 @@ export default function TalentFlowChart() {
           .style("top", "24px")
           .style("z-index", "2");
 
-        const svg = d3.select(chartRef.current)
-          .append("svg")
-          .attr("width", width)
-          .attr("height", height)
-          .attr("viewBox", [-width / 2, -height / 2 + 60, width, height])
-          .attr("style", "max-width: 100%; height: auto; font: 16px montserrat;")
-          .attr("z-index", "1");
+        // Create the center text group
+        const createCenterText = () => {
+          const group = svg.append("g")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(0, 0)")
+            .attr("class", "center-text");
 
+          group.append("circle")
+            .attr("r", 90)
+            .attr("fill", "white")
+            .attr("fill-opacity", 0.9);
+
+          group.append("text")
+            .attr("dy", "-0.2em")
+            .attr("fill", COLOR_TEXT)
+            .attr("font-size", "48px")
+            .attr("font-weight", "bold")
+            .text(totalChanges.toLocaleString());
+
+          group.append("text")
+            .attr("dy", "1.5em")
+            .attr("fill", COLOR_TEXT)
+            .attr("font-size", "24px")
+            .text("AI Job Changes");
+
+          return group;
+        };
+
+        // Draw the connections
         const line = d3.lineRadial()
           .curve(d3.curveBundle.beta(0.85))
           .radius((d: any) => d.y)
@@ -92,6 +122,10 @@ export default function TalentFlowChart() {
           .join("path")
           .attr("d", ([i, o]: any) => line(i.path(o)))
           .each(function(this: any, d: any) { d.path = this; });
+
+        // Create and position the center text group
+        const centerText = createCenterText();
+        centerText.raise();
 
         const node = svg.append("g")
           .selectAll("g")
@@ -216,34 +250,6 @@ export default function TalentFlowChart() {
             .duration(200)
             .style("opacity", 1);
         }
-
-        // KEEP THIS centerTextGroup BLOCK
-        const centerTextGroup = svg.append("g")
-          .attr("text-anchor", "middle")
-          .attr("transform", "translate(0, 0)")
-          .attr("class", "center-text")
-          .raise();
-
-        centerTextGroup.append("circle")
-          .attr("r", 90)
-          .attr("fill", "white")
-          .attr("fill-opacity", 0.9);
-
-        centerTextGroup.append("text")
-          .attr("dy", "-0.2em")
-          .attr("fill", COLOR_TEXT)
-          .attr("font-size", "48px")
-          .attr("font-weight", "bold")
-          .text(totalChanges.toLocaleString());
-
-        centerTextGroup.append("text")
-          .attr("dy", "1.5em")
-          .attr("fill", COLOR_TEXT)
-          .attr("font-size", "24px")
-          .text("AI Job Changes");
-
-        // Make sure to call raise() after all elements are added
-        centerTextGroup.raise();
 
       } catch (error) {
         console.error('Error loading chart:', error);
