@@ -6,7 +6,7 @@ import GrowthGauges from './GrowthGauges';
 import InsightsModule from './InsightsModule';
 import SimpleJobsDisplay from './SimpleJobsDisplay';
 import { useAirtableData } from '../hooks/useAirtableData';
-import { insights, talentFlowData } from '../utils/dummyData';
+import { insights } from '../utils/dummyData';
 
 export default function Dashboard() {
   const { yoyGrowth, engineerGrowth, insights: airtableInsights, loading, error } = useAirtableData();
