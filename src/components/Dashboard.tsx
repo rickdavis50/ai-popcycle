@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import IndustryStats from './IndustryStats';
-import GrowthGauges from './GrowthGauges';
 import InsightsModule from './InsightsModule';
 import SimpleJobsDisplay from './SimpleJobsDisplay';
 import { useAirtableData } from '../hooks/useAirtableData';

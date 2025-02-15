@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react';
 
 interface AirtableData {
-  yoyGrowth: number;
-  engineerGrowth: number;
   companyCount: number;
   peopleCount: number;
   engineerCount: number;
@@ -19,8 +17,6 @@ interface AirtableData {
 
 export function useAirtableData() {
   const [data, setData] = useState({
-    yoyGrowth: 0,
-    engineerGrowth: 0,
     companyCount: 0,
     peopleCount: 0,
     engineerCount: 0,
