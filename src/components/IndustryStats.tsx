@@ -42,10 +42,17 @@ export default function IndustryStats() {
   };
 
   const renderGrowth = (growth: number) => {
-    if (!growth) return null;
+    console.log('Growth value:', growth);
+    
+    if (growth === undefined || growth === null) return null;
     const arrow = growth >= 0 ? '▲' : '▼';
     return (
-      <span style={growthStyle}>
+      <span style={{
+        fontSize: '14px',
+        color: '#78401F',
+        marginLeft: '8px',
+        whiteSpace: 'nowrap'
+      }}>
         {arrow} {Math.abs(Math.round(growth))}% YoY
       </span>
     );
@@ -75,6 +82,9 @@ export default function IndustryStats() {
         <div style={labelStyle}>
           <span>Tracked People</span>
           {renderGrowth(peopleGrowth)}
+          {process.env.NODE_ENV === 'development' && 
+            <span style={{fontSize: '10px'}}>[{peopleGrowth}]</span>
+          }
         </div>
       </div>
       
@@ -85,6 +95,9 @@ export default function IndustryStats() {
         <div style={labelStyle}>
           <span>Tracked Engineers</span>
           {renderGrowth(engineerGrowth)}
+          {process.env.NODE_ENV === 'development' && 
+            <span style={{fontSize: '10px'}}>[{engineerGrowth}]</span>
+          }
         </div>
       </div>
     </div>

@@ -35,27 +35,33 @@ export async function GET() {
 
     const rawData = await response.json();
     
+    const records = rawData.records;
+    
+    // Calculate totals and growth
+    const currentPeople = records.reduce((sum, record) => sum + (record.fields.count_current_employees || 0), 0);
+    const lastYearPeople = records.reduce((sum, record) => sum + (record.fields.headcount_last_year || 0), 0);
+    const currentEngineers = records.reduce((sum, record) => sum + (record.fields.engineers || 0), 0);
+    const lastYearEngineers = records.reduce((sum, record) => sum + (record.fields.engineers_1yr || 0), 0);
+
+    const peopleGrowth = lastYearPeople ? ((currentPeople - lastYearPeople) / lastYearPeople) * 100 : 0;
+    const engineerGrowth = lastYearEngineers ? ((currentEngineers - lastYearEngineers) / lastYearEngineers) * 100 : 0;
+
     // Add default values and better error handling
     const stats = {
-      yoyGrowth: calculateYoyGrowth(rawData.records) || 0,
-      engineerGrowth: calculateEngineerGrowth(rawData.records) || 0,
-      companyCount: rawData.records?.length || 0,
-      peopleCount: rawData.records?.reduce((acc, record) => 
-        acc + (record.fields.count_current_employees || 0), 0) || 0,
-      engineerCount: rawData.records?.reduce((acc, record) => 
-        acc + (record.fields.engineers || 0), 0) || 0,
-      insights: generateInsights(rawData.records) || [],
-      engineerTrends: calculateEngineerTrends(rawData.records),
+      companyCount: records.length,
+      peopleCount: currentPeople,
+      engineerCount: currentEngineers,
+      peopleGrowth,
+      engineerGrowth,
+      insights: generateInsights(records),
+      engineerTrends: calculateEngineerTrends(records),
     };
 
     return NextResponse.json(stats);
   } catch (error) {
-    console.error('Airtable API error:', error);
+    console.error('API Error:', error);
     return NextResponse.json(
-      { 
-        error: error.message || 'Failed to fetch data',
-        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
-      }, 
+      { error: 'Failed to fetch data' },
       { status: 500 }
     );
   }
