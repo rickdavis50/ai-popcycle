@@ -124,7 +124,7 @@ export default function EngineerTrendChart({ data }: Props) {
       .style("fill", "white")
       .style("stroke", "#FF7E26")
       .style("stroke-width", 2)
-      .on("mouseover", function(event, d) {
+      .on("mouseover", function(this: SVGCircleElement, event: MouseEvent, d: DataPoint) {
         d3.select(this)
           .transition()
           .duration(200)
@@ -136,14 +136,23 @@ export default function EngineerTrendChart({ data }: Props) {
           .attr("y", y(d.value) - 15)
           .attr("text-anchor", "middle")
           .text(d3.format(",")(d.value));
+
+        const index = data.findIndex(point => point.date === d.date);
+        if (index >= 2) {
+          const velocity = calculateVelocity(index, data);
+          if (velocity) {
+            setVelocityText(`${velocity > 1 ? '+' : ''}${velocity.toFixed(1)}x Hiring Velocity vs previous 6m rate`);
+          }
+        }
       })
-      .on("mouseout", function() {
+      .on("mouseout", function(this: SVGCircleElement) {
         d3.select(this)
           .transition()
           .duration(200)
           .attr("r", 6);
         
         tooltip.style("opacity", 0);
+        setVelocityText('');
       });
 
     // Add x-axis with custom labels
@@ -167,21 +176,6 @@ export default function EngineerTrendChart({ data }: Props) {
       .style("stroke-dasharray", "3,3")
       .style("stroke-opacity", 0.2)
       .call(g => g.select(".domain").remove());
-
-    // Add mouseover handlers for dots
-    svg.selectAll(".dot")
-      .on("mouseover", (event, d, i) => {
-        const index = data.findIndex(point => point.date === d.date);
-        if (index >= 2) {
-          const velocity = calculateVelocity(index, data);
-          if (velocity) {
-            setVelocityText(`${velocity > 1 ? '+' : ''}${velocity.toFixed(1)}x Hiring Velocity vs previous 6m rate`);
-          }
-        }
-      })
-      .on("mouseout", () => {
-        setVelocityText('');
-      });
 
     // Add velocity text display below chart
     const velocityContainer = svg.append("g")
