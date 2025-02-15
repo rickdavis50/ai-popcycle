@@ -101,7 +101,7 @@ export default function Dashboard() {
               marginBottom: '16px',
               color: '#78401F',
               fontFamily: 'Montserrat, sans-serif'
-            }}>Summary</h2>
+            }}>AI Industry Summary</h2>
             <IndustryStats />
           </div>
           
