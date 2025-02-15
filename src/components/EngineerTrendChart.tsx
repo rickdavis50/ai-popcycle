@@ -110,6 +110,7 @@ export default function EngineerTrendChart({ data }: Props) {
       .style("opacity", 0)
       .style("font-size", "12px")
       .style("font-family", "Montserrat, sans-serif")
+      .style("font-weight", "600")
       .style("fill", "#78401F");
 
     // Add interactive dots with updated tooltip
@@ -161,9 +162,10 @@ export default function EngineerTrendChart({ data }: Props) {
       .call(d3.axisBottom(x).tickFormat(formatLabel))
       .style("font-size", "12px")
       .style("font-family", "Montserrat, sans-serif")
+      .style("font-weight", "500")
       .style("color", "#78401F")
-      .call(g => g.select(".domain").remove()) // Remove axis line
-      .call(g => g.selectAll(".tick line").remove()); // Remove tick lines
+      .call(g => g.select(".domain").remove())
+      .call(g => g.selectAll(".tick line").remove());
 
     // Add y-axis grid lines only
     svg.append("g")
@@ -186,6 +188,7 @@ export default function EngineerTrendChart({ data }: Props) {
       .attr("text-anchor", "middle")
       .style("font-family", "Montserrat, sans-serif")
       .style("font-size", "14px")
+      .style("font-weight", "600")
       .style("fill", "#78401F");
 
     // Update velocity text when it changes
@@ -211,8 +214,11 @@ export default function EngineerTrendChart({ data }: Props) {
       <div ref={chartRef} style={{ width: '400px' }} />
       {velocityText && (
         <div style={{
+          width: '100%',
+          textAlign: 'center',
           fontFamily: 'Montserrat, sans-serif',
           fontSize: '14px',
+          fontWeight: 600,
           color: '#78401F',
           marginTop: '8px'
         }}>

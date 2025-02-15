@@ -55,7 +55,7 @@ export default function Dashboard() {
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center bottom',
         backgroundSize: 'cover',
-        transform: 'translateY(40%)',
+        transform: 'translateY(25%)',
       }} />
       
       <div style={{ 
@@ -144,7 +144,9 @@ export default function Dashboard() {
           padding: '24px',
           boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
           position: 'relative',
-          zIndex: 2
+          zIndex: 2,
+          maxWidth: '1400px',
+          margin: '0 auto',
         }}>
           <SimpleJobsDisplay />
         </div>

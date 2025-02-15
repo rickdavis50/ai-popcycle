@@ -2,7 +2,13 @@
 
 const SimpleJobsDisplay = () => {
   return (
-    <div style={{ position: 'relative', padding: '40px 0' }}>
+    <div style={{ 
+      position: 'relative', 
+      padding: '40px 0',
+      width: '100%',
+      maxWidth: '1200px',
+      margin: '0 auto'
+    }}>
       <h2 style={{
         fontSize: '20px',
         fontWeight: 'bold',
@@ -25,7 +31,8 @@ const SimpleJobsDisplay = () => {
       }}>
         <div style={{
           textAlign: 'center',
-          color: '#78401F'
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif'
         }}>
           <div style={{
             fontSize: '48px',
