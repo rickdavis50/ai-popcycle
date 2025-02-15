@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 
 interface DataPoint {
@@ -14,6 +14,7 @@ interface Props {
 
 export default function EngineerTrendChart({ data }: Props) {
   const chartRef = useRef<HTMLDivElement>(null);
+  const [velocityText, setVelocityText] = useState('');
 
   useEffect(() => {
     if (!chartRef.current || !data.length) return;
@@ -167,11 +168,63 @@ export default function EngineerTrendChart({ data }: Props) {
       .style("stroke-opacity", 0.2)
       .call(g => g.select(".domain").remove());
 
-  }, [data]);
+    // Add mouseover handlers for dots
+    svg.selectAll(".dot")
+      .on("mouseover", (event, d, i) => {
+        const index = data.findIndex(point => point.date === d.date);
+        if (index >= 2) {
+          const velocity = calculateVelocity(index, data);
+          if (velocity) {
+            setVelocityText(`${velocity > 1 ? '+' : ''}${velocity.toFixed(1)}x Hiring Velocity vs previous 6m rate`);
+          }
+        }
+      })
+      .on("mouseout", () => {
+        setVelocityText('');
+      });
+
+    // Add velocity text display below chart
+    const velocityContainer = svg.append("g")
+      .attr("transform", `translate(${width/2}, ${height + 40})`);
+      
+    velocityContainer.append("text")
+      .attr("class", "velocity-text")
+      .attr("text-anchor", "middle")
+      .style("font-family", "Montserrat, sans-serif")
+      .style("font-size", "14px")
+      .style("fill", "#78401F");
+
+    // Update velocity text when it changes
+    d3.select(".velocity-text")
+      .text(velocityText);
+
+  }, [data, velocityText]);
+
+  const calculateVelocity = (index: number, data: DataPoint[]) => {
+    if (index < 2 || !data[index-2] || !data[index-1] || !data[index]) return null;
+    
+    const previousDiff = data[index-1].value - data[index-2].value;
+    const currentDiff = data[index].value - data[index-1].value;
+    
+    if (previousDiff === 0) return null;
+    
+    const velocity = currentDiff / previousDiff;
+    return velocity;
+  };
 
   return (
-    <div className="w-full flex justify-center items-center">
+    <div className="w-full flex flex-col items-center">
       <div ref={chartRef} style={{ width: '400px' }} />
+      {velocityText && (
+        <div style={{
+          fontFamily: 'Montserrat, sans-serif',
+          fontSize: '14px',
+          color: '#78401F',
+          marginTop: '8px'
+        }}>
+          {velocityText}
+        </div>
+      )}
     </div>
   );
 } 
