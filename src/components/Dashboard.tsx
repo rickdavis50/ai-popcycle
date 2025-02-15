@@ -7,14 +7,16 @@ import InsightsModule from './InsightsModule';
 import SimpleJobsDisplay from './SimpleJobsDisplay';
 import { useAirtableData } from '../hooks/useAirtableData';
 import { insights } from '../utils/dummyData';
+import Logo from './Logo';
+import EngineerTrendChart from './EngineerTrendChart';
 
 export default function Dashboard() {
-  const { yoyGrowth, engineerGrowth, insights: airtableInsights, loading, error } = useAirtableData();
-
-  const metrics = {
-    yoyGrowth: loading ? 0 : yoyGrowth,
-    engineerGrowth: loading ? 0 : engineerGrowth
-  };
+  const { 
+    engineerTrends, 
+    insights: airtableInsights, 
+    loading, 
+    error 
+  } = useAirtableData();
 
   // Use dummy insights from utils/dummyData if loading or error
   const displayInsights = loading || error ? insights : (airtableInsights || insights);
@@ -36,41 +38,57 @@ export default function Dashboard() {
       minHeight: '100vh',
       backgroundColor: '#FFE3D1',
       padding: '32px',
+      paddingBottom: '60vh',
       position: 'relative',
       overflow: 'hidden'
     }}>
+      {/* Add background image */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: '100%',
+        minHeight: '100vh',
+        zIndex: 1,
+        opacity: 1,
+        backgroundImage: 'url(/images/dreamcycle.png)',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center bottom',
+        backgroundSize: 'cover',
+        transform: 'translateY(40%)',
+      }} />
+      
+      <div style={{ 
+        marginBottom: '32px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <Image
+          src="/images/pop_logo.svg"
+          alt="Pop Logo"
+          width={250}
+          height={63}
+          priority
+        />
+      </div>
       <div style={{ 
         maxWidth: '1400px', 
         margin: '0 auto', 
         position: 'relative',
-        zIndex: 1
+        zIndex: 2
       }}>
-        <div style={{ 
-          marginBottom: '32px',
-          position: 'relative',
-          width: '545px',
-          height: '79px'
-        }}>
-          <Image
-            src="/images/dream_logo.svg"
-            alt="Dream Logo"
-            width={545}    // Match SVG viewBox width
-            height={79}    // Match SVG viewBox height
-            priority      // Load this image first
-            style={{      // Add responsive scaling
-              maxWidth: '100%',
-              height: 'auto'
-            }}
-          />
-        </div>
-        
         {errorMessage}
         
         <div style={{ 
           display: 'grid',
           gridTemplateColumns: '450px 450px 450px',
           gap: '25px',
-          marginBottom: '32px'
+          marginBottom: '32px',
+          justifyContent: 'center',
+          position: 'relative',
+          zIndex: 2
         }}>
           <div style={{ 
             backgroundColor: '#ffffff',
@@ -100,8 +118,8 @@ export default function Dashboard() {
               marginBottom: '16px',
               color: '#78401F',
               fontFamily: 'Montserrat, sans-serif'
-            }}>Momentum</h2>
-            <GrowthGauges metrics={metrics} />
+            }}>Engineer Growth Trend</h2>
+            <EngineerTrendChart data={loading ? [] : engineerTrends} />
           </div>
           
           <div style={{ 
@@ -113,7 +131,7 @@ export default function Dashboard() {
             <h2 style={{
               fontSize: '20px',
               fontWeight: 'bold',
-              marginBottom: '16px',
+              marginBottom: '24px',
               color: '#78401F',
               fontFamily: 'Montserrat, sans-serif'
             }}>Outlier Insights</h2>
@@ -122,10 +140,12 @@ export default function Dashboard() {
         </div>
         
         <div style={{ 
-          backgroundColor: '#ffffff',
+          backgroundColor: 'rgba(255, 255, 255, 0.85)',
           borderRadius: '8px',
           padding: '24px',
-          boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+          boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+          position: 'relative',
+          zIndex: 2
         }}>
           <SimpleJobsDisplay />
         </div>

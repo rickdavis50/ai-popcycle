@@ -2,6 +2,21 @@
 
 import { useState, useEffect } from 'react';
 
+interface AirtableData {
+  yoyGrowth: number;
+  engineerGrowth: number;
+  companyCount: number;
+  peopleCount: number;
+  engineerCount: number;
+  insights: Array<any>;
+  engineerTrends: Array<{
+    date: string;
+    value: number;
+  }>;
+  loading: boolean;
+  error: string | null;
+}
+
 export function useAirtableData() {
   const [data, setData] = useState({
     yoyGrowth: 0,
@@ -10,6 +25,7 @@ export function useAirtableData() {
     peopleCount: 0,
     engineerCount: 0,
     insights: [],
+    engineerTrends: [],
     loading: true,
     error: null
   });
@@ -18,17 +34,14 @@ export function useAirtableData() {
     const loadData = async () => {
       try {
         const response = await fetch('/api/airtable');
+        const data = await response.json();
+        
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error(data.error || 'Failed to fetch data');
         }
-        const stats = await response.json();
+
         setData({
-          yoyGrowth: stats.yoyGrowth,
-          engineerGrowth: stats.engineerGrowth,
-          companyCount: stats.companyCount,
-          peopleCount: stats.peopleCount,
-          engineerCount: stats.engineerCount,
-          insights: stats.insights,
+          ...data,
           loading: false,
           error: null
         });

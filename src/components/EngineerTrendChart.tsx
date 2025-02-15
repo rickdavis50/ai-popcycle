@@ -1,0 +1,177 @@
+"use client";
+
+import { useEffect, useRef } from 'react';
+import * as d3 from 'd3';
+
+interface DataPoint {
+  date: string;
+  value: number;
+}
+
+interface Props {
+  data: DataPoint[];
+}
+
+export default function EngineerTrendChart({ data }: Props) {
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!chartRef.current || !data.length) return;
+
+    // Clear existing content
+    d3.select(chartRef.current).selectAll("*").remove();
+
+    // Set dimensions
+    const margin = { top: 20, right: 40, bottom: 30, left: 40 };
+    const width = 400 - margin.left - margin.right;
+    const height = 200 - margin.top - margin.bottom;
+
+    // Create SVG
+    const svg = d3.select(chartRef.current)
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Format x-axis labels
+    const formatLabel = (label: string) => {
+      switch (label) {
+        case '24 months ago': return '24m';
+        case '18 months ago': return '18m';
+        case '12 months ago': return '12m';
+        case '6 months ago': return '6m';
+        case 'Current': return 'Now';
+        default: return label;
+      }
+    };
+
+    // Create scales
+    const x = d3.scalePoint()
+      .domain(data.map(d => d.date))
+      .range([0, width])
+      .padding(0.5);
+
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.value) * 1.1])
+      .range([height, 0]);
+
+    // Create line generator with curve
+    const line = d3.line<DataPoint>()
+      .x(d => x(d.date))
+      .y(d => y(d.value))
+      .curve(d3.curveCatmullRom.alpha(0.5));
+
+    // Create area generator
+    const area = d3.area<DataPoint>()
+      .x(d => x(d.date))
+      .y0(height)
+      .y1(d => y(d.value))
+      .curve(d3.curveCatmullRom.alpha(0.5));
+
+    // Create gradient
+    const gradient = svg.append("defs")
+      .append("linearGradient")
+      .attr("id", "area-gradient")
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", 0)
+      .attr("y1", y(0))
+      .attr("x2", 0)
+      .attr("y2", y(d3.max(data, d => d.value)));
+
+    gradient.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#FF9C59")
+      .attr("stop-opacity", 0.1);
+
+    gradient.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#FF7E26")
+      .attr("stop-opacity", 0.3);
+
+    // Add the area
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "url(#area-gradient)")
+      .attr("d", area);
+
+    // Add the line
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "#FF7E26")
+      .attr("stroke-width", 2)
+      .attr("d", line);
+
+    // Create tooltip (simplified)
+    const tooltip = svg.append("text")
+      .attr("class", "tooltip")
+      .style("opacity", 0)
+      .style("font-size", "12px")
+      .style("font-family", "Montserrat, sans-serif")
+      .style("fill", "#78401F");
+
+    // Add interactive dots with updated tooltip
+    svg.selectAll(".dot")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", "dot")
+      .attr("cx", d => x(d.date))
+      .attr("cy", d => y(d.value))
+      .attr("r", 6)
+      .style("fill", "white")
+      .style("stroke", "#FF7E26")
+      .style("stroke-width", 2)
+      .on("mouseover", function(event, d) {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", 8);
+        
+        tooltip
+          .style("opacity", 1)
+          .attr("x", x(d.date))
+          .attr("y", y(d.value) - 15)
+          .attr("text-anchor", "middle")
+          .text(d3.format(",")(d.value));
+      })
+      .on("mouseout", function() {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", 6);
+        
+        tooltip.style("opacity", 0);
+      });
+
+    // Add x-axis with custom labels
+    svg.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x).tickFormat(formatLabel))
+      .style("font-size", "12px")
+      .style("font-family", "Montserrat, sans-serif")
+      .style("color", "#78401F")
+      .call(g => g.select(".domain").remove()) // Remove axis line
+      .call(g => g.selectAll(".tick line").remove()); // Remove tick lines
+
+    // Add y-axis grid lines only
+    svg.append("g")
+      .attr("class", "grid")
+      .call(d3.axisLeft(y)
+        .ticks(5)
+        .tickSize(-width)
+        .tickFormat(() => "")
+      )
+      .style("stroke-dasharray", "3,3")
+      .style("stroke-opacity", 0.2)
+      .call(g => g.select(".domain").remove());
+
+  }, [data]);
+
+  return (
+    <div className="w-full flex justify-center items-center">
+      <div ref={chartRef} style={{ width: '400px' }} />
+    </div>
+  );
+} 

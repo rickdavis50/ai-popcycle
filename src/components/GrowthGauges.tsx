@@ -5,7 +5,10 @@ import { GrowthMetrics } from '../types/types';
 import * as d3 from 'd3';
 
 interface Props {
-  metrics: GrowthMetrics;
+  metrics: {
+    yoyGrowth: number;
+    engineerGrowth: number;
+  };
 }
 
 export default function GrowthGauges({ metrics }: Props) {
@@ -97,20 +100,31 @@ export default function GrowthGauges({ metrics }: Props) {
 
   useEffect(() => {
     if (yoyGaugeRef.current) {
-      createGauge(yoyGaugeRef.current, metrics.yoyGrowth, "YoY Growth");
+      createGauge(yoyGaugeRef.current, metrics.yoyGrowth, 'YoY Growth');
     }
     if (engineerGaugeRef.current) {
-      createGauge(engineerGaugeRef.current, metrics.engineerGrowth, "Engineer Growth");
+      createGauge(engineerGaugeRef.current, metrics.engineerGrowth, 'Engineer Growth');
     }
   }, [metrics]);
 
   return (
-    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <div style={{ marginBottom: '40px' }}>
-        <div ref={yoyGaugeRef} />
-      </div>
+    <div className="flex flex-col space-y-6">
       <div>
-        <div ref={engineerGaugeRef} />
+        <h3 className="text-sm font-medium text-gray-600 mb-2">Overall Growth</h3>
+        <div ref={yoyGaugeRef} className="w-full h-32" />
+        <div className="text-center mt-2">
+          <span className="text-2xl font-bold text-gray-700">{metrics.yoyGrowth}%</span>
+          <span className="text-sm text-gray-500 ml-1">YoY</span>
+        </div>
+      </div>
+      
+      <div>
+        <h3 className="text-sm font-medium text-gray-600 mb-2">Engineering Growth</h3>
+        <div ref={engineerGaugeRef} className="w-full h-32" />
+        <div className="text-center mt-2">
+          <span className="text-2xl font-bold text-gray-700">{metrics.engineerGrowth}%</span>
+          <span className="text-sm text-gray-500 ml-1">YoY</span>
+        </div>
       </div>
     </div>
   );
