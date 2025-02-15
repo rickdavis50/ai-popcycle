@@ -55,10 +55,10 @@ export async function GET() {
 
     const stats = {
       companyCount: records.length,
-      peopleCount,
-      engineerCount,
-      peopleGrowth,
-      engineerGrowth,
+      peopleCount: records.reduce((sum, record) => 
+        sum + (record.fields.count_current_employees || 0), 0),
+      engineerCount: records.reduce((sum, record) => 
+        sum + (record.fields.engineers || 0), 0),
       insights: generateInsights(records),
       engineerTrends: calculateEngineerTrends(records),
     };

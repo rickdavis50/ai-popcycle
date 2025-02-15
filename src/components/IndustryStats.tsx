@@ -7,8 +7,6 @@ export default function IndustryStats() {
     companyCount, 
     peopleCount, 
     engineerCount,
-    peopleGrowth,
-    engineerGrowth,
     loading, 
     error 
   } = useAirtableData();
@@ -78,21 +76,15 @@ export default function IndustryStats() {
       </div>
       
       <div style={statStyle}>
-        <div style={numberContainerStyle}>
-          <div style={numberStyle}>
-            {loading ? "..." : peopleCount.toLocaleString()}
-          </div>
-          {renderGrowth(peopleGrowth)}
+        <div style={numberStyle}>
+          {loading ? "..." : peopleCount.toLocaleString()}
         </div>
         <div style={labelStyle}>Tracked People</div>
       </div>
       
       <div style={statStyle}>
-        <div style={numberContainerStyle}>
-          <div style={numberStyle}>
-            {loading ? "..." : engineerCount.toLocaleString()}
-          </div>
-          {renderGrowth(engineerGrowth)}
+        <div style={numberStyle}>
+          {loading ? "..." : engineerCount.toLocaleString()}
         </div>
         <div style={labelStyle}>Tracked Engineers</div>
       </div>
