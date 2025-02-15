@@ -34,35 +34,29 @@ export async function GET() {
     }
 
     const rawData = await response.json();
-    
     const records = rawData.records;
     
-    // Calculate current totals (we already have these working)
-    const currentPeople = records.reduce((sum, record) => 
+    // Calculate totals using the proven method
+    const peopleCount = records.reduce((sum, record) => 
       sum + (record.fields.count_current_employees || 0), 0);
-    const currentEngineers = records.reduce((sum, record) => 
-      sum + (record.fields.engineers || 0), 0);
-
-    // Calculate last year totals using the same method
-    const lastYearPeople = records.reduce((sum, record) => 
+    
+    const lastYearPeopleCount = records.reduce((sum, record) => 
       sum + (record.fields.headcount_last_year || 0), 0);
-    const lastYearEngineers = records.reduce((sum, record) => 
+
+    const engineerCount = records.reduce((sum, record) => 
+      sum + (record.fields.engineers || 0), 0);
+    
+    const lastYearEngineerCount = records.reduce((sum, record) => 
       sum + (record.fields.engineers_1yr || 0), 0);
 
-    // Calculate growth rates
-    const peopleGrowth = lastYearPeople > 0 
-      ? ((currentPeople - lastYearPeople) / lastYearPeople) * 100 
-      : 0;
+    // Calculate growth percentages
+    const peopleGrowth = ((peopleCount - lastYearPeopleCount) / lastYearPeopleCount) * 100;
+    const engineerGrowth = ((engineerCount - lastYearEngineerCount) / lastYearEngineerCount) * 100;
 
-    const engineerGrowth = lastYearEngineers > 0 
-      ? ((currentEngineers - lastYearEngineers) / lastYearEngineers) * 100 
-      : 0;
-
-    // Add to stats
     const stats = {
       companyCount: records.length,
-      peopleCount: currentPeople,
-      engineerCount: currentEngineers,
+      peopleCount,
+      engineerCount,
       peopleGrowth,
       engineerGrowth,
       insights: generateInsights(records),
@@ -80,32 +74,6 @@ export async function GET() {
 }
 
 // Helper functions
-function calculateYoyGrowth(records) {
-  if (!records?.length) return 0;
-  
-  const totalCurrentEmployees = records.reduce((sum, record) => 
-    sum + (record.fields.count_current_employees || 0), 0);
-  const totalLastYearEmployees = records.reduce((sum, record) => 
-    sum + (record.fields.headcount_last_year || 0), 0);
-
-  if (!totalLastYearEmployees) return 0;
-  
-  return Math.round(((totalCurrentEmployees - totalLastYearEmployees) / totalLastYearEmployees) * 100);
-}
-
-function calculateEngineerGrowth(records) {
-  if (!records?.length) return 0;
-  
-  const totalCurrentEngineers = records.reduce((sum, record) => 
-    sum + (record.fields.engineers || 0), 0);
-  const totalLastYearEngineers = records.reduce((sum, record) => 
-    sum + (record.fields.engineers_1yr || 0), 0);
-
-  if (!totalLastYearEngineers) return 0;
-  
-  return Math.round(((totalCurrentEngineers - totalLastYearEngineers) / totalLastYearEngineers) * 100);
-}
-
 function generateInsights(records) {
   if (!records?.length) return [];
   
