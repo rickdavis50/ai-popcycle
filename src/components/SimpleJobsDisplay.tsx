@@ -2,17 +2,14 @@
 
 const SimpleJobsDisplay = () => {
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', padding: '40px 0' }}>
       <h2 style={{
         fontSize: '20px',
         fontWeight: 'bold',
         marginBottom: '16px',
         color: '#78401F',
         fontFamily: 'Montserrat, sans-serif',
-        position: 'absolute',
-        top: '8px',
-        left: '24px',
-        zIndex: 2
+        textAlign: 'center'
       }}>
         AI Industry Job Changes
       </h2>
@@ -25,7 +22,6 @@ const SimpleJobsDisplay = () => {
         backgroundColor: '#FFF3E9',
         borderRadius: '8px',
         padding: '20px',
-        marginTop: '40px'
       }}>
         <div style={{
           textAlign: 'center',
