@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchIndustryMap } from '../services/airtable';
 
 export default function TalentFlowChart() {
@@ -11,7 +11,6 @@ export default function TalentFlowChart() {
     const loadData = async () => {
       try {
         const data = await fetchIndustryMap();
-        // Calculate total changes
         const total = data.children[0].children.reduce((total, company) => {
           const childCount = company.imports?.length || 0;
           return total + childCount;
