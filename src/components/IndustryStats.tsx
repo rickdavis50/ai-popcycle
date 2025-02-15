@@ -36,23 +36,25 @@ export default function IndustryStats() {
     gap: '8px'
   };
 
+  const numberContainerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    marginBottom: '8px'
+  };
+
   const growthStyle = {
     fontSize: '14px',
     color: '#78401F',
+    whiteSpace: 'nowrap'
   };
 
   const renderGrowth = (growth: number) => {
-    console.log('Growth value:', growth);
-    
     if (growth === undefined || growth === null) return null;
     const arrow = growth >= 0 ? '▲' : '▼';
     return (
-      <span style={{
-        fontSize: '14px',
-        color: '#78401F',
-        marginLeft: '8px',
-        whiteSpace: 'nowrap'
-      }}>
+      <span style={growthStyle}>
         {arrow} {Math.abs(Math.round(growth))}% YoY
       </span>
     );
@@ -76,29 +78,23 @@ export default function IndustryStats() {
       </div>
       
       <div style={statStyle}>
-        <div style={numberStyle}>
-          {loading ? "..." : peopleCount.toLocaleString()}
-        </div>
-        <div style={labelStyle}>
-          <span>Tracked People</span>
+        <div style={numberContainerStyle}>
+          <div style={numberStyle}>
+            {loading ? "..." : peopleCount.toLocaleString()}
+          </div>
           {renderGrowth(peopleGrowth)}
-          {process.env.NODE_ENV === 'development' && 
-            <span style={{fontSize: '10px'}}>[{peopleGrowth}]</span>
-          }
         </div>
+        <div style={labelStyle}>Tracked People</div>
       </div>
       
       <div style={statStyle}>
-        <div style={numberStyle}>
-          {loading ? "..." : engineerCount.toLocaleString()}
-        </div>
-        <div style={labelStyle}>
-          <span>Tracked Engineers</span>
+        <div style={numberContainerStyle}>
+          <div style={numberStyle}>
+            {loading ? "..." : engineerCount.toLocaleString()}
+          </div>
           {renderGrowth(engineerGrowth)}
-          {process.env.NODE_ENV === 'development' && 
-            <span style={{fontSize: '10px'}}>[{engineerGrowth}]</span>
-          }
         </div>
+        <div style={labelStyle}>Tracked Engineers</div>
       </div>
     </div>
   );

@@ -37,20 +37,35 @@ export async function GET() {
     
     const records = rawData.records;
     
-    // Calculate totals and growth
-    const currentPeople = records.reduce((sum, record) => sum + (record.fields.count_current_employees || 0), 0);
-    const lastYearPeople = records.reduce((sum, record) => sum + (record.fields.headcount_last_year || 0), 0);
-    const currentEngineers = records.reduce((sum, record) => sum + (record.fields.engineers || 0), 0);
-    const lastYearEngineers = records.reduce((sum, record) => sum + (record.fields.engineers_1yr || 0), 0);
+    // Calculate totals first
+    const totals = records.reduce((acc, record) => {
+      return {
+        currentPeople: acc.currentPeople + (record.fields.count_current_employees || 0),
+        lastYearPeople: acc.lastYearPeople + (record.fields.headcount_last_year || 0),
+        currentEngineers: acc.currentEngineers + (record.fields.engineers || 0),
+        lastYearEngineers: acc.lastYearEngineers + (record.fields.engineers_1yr || 0)
+      };
+    }, {
+      currentPeople: 0,
+      lastYearPeople: 0,
+      currentEngineers: 0,
+      lastYearEngineers: 0
+    });
 
-    const peopleGrowth = lastYearPeople ? ((currentPeople - lastYearPeople) / lastYearPeople) * 100 : 0;
-    const engineerGrowth = lastYearEngineers ? ((currentEngineers - lastYearEngineers) / lastYearEngineers) * 100 : 0;
+    // Calculate growth rates
+    const peopleGrowth = totals.lastYearPeople > 0 
+      ? ((totals.currentPeople - totals.lastYearPeople) / totals.lastYearPeople) * 100 
+      : 0;
+
+    const engineerGrowth = totals.lastYearEngineers > 0 
+      ? ((totals.currentEngineers - totals.lastYearEngineers) / totals.lastYearEngineers) * 100 
+      : 0;
 
     // Add default values and better error handling
     const stats = {
       companyCount: records.length,
-      peopleCount: currentPeople,
-      engineerCount: currentEngineers,
+      peopleCount: totals.currentPeople,
+      engineerCount: totals.currentEngineers,
       peopleGrowth,
       engineerGrowth,
       insights: generateInsights(records),
