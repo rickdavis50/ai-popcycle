@@ -16,7 +16,7 @@ export async function GET() {
     }
 
     // Updated URL format
-    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?view=Grid%20view`;
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?view=Grid%20view&maxRecords=1000`;
     
     const response = await fetch(url, {
       method: 'GET',
