@@ -91,7 +91,7 @@ export default function InsightsModule({ insights }: InsightsModuleProps) {
         <ul className="list-none">
           {insights.map((insight, index) => (
             <li key={index} className={getInsightStyle(insight.type)}>
-              <span className="mr-2" style={getBulletStyle(insight.type)}>•</span>
+              <span className="mr-2" style={{ color: '#78401F' }}>•</span>
               {formatInsightText(insight.text)}
             </li>
           ))}

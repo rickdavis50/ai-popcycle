@@ -6,7 +6,9 @@ export default function IndustryStats() {
   const { 
     companyCount, 
     peopleCount, 
-    engineerCount, 
+    engineerCount,
+    peopleGrowth,
+    engineerGrowth,
     loading, 
     error 
   } = useAirtableData();
@@ -27,7 +29,26 @@ export default function IndustryStats() {
   const labelStyle = {
     fontSize: '16px',
     color: '#78401F',
-    fontFamily: 'Montserrat, sans-serif'
+    fontFamily: 'Montserrat, sans-serif',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px'
+  };
+
+  const growthStyle = {
+    fontSize: '14px',
+    color: '#78401F',
+  };
+
+  const renderGrowth = (growth: number) => {
+    if (!growth) return null;
+    const arrow = growth >= 0 ? '▲' : '▼';
+    return (
+      <span style={growthStyle}>
+        {arrow} {Math.abs(Math.round(growth))}% YoY
+      </span>
+    );
   };
 
   if (error) {
@@ -51,14 +72,20 @@ export default function IndustryStats() {
         <div style={numberStyle}>
           {loading ? "..." : peopleCount.toLocaleString()}
         </div>
-        <div style={labelStyle}>Tracked People</div>
+        <div style={labelStyle}>
+          <span>Tracked People</span>
+          {renderGrowth(peopleGrowth)}
+        </div>
       </div>
       
       <div style={statStyle}>
         <div style={numberStyle}>
           {loading ? "..." : engineerCount.toLocaleString()}
         </div>
-        <div style={labelStyle}>Tracked Engineers</div>
+        <div style={labelStyle}>
+          <span>Tracked Engineers</span>
+          {renderGrowth(engineerGrowth)}
+        </div>
       </div>
     </div>
   );
