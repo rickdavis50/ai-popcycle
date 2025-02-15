@@ -4,7 +4,7 @@ import Image from 'next/image';
 import IndustryStats from './IndustryStats';
 import GrowthGauges from './GrowthGauges';
 import InsightsModule from './InsightsModule';
-import TalentFlowChart from './TalentFlowChart';
+import SimpleJobsDisplay from './SimpleJobsDisplay';
 import { useAirtableData } from '../hooks/useAirtableData';
 import { insights, talentFlowData } from '../utils/dummyData';
 
@@ -127,7 +127,7 @@ export default function Dashboard() {
           padding: '24px',
           boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
         }}>
-          <TalentFlowChart data={talentFlowData} />
+          <SimpleJobsDisplay />
         </div>
       </div>
     </div>
