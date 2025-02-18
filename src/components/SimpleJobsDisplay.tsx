@@ -1,163 +1,93 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
 
-// Simple data structure
+// Simple data structure for company movements
 const dummyData = {
-  nodes: [
-    { id: "Company A", group: 1 },
-    { id: "Company B", group: 1 },
-    { id: "Company C", group: 1 },
-    { id: "Company D", group: 1 }
+  companies: [
+    { name: "Anthropic", x: 200, y: 100 },
+    { name: "OpenAI", x: 400, y: 100 },
+    { name: "Google", x: 200, y: 300 },
+    { name: "Microsoft", x: 400, y: 300 }
   ],
-  links: [
-    { source: "Company A", target: "Company B", value: 1 },
-    { source: "Company B", target: "Company C", value: 1 },
-    { source: "Company C", target: "Company D", value: 1 },
-    { source: "Company D", target: "Company A", value: 1 }
+  movements: [
+    { from: "Anthropic", to: "OpenAI", count: 5 },
+    { from: "OpenAI", to: "Google", count: 3 },
+    { from: "Google", to: "Microsoft", count: 4 },
+    { from: "Microsoft", to: "Anthropic", count: 2 }
   ]
 };
 
-interface Node extends d3.SimulationNodeDatum {
-  id: string;
-  group: number;
-}
-
-interface Link {
-  source: string;
-  target: string;
-  value: number;
-}
-
 const SimpleJobsDisplay = () => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [d3Loaded, setD3Loaded] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [hoveredCompany, setHoveredCompany] = useState<string | null>(null);
 
   useEffect(() => {
-    import('d3').then((d3Module) => {
-      setD3Loaded(true);
-      window.d3 = d3Module;
-    }).catch((err) => {
-      console.error('Failed to load D3:', err);
-      setError('Failed to load visualization library');
+    if (!svgRef.current) return;
+
+    // Clear previous content
+    while (svgRef.current.firstChild) {
+      svgRef.current.removeChild(svgRef.current.firstChild);
+    }
+
+    // Draw connections
+    dummyData.movements.forEach(movement => {
+      const fromCompany = dummyData.companies.find(c => c.name === movement.from);
+      const toCompany = dummyData.companies.find(c => c.name === movement.to);
+
+      if (fromCompany && toCompany) {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        const d = `M ${fromCompany.x} ${fromCompany.y} L ${toCompany.x} ${toCompany.y}`;
+        
+        path.setAttribute("d", d);
+        path.setAttribute("stroke", "#78401F");
+        path.setAttribute("stroke-width", "2");
+        path.setAttribute("fill", "none");
+        path.setAttribute("opacity", "0.6");
+        
+        svgRef.current.appendChild(path);
+      }
     });
-  }, []);
 
-  useEffect(() => {
-    if (!chartRef.current || !d3Loaded || !window.d3) return;
+    // Draw companies
+    dummyData.companies.forEach(company => {
+      // Create group for company
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      
+      // Create circle
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("cx", company.x.toString());
+      circle.setAttribute("cy", company.y.toString());
+      circle.setAttribute("r", "20");
+      circle.setAttribute("fill", "#FF9C59");
+      circle.setAttribute("stroke", "#78401F");
+      circle.setAttribute("stroke-width", "2");
+      
+      // Create text
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", (company.x + 30).toString());
+      text.setAttribute("y", (company.y + 5).toString());
+      text.setAttribute("font-family", "Montserrat, sans-serif");
+      text.setAttribute("font-size", "14px");
+      text.setAttribute("fill", "#78401F");
+      text.textContent = company.name;
 
-    try {
-      const d3 = window.d3;
-      d3.select(chartRef.current).selectAll("*").remove();
-
-      const width = 800;
-      const height = 600;
-
-      const svg = d3.select(chartRef.current)
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("viewBox", [0, 0, width, height]);
-
-      // Create a simulation with forces
-      const simulation = d3.forceSimulation<Node>(dummyData.nodes as Node[])
-        .force("link", d3.forceLink<Node, Link>(dummyData.links)
-          .id(d => d.id)
-          .distance(100))
-        .force("charge", d3.forceManyBody().strength(-400))
-        .force("center", d3.forceCenter(width / 2, height / 2));
-
-      // Draw links
-      const link = svg.append("g")
-        .selectAll("line")
-        .data(dummyData.links)
-        .join("line")
-        .style("stroke", "#78401F")
-        .style("stroke-opacity", 0.6)
-        .style("stroke-width", 2);
-
-      // Draw nodes
-      const node = svg.append("g")
-        .selectAll("g")
-        .data(dummyData.nodes)
-        .join("g")
-        .call(d3.drag<any, Node>()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended));
-
-      // Add circles to nodes
-      node.append("circle")
-        .attr("r", 8)
-        .style("fill", "#FF9C59")
-        .style("stroke", "#78401F")
-        .style("stroke-width", 1.5);
-
-      // Add labels to nodes
-      node.append("text")
-        .attr("x", 12)
-        .attr("y", 4)
-        .style("font-family", "Montserrat, sans-serif")
-        .style("font-size", "12px")
-        .style("fill", "#78401F")
-        .text(d => d.id);
-
-      // Update positions on each tick
-      simulation.on("tick", () => {
-        link
-          .attr("x1", d => (d.source as any).x)
-          .attr("y1", d => (d.source as any).y)
-          .attr("x2", d => (d.target as any).x)
-          .attr("y2", d => (d.target as any).y);
-
-        node
-          .attr("transform", d => `translate(${d.x},${d.y})`);
+      // Add hover effects
+      group.addEventListener("mouseenter", () => {
+        circle.setAttribute("r", "22");
+        setHoveredCompany(company.name);
       });
 
-      // Drag functions
-      function dragstarted(event: any, d: Node) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-      }
+      group.addEventListener("mouseleave", () => {
+        circle.setAttribute("r", "20");
+        setHoveredCompany(null);
+      });
 
-      function dragged(event: any, d: Node) {
-        d.fx = event.x;
-        d.fy = event.y;
-      }
-
-      function dragended(event: any, d: Node) {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-      }
-
-    } catch (err) {
-      console.error('Error rendering chart:', err);
-      setError('Failed to render visualization');
-    }
-  }, [d3Loaded]);
-
-  if (error) {
-    return (
-      <div style={{ 
-        width: '100%',
-        minHeight: '400px',
-        backgroundColor: '#FFF3E9',
-        borderRadius: '8px',
-        padding: '20px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: '#78401F',
-        fontFamily: 'Montserrat, sans-serif'
-      }}>
-        Visualization Temporarily Unavailable
-      </div>
-    );
-  }
+      group.appendChild(circle);
+      group.appendChild(text);
+      svgRef.current.appendChild(group);
+    });
+  }, []);
 
   return (
     <div style={{ 
@@ -177,13 +107,40 @@ const SimpleJobsDisplay = () => {
       }}>
         AI Industry Job Changes
       </h2>
-      <div ref={chartRef} style={{ 
+      <div style={{ 
         width: '100%',
         minHeight: '400px',
         backgroundColor: '#FFF3E9',
         borderRadius: '8px',
         padding: '20px',
-      }} />
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <svg
+          ref={svgRef}
+          width="600"
+          height="400"
+          viewBox="0 0 600 400"
+          style={{ maxWidth: '100%', height: 'auto' }}
+        />
+      </div>
+      {hoveredCompany && (
+        <div style={{
+          position: 'absolute',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          padding: '8px 16px',
+          backgroundColor: 'white',
+          borderRadius: '4px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif'
+        }}>
+          {hoveredCompany}
+        </div>
+      )}
     </div>
   );
 };
