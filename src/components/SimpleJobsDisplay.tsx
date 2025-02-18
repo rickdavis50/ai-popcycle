@@ -3,6 +3,27 @@
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 
+// Add TypeScript interfaces
+interface Node {
+  x: number;
+  y: number;
+  data: {
+    name: string;
+    imports?: string[];
+  };
+  path?: (target: Node) => [Node, Node][];
+  incoming?: [Node, Node][];
+  outgoing?: [Node, Node][];
+}
+
+interface HierarchyNode extends d3.HierarchyNode<any> {
+  x: number;
+  y: number;
+  path?: (target: HierarchyNode) => [HierarchyNode, HierarchyNode][];
+  incoming?: [HierarchyNode, HierarchyNode][];
+  outgoing?: [HierarchyNode, HierarchyNode][];
+}
+
 // Dummy data structure
 const dummyData = {
   name: "flare",
@@ -36,7 +57,7 @@ const dummyData = {
 const SimpleJobsDisplay = () => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [d3Loaded, setD3Loaded] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     import('d3').then((d3Module) => {
@@ -58,11 +79,11 @@ const SimpleJobsDisplay = () => {
       const width = 954;
       const radius = (width / 2) * 0.75;
 
-      const tree = d3.cluster()
+      const tree = d3.cluster<any>()
         .size([2 * Math.PI, radius - 100]);
 
       const root = tree(bilink(d3.hierarchy(dummyData)
-        .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.name, b.data.name))));
+        .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.name, b.data.name)))) as HierarchyNode;
 
       const svg = d3.select(chartRef.current)
         .append("svg")
@@ -71,7 +92,7 @@ const SimpleJobsDisplay = () => {
         .attr("viewBox", [-width / 2, -width / 2, width, width])
         .attr("style", "max-width: 100%; height: auto; font: 18px montserrat;");
 
-      const line = d3.lineRadial()
+      const line = d3.lineRadial<HierarchyNode>()
         .curve(d3.curveBundle.beta(0.85))
         .radius(d => d.y)
         .angle(d => d.x);
@@ -80,10 +101,10 @@ const SimpleJobsDisplay = () => {
         .attr("fill", "none")
         .attr("stroke", "#2C2C2C")
         .selectAll("path")
-        .data(root.leaves().flatMap(leaf => leaf.outgoing))
+        .data(root.leaves().flatMap(leaf => leaf.outgoing || []))
         .join("path")
-        .attr("d", ([i, o]) => line(i.path(o)))
-        .each(function(d) { d.path = this; });
+        .attr("d", ([i, o]) => line(i.path?.(o) || []))
+        .each(function(d) { (d as any).path = this; });
 
       const node = svg.append("g")
         .selectAll("g")
@@ -97,7 +118,7 @@ const SimpleJobsDisplay = () => {
         .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null)
         .attr("fill", "#78401F")
         .text(d => d.data.name)
-        .each(function(d) { d.text = this; });
+        .each(function(d) { (d as any).text = this; });
 
     } catch (err) {
       console.error('Error rendering chart:', err);
@@ -153,23 +174,24 @@ const SimpleJobsDisplay = () => {
   );
 };
 
-function bilink(root) {
+function bilink(root: HierarchyNode) {
   const map = new Map(root.leaves().map(d => [id(d), d]));
   for (const d of root.leaves()) {
     d.incoming = [];
     d.outgoing = (d.data.imports || [])
       .map(i => [d, map.get(i)])
-      .filter(([, target]) => target);
+      .filter(([, target]) => target) as [HierarchyNode, HierarchyNode][];
   }
   for (const d of root.leaves()) {
-    for (const o of d.outgoing) {
+    for (const o of d.outgoing || []) {
+      o[1].incoming = o[1].incoming || [];
       o[1].incoming.push(o);
     }
   }
   return root;
 }
 
-function id(node) {
+function id(node: HierarchyNode): string {
   return `${node.parent ? id(node.parent) + "." : ""}${node.data.name}`;
 }
 
