@@ -3,7 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 
-// Add TypeScript interfaces
+// Update TypeScript interfaces
+interface Point {
+  x: number;
+  y: number;
+}
+
 interface Node {
   x: number;
   y: number;
@@ -11,7 +16,7 @@ interface Node {
     name: string;
     imports?: string[];
   };
-  path?: (target: Node) => [Node, Node][];
+  path?: (target: Node) => Point[];
   incoming?: [Node, Node][];
   outgoing?: [Node, Node][];
 }
@@ -19,7 +24,7 @@ interface Node {
 interface HierarchyNode extends d3.HierarchyNode<any> {
   x: number;
   y: number;
-  path?: (target: HierarchyNode) => [HierarchyNode, HierarchyNode][];
+  path?: (target: HierarchyNode) => Point[];
   incoming?: [HierarchyNode, HierarchyNode][];
   outgoing?: [HierarchyNode, HierarchyNode][];
 }
@@ -92,7 +97,7 @@ const SimpleJobsDisplay = () => {
         .attr("viewBox", [-width / 2, -width / 2, width, width])
         .attr("style", "max-width: 100%; height: auto; font: 18px montserrat;");
 
-      const line = d3.lineRadial<HierarchyNode>()
+      const line = d3.lineRadial<Point>()
         .curve(d3.curveBundle.beta(0.85))
         .radius(d => d.y)
         .angle(d => d.x);
@@ -103,7 +108,10 @@ const SimpleJobsDisplay = () => {
         .selectAll("path")
         .data(root.leaves().flatMap(leaf => leaf.outgoing || []))
         .join("path")
-        .attr("d", ([i, o]) => line(i.path?.(o) || []))
+        .attr("d", ([i, o]) => {
+          const points = i.path?.(o) || [];
+          return line(points);
+        })
         .each(function(d) { (d as any).path = this; });
 
       const node = svg.append("g")
