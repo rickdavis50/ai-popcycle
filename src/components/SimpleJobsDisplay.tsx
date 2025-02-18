@@ -38,6 +38,11 @@ const SimpleJobsDisplay = () => {
     if (!chartRef.current || !data || !d3Loaded || !window.d3) return;
 
     try {
+      // Validate data structure
+      if (!data.children?.[0]?.children?.length) {
+        throw new Error('Invalid data structure');
+      }
+
       // Clear existing content
       window.d3.select(chartRef.current).selectAll("*").remove();
 
@@ -49,18 +54,25 @@ const SimpleJobsDisplay = () => {
       const tree = window.d3.cluster()
         .size([2 * Math.PI, radius - 100]);
 
-      const root = tree(bilink(window.d3.hierarchy(data)
-        .sort((a, b) => window.d3.ascending(a.height, b.height) || window.d3.ascending(a.data.name, b.data.name))));
+      // Safe hierarchy creation with error handling
+      try {
+        const root = tree(bilink(window.d3.hierarchy(data)
+          .sort((a, b) => window.d3.ascending(a.height, b.height) || window.d3.ascending(a.data.name, b.data.name))));
 
-      const svg = window.d3.select(chartRef.current)
-        .append("svg")
-        .attr("width", width)
-        .attr("height", width)
-        .attr("viewBox", [-width / 2, -width / 2, width, width])
-        .attr("style", "max-width: 100%; height: auto; font: 18px montserrat;");
+        const svg = window.d3.select(chartRef.current)
+          .append("svg")
+          .attr("width", width)
+          .attr("height", width)
+          .attr("viewBox", [-width / 2, -width / 2, width, width])
+          .attr("style", "max-width: 100%; height: auto; font: 18px montserrat;");
 
-      // Add the rest of the D3.js code here...
-      // (Include all the D3 visualization code you provided)
+        // Add visualization code here
+        // ... rest of the D3 code
+
+      } catch (hierarchyError) {
+        console.error('Error creating hierarchy:', hierarchyError);
+        setError('Error creating visualization hierarchy');
+      }
     } catch (err) {
       console.error('Error rendering chart:', err);
       setError('Failed to render visualization');
@@ -179,17 +191,40 @@ const SimpleJobsDisplay = () => {
   );
 };
 
-// Helper functions
+// Update helper functions with better error handling
 function bilink(root) {
-  const map = new Map(root.leaves().map(d => [id(d), d]));
-  for (const d of root.leaves()) {
-    d.incoming = [];
-    d.outgoing = d.data.imports.map(i => [d, map.get(i)]);
+  try {
+    if (!root || !root.leaves) {
+      throw new Error('Invalid root node');
+    }
+
+    const leaves = root.leaves();
+    if (!Array.isArray(leaves)) {
+      throw new Error('Invalid leaves structure');
+    }
+
+    const map = new Map(leaves.map(d => [id(d), d]));
+    
+    for (const d of leaves) {
+      d.incoming = [];
+      d.outgoing = (d.data.imports || [])
+        .map(i => [d, map.get(i)])
+        .filter(([, target]) => target); // Filter out invalid targets
+    }
+
+    for (const d of leaves) {
+      for (const o of d.outgoing) {
+        if (o[1]) {  // Check if target exists
+          o[1].incoming.push(o);
+        }
+      }
+    }
+
+    return root;
+  } catch (error) {
+    console.error('Error in bilink:', error);
+    throw error;
   }
-  for (const d of root.leaves()) {
-    for (const o of d.outgoing) o[1].incoming.push(o);
-  }
-  return root;
 }
 
 function id(node) {

@@ -30,22 +30,44 @@ export async function GET() {
 
     const data = await response.json();
     
+    // Validate and clean the data
+    if (!data.records || !Array.isArray(data.records)) {
+      console.error('Invalid data structure from Airtable');
+      return NextResponse.json({ error: 'Invalid data structure' }, { status: 500 });
+    }
+
+    // Filter out invalid records and transform
+    const validRecords = data.records
+      .filter(record => 
+        record.fields && 
+        record.fields['parent-co'] &&
+        record.fields['children']
+      )
+      .map(record => ({
+        name: record.fields['parent-co'],
+        parentId: record.id,
+        imports: (record.fields['children'] || '')
+          .split(';')
+          .map(child => child.trim())
+          .filter(child => child)
+          .map(child => `flare.companies.${child}`)
+      }));
+
+    if (validRecords.length === 0) {
+      console.error('No valid records found');
+      return NextResponse.json({ error: 'No valid records found' }, { status: 500 });
+    }
+
     // Transform data for the chord diagram
     const transformedData = {
       name: "flare",
       children: [{
         name: "companies",
-        children: data.records.map(record => ({
-          name: record.fields['parent-co'],
-          parentId: record.id,
-          imports: record.fields['children']?.split(';')
-            .map(child => child.trim())
-            .filter(child => child)
-            .map(child => `flare.companies.${child}`)
-        }))
+        children: validRecords
       }]
     };
 
+    console.log('Transformed data:', JSON.stringify(transformedData, null, 2));
     return NextResponse.json(transformedData);
   } catch (error) {
     console.error('API Error:', error);
