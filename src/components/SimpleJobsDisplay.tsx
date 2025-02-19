@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
+import { useAirtableData } from '../hooks/useAirtableData';
 
 // Add interface for API response
 interface AirtableRecord {
@@ -71,29 +72,35 @@ const SimpleJobsDisplay = () => {
   const [companies, setCompanies] = useState<string[]>([]);
   const [companyA, setCompanyA] = useState<string>('');
   const [companyB, setCompanyB] = useState<string>('');
-  const [loading, setLoading] = useState(true);
+  const { records, loading, error } = useAirtableData();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    // Fetch companies from Airtable
-    fetch('/api/airtable')
-      .then(res => res.json())
-      .then((data: AirtableResponse) => {
-        const companyNames = Array.from(
-          new Set(
-            data.records
-              .filter(r => r.fields.company) // Ensure company name exists
-              .map(r => r.fields.company)
-          )
-        );
-        setCompanies(companyNames);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error fetching companies:', err);
-        setLoading(false);
-      });
-  }, []);
+    if (records && records.length > 0) {
+      // Extract unique company names from records
+      const companyNames = Array.from(
+        new Set(
+          records
+            .filter(record => record.fields.company)
+            .map(record => record.fields.company)
+        )
+      ).sort(); // Sort alphabetically
+      
+      setCompanies(companyNames);
+    }
+  }, [records]);
+
+  if (error) {
+    return (
+      <div style={{ 
+        padding: '20px', 
+        color: '#78401F',
+        textAlign: 'center' 
+      }}>
+        Error loading company data
+      </div>
+    );
+  }
 
   return (
     <div style={{ 
@@ -123,12 +130,15 @@ const SimpleJobsDisplay = () => {
         <select 
           value={companyA}
           onChange={(e) => setCompanyA(e.target.value)}
+          disabled={loading}
           style={{
             padding: '8px',
             borderRadius: '4px',
             border: '1px solid #78401F',
             color: '#78401F',
-            fontFamily: 'Montserrat, sans-serif'
+            fontFamily: 'Montserrat, sans-serif',
+            opacity: loading ? 0.7 : 1,
+            cursor: loading ? 'wait' : 'pointer'
           }}
         >
           <option value="">Select Company A</option>
@@ -140,17 +150,24 @@ const SimpleJobsDisplay = () => {
         <select
           value={companyB}
           onChange={(e) => setCompanyB(e.target.value)}
+          disabled={loading}
           style={{
             padding: '8px',
             borderRadius: '4px',
             border: '1px solid #78401F',
             color: '#78401F',
-            fontFamily: 'Montserrat, sans-serif'
+            fontFamily: 'Montserrat, sans-serif',
+            opacity: loading ? 0.7 : 1,
+            cursor: loading ? 'wait' : 'pointer'
           }}
         >
           <option value="">Select Company B</option>
           {companies.map(company => (
-            <option key={company} value={company}>{company}</option>
+            <option key={company} value={company}
+              disabled={company === companyA} // Prevent selecting same company
+            >
+              {company}
+            </option>
           ))}
         </select>
       </div>
@@ -165,12 +182,18 @@ const SimpleJobsDisplay = () => {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <canvas
-          ref={canvasRef}
-          width="600"
-          height="600"
-          style={{ maxWidth: '100%', height: 'auto' }}
-        />
+        {loading ? (
+          <div style={{ color: '#78401F', fontFamily: 'Montserrat, sans-serif' }}>
+            Loading companies...
+          </div>
+        ) : (
+          <canvas
+            ref={canvasRef}
+            width="600"
+            height="600"
+            style={{ maxWidth: '100%', height: 'auto' }}
+          />
+        )}
       </div>
     </div>
   );
