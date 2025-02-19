@@ -75,6 +75,11 @@ const SimpleJobsDisplay = () => {
   const { records, loading, error } = useAirtableData();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Debug logging
+  useEffect(() => {
+    console.log('Records:', records);
+  }, [records]);
+
   useEffect(() => {
     if (records && records.length > 0) {
       const companyNames = Array.from(
@@ -85,9 +90,124 @@ const SimpleJobsDisplay = () => {
         )
       ).sort();
       
+      console.log('Company Names:', companyNames); // Debug logging
       setCompanies(companyNames);
     }
   }, [records]);
+
+  // Draw radar chart when companies are selected
+  useEffect(() => {
+    if (!canvasRef.current || !companyA || !companyB) return;
+
+    const ctx = canvasRef.current.getContext('2d');
+    if (!ctx) return;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, 600, 600);
+
+    // Find company data
+    const companyAData = records?.find(r => r.fields.company === companyA)?.fields;
+    const companyBData = records?.find(r => r.fields.company === companyB)?.fields;
+
+    if (!companyAData || !companyBData) return;
+
+    // Calculate metrics
+    const metricsA = calculateMetrics({
+      name: companyA,
+      currentHeadcount: companyAData.count_current_employees || 0,
+      headcount12MonthsAgo: companyAData.headcount_last_year || 0,
+      voluntaryLeaves: companyAData.voluntarily_left || 0,
+      currentEngineers: companyAData.engineers || 0,
+      engineers6MonthsAgo: companyAData.engineers_6mo || 0,
+      industryAverageHeadcount: calculateIndustryAverage(records)
+    });
+
+    const metricsB = calculateMetrics({
+      name: companyB,
+      currentHeadcount: companyBData.count_current_employees || 0,
+      headcount12MonthsAgo: companyBData.headcount_last_year || 0,
+      voluntaryLeaves: companyBData.voluntarily_left || 0,
+      currentEngineers: companyBData.engineers || 0,
+      engineers6MonthsAgo: companyBData.engineers_6mo || 0,
+      industryAverageHeadcount: calculateIndustryAverage(records)
+    });
+
+    // Draw radar chart
+    drawRadarChart(ctx, metricsA, metricsB);
+
+  }, [companyA, companyB, records]);
+
+  // Helper function to calculate industry average
+  const calculateIndustryAverage = (records: any[]) => {
+    const validHeadcounts = records
+      .map(r => r.fields.count_current_employees)
+      .filter(count => count && count > 0);
+    
+    return validHeadcounts.reduce((sum, count) => sum + count, 0) / validHeadcounts.length;
+  };
+
+  // Function to draw radar chart
+  const drawRadarChart = (ctx: CanvasRenderingContext2D, metricsA: CompanyMetrics, metricsB: CompanyMetrics) => {
+    const centerX = 300;
+    const centerY = 300;
+    const radius = 200;
+    const metrics = ['retention', 'engineerGrowth', 'engineerConcentration', 'headcountGrowth', 'sizeRank'];
+    const angles = metrics.map((_, i) => (i * 2 * Math.PI) / metrics.length);
+
+    // Draw axes
+    ctx.strokeStyle = '#78401F';
+    ctx.lineWidth = 1;
+    metrics.forEach((_, i) => {
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      const x = centerX + radius * Math.cos(angles[i] - Math.PI / 2);
+      const y = centerY + radius * Math.sin(angles[i] - Math.PI / 2);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    });
+
+    // Draw company A data
+    ctx.beginPath();
+    ctx.strokeStyle = '#FF9C59';
+    ctx.fillStyle = 'rgba(255, 156, 89, 0.3)';
+    metrics.forEach((metric, i) => {
+      const value = metricsA[metric as keyof CompanyMetrics];
+      const distance = (value / 5) * radius;
+      const x = centerX + distance * Math.cos(angles[i] - Math.PI / 2);
+      const y = centerY + distance * Math.sin(angles[i] - Math.PI / 2);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Draw company B data
+    ctx.beginPath();
+    ctx.strokeStyle = '#78401F';
+    ctx.fillStyle = 'rgba(120, 64, 31, 0.3)';
+    metrics.forEach((metric, i) => {
+      const value = metricsB[metric as keyof CompanyMetrics];
+      const distance = (value / 5) * radius;
+      const x = centerX + distance * Math.cos(angles[i] - Math.PI / 2);
+      const y = centerY + distance * Math.sin(angles[i] - Math.PI / 2);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Draw labels
+    ctx.fillStyle = '#78401F';
+    ctx.font = '14px Montserrat';
+    ctx.textAlign = 'center';
+    metrics.forEach((metric, i) => {
+      const x = centerX + (radius + 30) * Math.cos(angles[i] - Math.PI / 2);
+      const y = centerY + (radius + 30) * Math.sin(angles[i] - Math.PI / 2);
+      ctx.fillText(metric.replace(/([A-Z])/g, ' $1').trim(), x, y);
+    });
+  };
 
   if (error) {
     return (
