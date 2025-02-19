@@ -77,14 +77,13 @@ const SimpleJobsDisplay = () => {
 
   useEffect(() => {
     if (records && records.length > 0) {
-      // Extract unique company names from records
       const companyNames = Array.from(
         new Set(
           records
             .filter(record => record.fields.company)
             .map(record => record.fields.company)
         )
-      ).sort(); // Sort alphabetically
+      ).sort();
       
       setCompanies(companyNames);
     }

@@ -2,21 +2,31 @@
 
 import { useState, useEffect } from 'react';
 
+interface AirtableRecord {
+  fields: {
+    company: string;
+    count_current_employees?: number;
+    headcount_last_year?: number;
+    engineers?: number;
+    engineers_6mo?: number;
+    engineers_1yr?: number;
+    voluntarily_left?: number;
+  };
+}
+
 interface AirtableData {
   companyCount: number;
   peopleCount: number;
   engineerCount: number;
   insights: Array<any>;
-  engineerTrends: Array<{
-    date: string;
-    value: number;
-  }>;
+  engineerTrends: Array<any>;
   loading: boolean;
   error: string | null;
+  records: AirtableRecord[];
 }
 
 export function useAirtableData() {
-  const [data, setData] = useState({
+  const [data, setData] = useState<AirtableData>({
     companyCount: 0,
     peopleCount: 0,
     engineerCount: 0,
@@ -24,6 +34,7 @@ export function useAirtableData() {
     engineerTrends: [],
     loading: true,
     error: null,
+    records: [],
   });
 
   useEffect(() => {
@@ -39,7 +50,8 @@ export function useAirtableData() {
         setData({
           ...rawData,
           loading: false,
-          error: null
+          error: null,
+          records: rawData.records || [],
         });
       } catch (error) {
         console.error('Error in useAirtableData:', error);
