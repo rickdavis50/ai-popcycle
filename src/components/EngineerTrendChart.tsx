@@ -23,9 +23,9 @@ export default function EngineerTrendChart({ data }: Props) {
     d3.select(chartRef.current).selectAll("*").remove();
 
     // Set dimensions
-    const margin = { top: 20, right: 40, bottom: 30, left: 40 };
-    const width = 400 - margin.left - margin.right;
-    const height = 200 - margin.top - margin.bottom;
+    const isMobile = window.innerWidth < 768;
+    const width = isMobile ? 300 : 400;
+    const height = isMobile ? 150 : 200;
 
     // Create SVG
     const svg = d3.select(chartRef.current)

@@ -557,27 +557,55 @@ const SimpleJobsDisplay = () => {
         </ul>
       </div>
 
-      {/* API Button - Adjusted positioning */}
-      <a 
-        href="https://www.livedatatechnologies.com/api"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'block',
-          width: '200px',
-          margin: '40px auto',
-          position: 'relative',
-          zIndex: 3 // Ensure it's above the background
-        }}
-      >
-        <Image
-          src="/images/api_button.svg"
-          alt="API Access"
-          width={200}
-          height={60}
-          priority
-        />
-      </a>
+      {/* API Button Section */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '16px',
+        margin: '40px auto',
+        position: 'relative',
+        zIndex: 3
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px'
+        }}>
+          <Image
+            src="/images/api_icon.svg"
+            alt="API Icon"
+            width={40}
+            height={40}
+          />
+          <a 
+            href="https://www.livedatatechnologies.com/api"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'block',
+              width: '200px'
+            }}
+          >
+            <Image
+              src="/images/api_button.svg"
+              alt="API Access"
+              width={200}
+              height={60}
+              priority
+            />
+          </a>
+        </div>
+        <p style={{
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif',
+          fontSize: '14px',
+          textAlign: 'center',
+          maxWidth: '300px'
+        }}>
+          Get API Access and start building apps today!
+        </p>
+      </div>
 
       {/* Info Popup */}
       {showInfoPopup && (
