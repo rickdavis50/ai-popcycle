@@ -151,16 +151,40 @@ const SimpleJobsDisplay = () => {
     const metrics = ['retention', 'engineerGrowth', 'engineerConcentration', 'headcountGrowth', 'sizeRank'];
     const angles = metrics.map((_, i) => (i * 2 * Math.PI) / metrics.length);
 
+    // Draw background circles
+    const circles = [0.2, 0.4, 0.6, 0.8, 1.0];
+    circles.forEach((percentage, i) => {
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius * percentage, 0, 2 * Math.PI);
+      ctx.fillStyle = i % 2 === 0 ? '#FFF3E9' : '#FFF9F4';
+      ctx.fill();
+    });
+
     // Draw axes
     ctx.strokeStyle = '#78401F';
     ctx.lineWidth = 1;
-    metrics.forEach((_, i) => {
+    metrics.forEach((metric, i) => {
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
       const x = centerX + radius * Math.cos(angles[i] - Math.PI / 2);
       const y = centerY + radius * Math.sin(angles[i] - Math.PI / 2);
       ctx.lineTo(x, y);
       ctx.stroke();
+
+      // Draw metric labels on the arc
+      const labelRadius = radius + 30;
+      const labelX = centerX + labelRadius * Math.cos(angles[i] - Math.PI / 2);
+      const labelY = centerY + labelRadius * Math.sin(angles[i] - Math.PI / 2);
+      
+      ctx.save();
+      ctx.translate(labelX, labelY);
+      ctx.rotate(angles[i] - Math.PI / 2 + (angles[i] > Math.PI / 2 && angles[i] < 3 * Math.PI / 2 ? Math.PI : 0));
+      
+      ctx.fillStyle = '#78401F';
+      ctx.font = '14px Montserrat';
+      ctx.textAlign = 'center';
+      ctx.fillText(metric.replace(/([A-Z])/g, ' $1').trim(), 0, 0);
+      ctx.restore();
     });
 
     // Draw company A data
@@ -194,16 +218,6 @@ const SimpleJobsDisplay = () => {
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
-
-    // Draw labels
-    ctx.fillStyle = '#78401F';
-    ctx.font = '14px Montserrat';
-    ctx.textAlign = 'center';
-    metrics.forEach((metric, i) => {
-      const x = centerX + (radius + 30) * Math.cos(angles[i] - Math.PI / 2);
-      const y = centerY + (radius + 30) * Math.sin(angles[i] - Math.PI / 2);
-      ctx.fillText(metric.replace(/([A-Z])/g, ' $1').trim(), x, y);
-    });
   };
 
   if (error) {
@@ -243,49 +257,87 @@ const SimpleJobsDisplay = () => {
         gap: '20px',
         marginBottom: '20px'
       }}>
-        <select 
-          value={companyA}
-          onChange={(e) => setCompanyA(e.target.value)}
-          disabled={loading}
-          style={{
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #78401F',
-            color: '#78401F',
-            fontFamily: 'Montserrat, sans-serif',
-            opacity: loading ? 0.7 : 1,
-            cursor: loading ? 'wait' : 'pointer'
-          }}
-        >
-          <option value="">Select Company A</option>
-          {companies.map(company => (
-            <option key={company} value={company}>{company}</option>
-          ))}
-        </select>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <select 
+            value={companyA}
+            onChange={(e) => setCompanyA(e.target.value)}
+            disabled={loading}
+            style={{
+              padding: '8px 32px 8px 12px',
+              borderRadius: '4px',
+              border: '1px solid #78401F',
+              color: '#78401F',
+              fontFamily: 'Montserrat, sans-serif',
+              opacity: loading ? 0.7 : 1,
+              cursor: loading ? 'wait' : 'pointer',
+              maxHeight: '200px',
+              overflow: 'auto',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+              backgroundColor: '#FFF3E9'
+            }}
+            size={6}
+          >
+            <option value="">Select Company A</option>
+            {companies.map(company => (
+              <option key={company} value={company}>{company}</option>
+            ))}
+          </select>
+          <div style={{
+            width: '16px',
+            height: '16px',
+            borderRadius: '50%',
+            backgroundColor: '#FF9C59',
+            position: 'absolute',
+            right: '-24px',
+            pointerEvents: 'none'
+          }} />
+        </div>
 
-        <select
-          value={companyB}
-          onChange={(e) => setCompanyB(e.target.value)}
-          disabled={loading}
-          style={{
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #78401F',
-            color: '#78401F',
-            fontFamily: 'Montserrat, sans-serif',
-            opacity: loading ? 0.7 : 1,
-            cursor: loading ? 'wait' : 'pointer'
-          }}
-        >
-          <option value="">Select Company B</option>
-          {companies.map(company => (
-            <option key={company} value={company}
-              disabled={company === companyA} // Prevent selecting same company
-            >
-              {company}
-            </option>
-          ))}
-        </select>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <select
+            value={companyB}
+            onChange={(e) => setCompanyB(e.target.value)}
+            disabled={loading}
+            style={{
+              padding: '8px 32px 8px 12px',
+              borderRadius: '4px',
+              border: '1px solid #78401F',
+              color: '#78401F',
+              fontFamily: 'Montserrat, sans-serif',
+              opacity: loading ? 0.7 : 1,
+              cursor: loading ? 'wait' : 'pointer',
+              maxHeight: '200px',
+              overflow: 'auto',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+              backgroundColor: '#FFF3E9'
+            }}
+            size={6}
+          >
+            <option value="">Select Company B</option>
+            {companies.map(company => (
+              <option 
+                key={company} 
+                value={company}
+                disabled={company === companyA}
+              >
+                {company}
+              </option>
+            ))}
+          </select>
+          <div style={{
+            width: '16px',
+            height: '16px',
+            borderRadius: '50%',
+            backgroundColor: '#78401F',
+            position: 'absolute',
+            right: '-24px',
+            pointerEvents: 'none'
+          }} />
+        </div>
       </div>
 
       <div style={{ 
