@@ -344,23 +344,19 @@ const SimpleJobsDisplay = () => {
       maxWidth: '1200px',
       margin: '0 auto',
     }}>
-      {/* Company Comparison Title (outside the white box) */}
+      {/* Company Comparison Title */}
       <h2 style={{
         fontSize: '20px',
         fontWeight: 'bold',
         color: '#78401F',
-        fontFamily: 'Montserrat, sans-serif',
-        marginBottom: '-20px'
+        fontFamily: 'Montserrat, sans-serif'
       }}>
         Company Comparison
       </h2>
 
-      {/* Company Selection and Radar Chart Module */}
+      {/* Company Selection and Radar Chart Module - No background */}
       <div style={{
-        backgroundColor: '#ffffff',
-        borderRadius: '8px',
         padding: '24px',
-        boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
       }}>
         <div style={{
           display: 'flex',
@@ -470,7 +466,7 @@ const SimpleJobsDisplay = () => {
         </div>
       </div>
 
-      {/* How We Built This Module */}
+      {/* How We Built This Module - Keep white background */}
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: '8px',
