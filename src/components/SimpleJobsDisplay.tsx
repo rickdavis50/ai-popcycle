@@ -336,246 +336,256 @@ const SimpleJobsDisplay = () => {
   }
 
   return (
-    <div style={{ 
-      position: 'relative', 
-      width: '100%',
-      maxWidth: '1200px',
-      margin: '0 auto',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '40px'
-    }}>
-      <h2 style={{
-        fontSize: '20px',
-        fontWeight: 'bold',
-        marginBottom: '16px',
-        color: '#78401F',
-        fontFamily: 'Montserrat, sans-serif',
-        textAlign: 'left',
-        paddingLeft: '20px'
-      }}>
-        Company Comparison
-      </h2>
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '40px',
-        marginBottom: '20px'
-      }}>
-        <select 
-          value={companyA}
-          onChange={(e) => setCompanyA(e.target.value)}
-          disabled={loading}
-          style={{
-            padding: '8px 32px 8px 12px',
-            borderRadius: '4px',
-            border: '1px solid #78401F',
-            color: '#78401F',
-            fontFamily: 'Montserrat, sans-serif',
-            opacity: loading ? 0.7 : 1,
-            cursor: loading ? 'wait' : 'pointer',
-            maxHeight: '200px',
-            overflow: 'auto',
-            WebkitAppearance: 'none',
-            MozAppearance: 'none',
-            appearance: 'none',
-            backgroundColor: '#FFF3E9',
-            borderColor: companyA ? '#F78729' : '#78401F',
-            outline: 'none',
-            width: '200px'
-          }}
-          size={6}
-        >
-          <option value="">Select Company A</option>
-          {companies.map(company => (
-            <option 
-              key={company} 
-              value={company}
-              style={{
-                backgroundColor: company === companyA ? '#F78729' : 'transparent',
-                color: company === companyA ? '#FFF' : '#78401F'
-              }}
-            >
-              {company}
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={companyB}
-          onChange={(e) => setCompanyB(e.target.value)}
-          disabled={loading}
-          style={{
-            padding: '8px 32px 8px 12px',
-            borderRadius: '4px',
-            border: '1px solid #78401F',
-            color: '#78401F',
-            fontFamily: 'Montserrat, sans-serif',
-            opacity: loading ? 0.7 : 1,
-            cursor: loading ? 'wait' : 'pointer',
-            maxHeight: '200px',
-            overflow: 'auto',
-            WebkitAppearance: 'none',
-            MozAppearance: 'none',
-            appearance: 'none',
-            backgroundColor: '#FFF3E9',
-            borderColor: companyB ? '#D46B13' : '#78401F',
-            outline: 'none',
-            width: '200px'
-          }}
-          size={6}
-        >
-          <option value="">Select Company B</option>
-          {companies.map(company => (
-            <option 
-              key={company} 
-              value={company}
-              disabled={company === companyA}
-              style={{
-                backgroundColor: company === companyB ? '#D46B13' : 'transparent',
-                color: company === companyB ? '#FFF' : '#78401F'
-              }}
-            >
-              {company}
-            </option>
-          ))}
-        </select>
-      </div>
-
+    <>
       <div style={{ 
+        position: 'relative', 
         width: '100%',
-        minHeight: '600px',
-        backgroundColor: '#FFF3E9',
-        borderRadius: '8px',
-        padding: '20px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        {loading ? (
-          <div style={{ color: '#78401F', fontFamily: 'Montserrat, sans-serif' }}>
-            Loading companies...
-          </div>
-        ) : (
-          <canvas
-            ref={canvasRef}
-            width="600"
-            height="600"
-            style={{ maxWidth: '100%', height: 'auto' }}
-          />
-        )}
-      </div>
-
-      {/* Info Popup */}
-      {showInfoPopup && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{
-            backgroundColor: '#FFF3E9',
-            padding: '20px',
-            borderRadius: '8px',
-            maxWidth: '400px',
-            position: 'relative'
-          }}>
-            <h3 style={{ color: '#78401F', marginTop: 0 }}>Melt Index Explained</h3>
-            <p style={{ color: '#78401F' }}>
-              The Melt Index is the average score across five key metrics:
-              retention, engineer growth, engineer concentration, headcount growth, and size rank.
-              Each metric is scored from 1-5, and the final index is their average.
-              A higher score indicates stronger overall performance.
-            </p>
-            <button
-              onClick={() => setShowInfoPopup(false)}
-              style={{
-                position: 'absolute',
-                top: '10px',
-                right: '10px',
-                border: 'none',
-                background: 'none',
-                color: '#78401F',
-                cursor: 'pointer'
-              }}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* How We Built This Section */}
-      <div style={{
-        backgroundColor: '#FFF3E9',
-        borderRadius: '8px',
-        padding: '24px',
-        marginTop: '40px'
+        maxWidth: '1200px',
+        margin: '0 auto',
+        marginBottom: '40px'
       }}>
         <h2 style={{
           fontSize: '20px',
           fontWeight: 'bold',
           marginBottom: '16px',
           color: '#78401F',
-          fontFamily: 'Montserrat, sans-serif'
-        }}>
-          How We Built This:
-        </h2>
-        <ul style={{
-          listStyle: 'none',
-          padding: 0,
-          margin: 0,
-          color: '#78401F',
           fontFamily: 'Montserrat, sans-serif',
-          fontSize: '16px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '12px'
+          textAlign: 'left',
+          paddingLeft: '20px'
         }}>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Data</strong> - Live Data API feeds Airtable, Airtable feeds the app
-          </li>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Figma</strong> - Mockups, logos, design
-          </li>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Bolt</strong> - Initial dashboard concept vetting
-          </li>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Cursor</strong> - All final app coding in VS code (with mostly Claude, some ChatGPT)
-          </li>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Github</strong> - connecting VS code to Vercel
-          </li>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Vercel</strong> - App deployment
-          </li>
-        </ul>
+          Company Comparison
+        </h2>
+
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '40px',
+          marginBottom: '20px'
+        }}>
+          <select 
+            value={companyA}
+            onChange={(e) => setCompanyA(e.target.value)}
+            disabled={loading}
+            style={{
+              padding: '8px 32px 8px 12px',
+              borderRadius: '4px',
+              border: '1px solid #78401F',
+              color: '#78401F',
+              fontFamily: 'Montserrat, sans-serif',
+              opacity: loading ? 0.7 : 1,
+              cursor: loading ? 'wait' : 'pointer',
+              maxHeight: '200px',
+              overflow: 'auto',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+              backgroundColor: '#FFF3E9',
+              borderColor: companyA ? '#F78729' : '#78401F',
+              outline: 'none',
+              width: '200px'
+            }}
+            size={6}
+          >
+            <option value="">Select Company A</option>
+            {companies.map(company => (
+              <option 
+                key={company} 
+                value={company}
+                style={{
+                  backgroundColor: company === companyA ? '#F78729' : 'transparent',
+                  color: company === companyA ? '#FFF' : '#78401F'
+                }}
+              >
+                {company}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={companyB}
+            onChange={(e) => setCompanyB(e.target.value)}
+            disabled={loading}
+            style={{
+              padding: '8px 32px 8px 12px',
+              borderRadius: '4px',
+              border: '1px solid #78401F',
+              color: '#78401F',
+              fontFamily: 'Montserrat, sans-serif',
+              opacity: loading ? 0.7 : 1,
+              cursor: loading ? 'wait' : 'pointer',
+              maxHeight: '200px',
+              overflow: 'auto',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+              backgroundColor: '#FFF3E9',
+              borderColor: companyB ? '#D46B13' : '#78401F',
+              outline: 'none',
+              width: '200px'
+            }}
+            size={6}
+          >
+            <option value="">Select Company B</option>
+            {companies.map(company => (
+              <option 
+                key={company} 
+                value={company}
+                disabled={company === companyA}
+                style={{
+                  backgroundColor: company === companyB ? '#D46B13' : 'transparent',
+                  color: company === companyB ? '#FFF' : '#78401F'
+                }}
+              >
+                {company}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div style={{ 
+          width: '100%',
+          minHeight: '600px',
+          backgroundColor: '#FFF3E9',
+          borderRadius: '8px',
+          padding: '20px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          {loading ? (
+            <div style={{ color: '#78401F', fontFamily: 'Montserrat, sans-serif' }}>
+              Loading companies...
+            </div>
+          ) : (
+            <canvas
+              ref={canvasRef}
+              width="600"
+              height="600"
+              style={{ maxWidth: '100%', height: 'auto' }}
+            />
+          )}
+        </div>
+
+        {/* Info Popup */}
+        {showInfoPopup && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000
+          }}>
+            <div style={{
+              backgroundColor: '#FFF3E9',
+              padding: '20px',
+              borderRadius: '8px',
+              maxWidth: '400px',
+              position: 'relative'
+            }}>
+              <h3 style={{ color: '#78401F', marginTop: 0 }}>Melt Index Explained</h3>
+              <p style={{ color: '#78401F' }}>
+                The Melt Index is the average score across five key metrics:
+                retention, engineer growth, engineer concentration, headcount growth, and size rank.
+                Each metric is scored from 1-5, and the final index is their average.
+                A higher score indicates stronger overall performance.
+              </p>
+              <button
+                onClick={() => setShowInfoPopup(false)}
+                style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '10px',
+                  border: 'none',
+                  background: 'none',
+                  color: '#78401F',
+                  cursor: 'pointer'
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* API Button */}
+      {/* How We Built This as a separate module */}
       <div style={{
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        marginBottom: '40px'
+      }}>
+        <div style={{
+          backgroundColor: '#ffffff',
+          borderRadius: '8px',
+          padding: '24px',
+          boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+        }}>
+          <h2 style={{
+            fontSize: '20px',
+            fontWeight: 'bold',
+            marginBottom: '16px',
+            color: '#78401F',
+            fontFamily: 'Montserrat, sans-serif'
+          }}>
+            How We Built This:
+          </h2>
+          <ul style={{
+            listStyle: 'none',
+            padding: 0,
+            margin: 0,
+            color: '#78401F',
+            fontFamily: 'Montserrat, sans-serif',
+            fontSize: '16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}>
+            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Data</strong> - Live Data API feeds Airtable, Airtable feeds the app
+            </li>
+            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Figma</strong> - Mockups, logos, design
+            </li>
+            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Bolt</strong> - Initial dashboard concept vetting
+            </li>
+            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Cursor</strong> - All final app coding in VS code (with mostly Claude, some ChatGPT)
+            </li>
+            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Github</strong> - connecting VS code to Vercel
+            </li>
+            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Vercel</strong> - App deployment
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* API Button as a separate section */}
+      <div style={{
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
         marginTop: '40px',
         marginBottom: '60px'
       }}>
         <a 
-          href="/api/documentation" 
+          href="https://www.livedatatechnologies.com/api"
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             display: 'inline-block',
             textDecoration: 'none'
@@ -590,7 +600,7 @@ const SimpleJobsDisplay = () => {
           />
         </a>
       </div>
-    </div>
+    </>
   );
 };
 
