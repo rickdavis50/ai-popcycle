@@ -35,7 +35,7 @@ export default function Dashboard() {
     <div style={{ 
       minHeight: '100vh',
       backgroundColor: '#FFF6EF',
-      padding: '32px',
+      padding: '0px',
       paddingBottom: '60vh',
       position: 'relative',
       overflow: 'hidden'
