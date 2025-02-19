@@ -1,93 +1,99 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
+import * as d3 from 'd3';
 
-// Simple data structure for company movements
-const dummyData = {
-  companies: [
-    { name: "Anthropic", x: 200, y: 100 },
-    { name: "OpenAI", x: 400, y: 100 },
-    { name: "Google", x: 200, y: 300 },
-    { name: "Microsoft", x: 400, y: 300 }
-  ],
-  movements: [
-    { from: "Anthropic", to: "OpenAI", count: 5 },
-    { from: "OpenAI", to: "Google", count: 3 },
-    { from: "Google", to: "Microsoft", count: 4 },
-    { from: "Microsoft", to: "Anthropic", count: 2 }
-  ]
+interface CompanyMetrics {
+  retention: number;
+  engineerGrowth: number;
+  engineerConcentration: number;
+  headcountGrowth: number;
+  sizeRank: number;
+}
+
+interface CompanyData {
+  name: string;
+  currentHeadcount: number;
+  headcount12MonthsAgo: number;
+  voluntaryLeaves: number;
+  currentEngineers: number;
+  engineers6MonthsAgo: number;
+  industryAverageHeadcount: number;
+}
+
+const calculateMetrics = (company: CompanyData): CompanyMetrics => {
+  // Retention Rate (1-5)
+  const retention = (company.currentHeadcount - company.voluntaryLeaves) / company.currentHeadcount;
+  const retentionScore = 1 + ((retention - 0.6) / 0.4) * 4;
+
+  // Engineer Growth (1-5)
+  const engineerGrowth = (company.currentEngineers - company.engineers6MonthsAgo) / company.engineers6MonthsAgo;
+  const engineerGrowthScore = 1 + (engineerGrowth / 2) * 4;
+
+  // Engineering Concentration (1-5)
+  const concentration = company.currentEngineers / company.currentHeadcount;
+  const concentrationScore = 1 + (concentration / 0.5) * 4;
+
+  // Headcount Growth (1-5)
+  const headcountGrowth = (company.currentHeadcount - company.headcount12MonthsAgo) / company.headcount12MonthsAgo;
+  const headcountGrowthScore = 1 + (headcountGrowth / 2) * 4;
+
+  // Size Rank (1-5)
+  const relativeSize = company.currentHeadcount / company.industryAverageHeadcount;
+  const sizeScore = 1 + ((relativeSize - 0.5) / 1.5) * 4;
+
+  // Clamp all scores between 1 and 5
+  return {
+    retention: Math.min(Math.max(retentionScore, 1), 5),
+    engineerGrowth: Math.min(Math.max(engineerGrowthScore, 1), 5),
+    engineerConcentration: Math.min(Math.max(concentrationScore, 1), 5),
+    headcountGrowth: Math.min(Math.max(headcountGrowthScore, 1), 5),
+    sizeRank: Math.min(Math.max(sizeScore, 1), 5)
+  };
 };
 
 const SimpleJobsDisplay = () => {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [hoveredCompany, setHoveredCompany] = useState<string | null>(null);
+  const [companies, setCompanies] = useState<string[]>([]);
+  const [companyA, setCompanyA] = useState<string>('');
+  const [companyB, setCompanyB] = useState<string>('');
+  const [loading, setLoading] = useState(true);
+  const chartRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
-    if (!svgRef.current) return;
-
-    // Clear previous content
-    while (svgRef.current.firstChild) {
-      svgRef.current.removeChild(svgRef.current.firstChild);
-    }
-
-    // Draw connections
-    dummyData.movements.forEach(movement => {
-      const fromCompany = dummyData.companies.find(c => c.name === movement.from);
-      const toCompany = dummyData.companies.find(c => c.name === movement.to);
-
-      if (fromCompany && toCompany) {
-        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        const d = `M ${fromCompany.x} ${fromCompany.y} L ${toCompany.x} ${toCompany.y}`;
-        
-        path.setAttribute("d", d);
-        path.setAttribute("stroke", "#78401F");
-        path.setAttribute("stroke-width", "2");
-        path.setAttribute("fill", "none");
-        path.setAttribute("opacity", "0.6");
-        
-        svgRef.current.appendChild(path);
-      }
-    });
-
-    // Draw companies
-    dummyData.companies.forEach(company => {
-      // Create group for company
-      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      
-      // Create circle
-      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      circle.setAttribute("cx", company.x.toString());
-      circle.setAttribute("cy", company.y.toString());
-      circle.setAttribute("r", "20");
-      circle.setAttribute("fill", "#FF9C59");
-      circle.setAttribute("stroke", "#78401F");
-      circle.setAttribute("stroke-width", "2");
-      
-      // Create text
-      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      text.setAttribute("x", (company.x + 30).toString());
-      text.setAttribute("y", (company.y + 5).toString());
-      text.setAttribute("font-family", "Montserrat, sans-serif");
-      text.setAttribute("font-size", "14px");
-      text.setAttribute("fill", "#78401F");
-      text.textContent = company.name;
-
-      // Add hover effects
-      group.addEventListener("mouseenter", () => {
-        circle.setAttribute("r", "22");
-        setHoveredCompany(company.name);
+    // Fetch companies from Airtable
+    fetch('/api/airtable')
+      .then(res => res.json())
+      .then(data => {
+        const companyNames = Array.from(new Set(data.records.map((r: any) => r.fields.company)));
+        setCompanies(companyNames);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching companies:', err);
+        setLoading(false);
       });
-
-      group.addEventListener("mouseleave", () => {
-        circle.setAttribute("r", "20");
-        setHoveredCompany(null);
-      });
-
-      group.appendChild(circle);
-      group.appendChild(text);
-      svgRef.current.appendChild(group);
-    });
   }, []);
+
+  useEffect(() => {
+    if (companyA && companyB && chartRef.current) {
+      drawRadarChart();
+    }
+  }, [companyA, companyB]);
+
+  const drawRadarChart = () => {
+    if (!chartRef.current) return;
+
+    const width = 600;
+    const height = 600;
+    const margin = 60;
+    const radius = Math.min(width, height) / 2 - margin;
+
+    const svg = d3.select(chartRef.current);
+    svg.selectAll("*").remove();
+
+    // Create the radar chart here using D3.js
+    // (I'll provide this code in the next message)
+  };
 
   return (
     <div style={{ 
@@ -105,11 +111,53 @@ const SimpleJobsDisplay = () => {
         fontFamily: 'Montserrat, sans-serif',
         textAlign: 'center'
       }}>
-        AI Industry Job Changes
+        Company Comparison
       </h2>
+
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '20px',
+        marginBottom: '20px'
+      }}>
+        <select 
+          value={companyA}
+          onChange={(e) => setCompanyA(e.target.value)}
+          style={{
+            padding: '8px',
+            borderRadius: '4px',
+            border: '1px solid #78401F',
+            color: '#78401F',
+            fontFamily: 'Montserrat, sans-serif'
+          }}
+        >
+          <option value="">Select Company A</option>
+          {companies.map(company => (
+            <option key={company} value={company}>{company}</option>
+          ))}
+        </select>
+
+        <select
+          value={companyB}
+          onChange={(e) => setCompanyB(e.target.value)}
+          style={{
+            padding: '8px',
+            borderRadius: '4px',
+            border: '1px solid #78401F',
+            color: '#78401F',
+            fontFamily: 'Montserrat, sans-serif'
+          }}
+        >
+          <option value="">Select Company B</option>
+          {companies.map(company => (
+            <option key={company} value={company}>{company}</option>
+          ))}
+        </select>
+      </div>
+
       <div style={{ 
         width: '100%',
-        minHeight: '400px',
+        minHeight: '600px',
         backgroundColor: '#FFF3E9',
         borderRadius: '8px',
         padding: '20px',
@@ -118,29 +166,13 @@ const SimpleJobsDisplay = () => {
         alignItems: 'center'
       }}>
         <svg
-          ref={svgRef}
+          ref={chartRef}
           width="600"
-          height="400"
-          viewBox="0 0 600 400"
+          height="600"
+          viewBox="0 0 600 600"
           style={{ maxWidth: '100%', height: 'auto' }}
         />
       </div>
-      {hoveredCompany && (
-        <div style={{
-          position: 'absolute',
-          top: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          padding: '8px 16px',
-          backgroundColor: 'white',
-          borderRadius: '4px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          color: '#78401F',
-          fontFamily: 'Montserrat, sans-serif'
-        }}>
-          {hoveredCompany}
-        </div>
-      )}
     </div>
   );
 };
