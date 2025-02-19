@@ -339,28 +339,29 @@ const SimpleJobsDisplay = () => {
     <div style={{ 
       display: 'flex',
       flexDirection: 'column',
-      gap: '40px', // This creates the spacing between sections
+      gap: '40px',
       width: '100%',
       maxWidth: '1200px',
       margin: '0 auto',
     }}>
-      {/* Company Comparison Section */}
+      {/* Company Comparison Title (outside the white box) */}
+      <h2 style={{
+        fontSize: '20px',
+        fontWeight: 'bold',
+        color: '#78401F',
+        fontFamily: 'Montserrat, sans-serif',
+        marginBottom: '-20px'
+      }}>
+        Company Comparison
+      </h2>
+
+      {/* Company Selection and Radar Chart Module */}
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: '8px',
         padding: '24px',
         boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
       }}>
-        <h2 style={{
-          fontSize: '20px',
-          fontWeight: 'bold',
-          marginBottom: '16px',
-          color: '#78401F',
-          fontFamily: 'Montserrat, sans-serif'
-        }}>
-          Company Comparison
-        </h2>
-
         <div style={{
           display: 'flex',
           justifyContent: 'center',
@@ -450,9 +451,6 @@ const SimpleJobsDisplay = () => {
         <div style={{ 
           width: '100%',
           minHeight: '600px',
-          backgroundColor: '#FFF3E9',
-          borderRadius: '8px',
-          padding: '20px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center'
@@ -470,55 +468,9 @@ const SimpleJobsDisplay = () => {
             />
           )}
         </div>
-
-        {/* Info Popup */}
-        {showInfoPopup && (
-          <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000
-          }}>
-            <div style={{
-              backgroundColor: '#FFF3E9',
-              padding: '20px',
-              borderRadius: '8px',
-              maxWidth: '400px',
-              position: 'relative'
-            }}>
-              <h3 style={{ color: '#78401F', marginTop: 0 }}>Melt Index Explained</h3>
-              <p style={{ color: '#78401F' }}>
-                The Melt Index is the average score across five key metrics:
-                retention, engineer growth, engineer concentration, headcount growth, and size rank.
-                Each metric is scored from 1-5, and the final index is their average.
-                A higher score indicates stronger overall performance.
-              </p>
-              <button
-                onClick={() => setShowInfoPopup(false)}
-                style={{
-                  position: 'absolute',
-                  top: '10px',
-                  right: '10px',
-                  border: 'none',
-                  background: 'none',
-                  color: '#78401F',
-                  cursor: 'pointer'
-                }}
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
-      {/* How We Built This Section */}
+      {/* How We Built This Module */}
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: '8px',
@@ -572,38 +524,73 @@ const SimpleJobsDisplay = () => {
         </ul>
       </div>
 
-      {/* API Button - no background */}
+      {/* API Button */}
       <div style={{
         display: 'flex',
         justifyContent: 'center',
-        padding: '20px 0'
+        marginTop: '20px',
+        marginBottom: '60px'
       }}>
         <a 
           href="https://www.livedatatechnologies.com/api"
           target="_blank"
           rel="noopener noreferrer"
-          style={{
-            display: 'inline-block',
-            textDecoration: 'none'
-          }}
         >
-          <div style={{
-            width: '200px',
-            height: '60px',
-            backgroundColor: '#78401F',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontFamily: 'Montserrat, sans-serif',
-            fontSize: '16px',
-            fontWeight: '600'
-          }}>
-            @api
-          </div>
+          <Image
+            src="/images/api_button.svg"
+            alt="API Access"
+            width={200}
+            height={60}
+            priority
+          />
         </a>
       </div>
+
+      {/* Info Popup */}
+      {showInfoPopup && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: '#FFF3E9',
+            padding: '20px',
+            borderRadius: '8px',
+            maxWidth: '400px',
+            position: 'relative'
+          }}>
+            <h3 style={{ color: '#78401F', marginTop: 0 }}>Melt Index Explained</h3>
+            <p style={{ color: '#78401F' }}>
+              The Melt Index is the average score across five key metrics:
+              retention, engineer growth, engineer concentration, headcount growth, and size rank.
+              Each metric is scored from 1-5, and the final index is their average.
+              A higher score indicates stronger overall performance.
+            </p>
+            <button
+              onClick={() => setShowInfoPopup(false)}
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                border: 'none',
+                background: 'none',
+                color: '#78401F',
+                cursor: 'pointer'
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
