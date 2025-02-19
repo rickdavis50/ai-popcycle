@@ -336,7 +336,7 @@ const SimpleJobsDisplay = () => {
   }
 
   return (
-    <>
+    <div style={{ position: 'relative' }}>
       {/* Company Comparison Section */}
       <div style={{ 
         display: 'flex',
@@ -523,27 +523,30 @@ const SimpleJobsDisplay = () => {
         </ul>
       </div>
 
-      {/* API Button as a separate section */}
-      <div style={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        margin: '40px 0 60px'
-      }}>
-        <a 
-          href="https://www.livedatatechnologies.com/api"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            src="/images/api_button.svg"
-            alt="API Access"
-            width={200}
-            height={60}
-            priority
-          />
-        </a>
-      </div>
+      {/* Standalone API Button */}
+      <a 
+        href="https://www.livedatatechnologies.com/api"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: 'absolute',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          bottom: '-120px', // Push it down onto the background
+          display: 'block',
+          width: '200px',
+          height: '60px',
+          zIndex: 1
+        }}
+      >
+        <Image
+          src="/images/api_button.svg"
+          alt="API Access"
+          width={200}
+          height={60}
+          priority
+        />
+      </a>
 
       {/* Info Popup */}
       {showInfoPopup && (
@@ -590,7 +593,7 @@ const SimpleJobsDisplay = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
