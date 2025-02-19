@@ -6,7 +6,6 @@ import InsightsModule from './InsightsModule';
 import SimpleJobsDisplay from './SimpleJobsDisplay';
 import { useAirtableData } from '../hooks/useAirtableData';
 import { insights } from '../utils/dummyData';
-import Logo from './Logo';
 import EngineerTrendChart from './EngineerTrendChart';
 
 export default function Dashboard() {
@@ -41,22 +40,7 @@ export default function Dashboard() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Add background image */}
-      <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        width: '100%',
-        minHeight: '100vh',
-        zIndex: 1,
-        opacity: 1,
-        backgroundImage: 'url(/images/dreamcycle.png)',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center bottom',
-        backgroundSize: 'cover',
-        transform: 'translateY(25%)',
-      }} />
+      {/* Remove background image div since we don't have the asset */}
       
       <div style={{ 
         marginBottom: '32px',
@@ -64,13 +48,15 @@ export default function Dashboard() {
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-        <Image
-          src="/images/pop_logo.svg"
-          alt="Pop Logo"
-          width={250}
-          height={63}
-          priority
-        />
+        {/* Replace with text until we have the logo */}
+        <h1 style={{
+          fontSize: '24px',
+          fontWeight: 'bold',
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif'
+        }}>
+          AI Pop-Cycle
+        </h1>
       </div>
       <div style={{ 
         maxWidth: '1400px', 
@@ -139,10 +125,6 @@ export default function Dashboard() {
         </div>
         
         <div style={{ 
-          backgroundColor: 'rgba(255, 255, 255, 0.85)',
-          borderRadius: '8px',
-          padding: '24px',
-          boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
           position: 'relative',
           zIndex: 2,
           maxWidth: '1400px',
