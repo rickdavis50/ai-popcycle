@@ -131,7 +131,13 @@ const SimpleJobsDisplay = () => {
     const centerX = 300;
     const centerY = 300;
     const radius = 200;
-    const metrics = ['retention', 'engineerGrowth', 'engineerConcentration', 'headcountGrowth', 'sizeRank'];
+    const metrics = [
+      { key: 'retention', label: 'Retention' },
+      { key: 'engineerGrowth', label: 'Engineer Growth' },
+      { key: 'engineerConcentration', label: 'Engineer Concentration' },
+      { key: 'headcountGrowth', label: 'Headcount Growth' },
+      { key: 'sizeRank', label: 'Size Rank' }
+    ];
     const angles = metrics.map((_, i) => (i * 2 * Math.PI) / metrics.length);
 
     // Clear canvas
@@ -152,7 +158,7 @@ const SimpleJobsDisplay = () => {
       ctx.stroke();
     }
 
-    // Draw axes and labels
+    // Draw axes and properly capitalized labels
     metrics.forEach((metric, i) => {
       // Draw axis line
       ctx.beginPath();
@@ -170,12 +176,12 @@ const SimpleJobsDisplay = () => {
       ctx.fillStyle = '#78401F';
       ctx.font = '14px Montserrat';
       ctx.textAlign = 'center';
-      ctx.fillText(metric.replace(/([A-Z])/g, ' $1').trim(), labelX, labelY);
+      ctx.fillText(metric.label, labelX, labelY);
     });
 
     // Draw Melt Index scores if companies are selected
     if (metricsA || metricsB) {
-      ctx.font = 'bold 28px Montserrat';
+      ctx.font = 'bold 20px Montserrat'; // Reduced font size
       ctx.textAlign = 'left';
     }
     
@@ -185,7 +191,7 @@ const SimpleJobsDisplay = () => {
       ctx.strokeStyle = '#F78729';
       ctx.fillStyle = 'rgba(247, 135, 41, 0.3)';
       metrics.forEach((metric, i) => {
-        const value = metricsA[metric as keyof CompanyMetrics];
+        const value = metricsA[metric.key as keyof CompanyMetrics];
         const distance = (value / 5) * radius;
         const x = centerX + distance * Math.cos(angles[i] - Math.PI / 2);
         const y = centerY + distance * Math.sin(angles[i] - Math.PI / 2);
@@ -196,9 +202,9 @@ const SimpleJobsDisplay = () => {
       ctx.fill();
       ctx.stroke();
 
-      // Draw Company A Melt Index
+      // Draw Company A Melt Index higher up
       ctx.fillStyle = '#F78729';
-      ctx.fillText('Melt Index: ' + calculateMeltIndex(metricsA).toString(), 40, 60);
+      ctx.fillText('Melt Index: ' + calculateMeltIndex(metricsA).toString(), 40, 40);
     }
 
     if (metricsB) {
@@ -207,7 +213,7 @@ const SimpleJobsDisplay = () => {
       ctx.strokeStyle = '#D46B13';
       ctx.fillStyle = 'rgba(212, 107, 19, 0.3)';
       metrics.forEach((metric, i) => {
-        const value = metricsB[metric as keyof CompanyMetrics];
+        const value = metricsB[metric.key as keyof CompanyMetrics];
         const distance = (value / 5) * radius;
         const x = centerX + distance * Math.cos(angles[i] - Math.PI / 2);
         const y = centerY + distance * Math.sin(angles[i] - Math.PI / 2);
@@ -218,20 +224,41 @@ const SimpleJobsDisplay = () => {
       ctx.fill();
       ctx.stroke();
 
-      // Draw Company B Melt Index with question mark
+      // Draw Company B Melt Index with question mark higher up
       ctx.fillStyle = '#D46B13';
       const rightScore = 'Melt Index: ' + calculateMeltIndex(metricsB).toString();
       const rightScoreWidth = ctx.measureText(rightScore).width;
-      ctx.fillText(rightScore, 560 - rightScoreWidth - 30, 60);
+      ctx.fillText(rightScore, 560 - rightScoreWidth - 30, 40);
       
-      // Draw question mark
-      ctx.font = 'bold 20px Montserrat';
-      ctx.fillText('?', 560 - 20, 60);
+      // Draw clickable question mark circle
+      const qMarkX = 560 - 10;
+      const qMarkY = 35;
+      const qMarkRadius = 12;
+      
       ctx.beginPath();
-      ctx.arc(560 - 10, 55, 12, 0, 2 * Math.PI);
+      ctx.arc(qMarkX, qMarkY, qMarkRadius, 0, 2 * Math.PI);
       ctx.strokeStyle = '#D46B13';
       ctx.lineWidth = 1;
       ctx.stroke();
+
+      // Draw question mark centered in circle
+      ctx.font = 'bold 16px Montserrat';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('?', qMarkX, qMarkY);
+
+      // Add click detection for the question mark
+      canvasRef.current?.addEventListener('click', (event) => {
+        const rect = canvasRef.current?.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        
+        // Check if click is within question mark circle
+        const distance = Math.sqrt(Math.pow(x - qMarkX, 0) + Math.pow(y - qMarkY, 0));
+        if (distance <= qMarkRadius) {
+          setShowInfoPopup(true);
+        }
+      });
     }
   };
 
@@ -352,7 +379,10 @@ const SimpleJobsDisplay = () => {
             appearance: 'none',
             backgroundColor: '#FFF3E9',
             borderColor: companyA ? '#F78729' : '#78401F',
-            width: '200px'
+            outline: 'none',
+            '&:focus': {
+              borderColor: companyA ? '#F78729' : '#78401F',
+            }
           }}
           size={6}
         >
