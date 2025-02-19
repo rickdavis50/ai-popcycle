@@ -68,12 +68,47 @@ const calculateMetrics = (company: CompanyData): CompanyMetrics => {
   };
 };
 
+const calculateMeltIndex = (metrics: CompanyMetrics): number => {
+  const scores = [
+    metrics.retention,
+    metrics.engineerGrowth,
+    metrics.engineerConcentration,
+    metrics.headcountGrowth,
+    metrics.sizeRank
+  ];
+  return Number((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1));
+};
+
+const InfoIcon = () => (
+  <div 
+    style={{ 
+      display: 'inline-block',
+      marginLeft: '4px',
+      cursor: 'pointer',
+      color: '#78401F',
+      fontSize: '14px',
+      fontWeight: 'bold',
+      width: '16px',
+      height: '16px',
+      borderRadius: '50%',
+      border: '1px solid #78401F',
+      textAlign: 'center',
+      lineHeight: '14px'
+    }}
+  >
+    ?
+  </div>
+);
+
 const SimpleJobsDisplay = () => {
   const [companies, setCompanies] = useState<string[]>([]);
   const [companyA, setCompanyA] = useState<string>('');
   const [companyB, setCompanyB] = useState<string>('');
   const { records, loading, error } = useAirtableData();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [showInfoPopup, setShowInfoPopup] = useState(false);
+  const [scoreA, setScoreA] = useState<number | null>(null);
+  const [scoreB, setScoreB] = useState<number | null>(null);
 
   // Debug logging
   useEffect(() => {
@@ -134,6 +169,38 @@ const SimpleJobsDisplay = () => {
 
   }, [companyA, companyB, records]);
 
+  // Calculate and update scores when companies change
+  useEffect(() => {
+    if (companyA && companyB && records) {
+      const companyAData = records.find(r => r.fields.company === companyA)?.fields;
+      const companyBData = records.find(r => r.fields.company === companyB)?.fields;
+
+      if (companyAData && companyBData) {
+        const metricsA = calculateMetrics({
+          name: companyA,
+          currentHeadcount: companyAData.count_current_employees || 0,
+          headcount12MonthsAgo: companyAData.headcount_last_year || 0,
+          voluntaryLeaves: companyAData.voluntarily_left || 0,
+          currentEngineers: companyAData.engineers || 0,
+          engineers6MonthsAgo: companyAData.engineers_6mo || 0,
+          industryAverageHeadcount: calculateIndustryAverage(records)
+        });
+        const metricsB = calculateMetrics({
+          name: companyB,
+          currentHeadcount: companyBData.count_current_employees || 0,
+          headcount12MonthsAgo: companyBData.headcount_last_year || 0,
+          voluntaryLeaves: companyBData.voluntarily_left || 0,
+          currentEngineers: companyBData.engineers || 0,
+          engineers6MonthsAgo: companyBData.engineers_6mo || 0,
+          industryAverageHeadcount: calculateIndustryAverage(records)
+        });
+
+        setScoreA(calculateMeltIndex(metricsA));
+        setScoreB(calculateMeltIndex(metricsB));
+      }
+    }
+  }, [companyA, companyB, records]);
+
   // Helper function to calculate industry average
   const calculateIndustryAverage = (records: any[]) => {
     const validHeadcounts = records
@@ -151,14 +218,20 @@ const SimpleJobsDisplay = () => {
     const metrics = ['retention', 'engineerGrowth', 'engineerConcentration', 'headcountGrowth', 'sizeRank'];
     const angles = metrics.map((_, i) => (i * 2 * Math.PI) / metrics.length);
 
-    // Draw background circles
-    const circles = [0.2, 0.4, 0.6, 0.8, 1.0];
-    circles.forEach((percentage, i) => {
+    // Draw background rings (1-5)
+    for (let score = 1; score <= 5; score++) {
+      const ringRadius = (score / 5) * radius;
       ctx.beginPath();
-      ctx.arc(centerX, centerY, radius * percentage, 0, 2 * Math.PI);
-      ctx.fillStyle = i % 2 === 0 ? '#FFF3E9' : '#FFF9F4';
-      ctx.fill();
-    });
+      angles.forEach((angle, i) => {
+        const x = centerX + ringRadius * Math.cos(angle - Math.PI / 2);
+        const y = centerY + ringRadius * Math.sin(angle - Math.PI / 2);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.closePath();
+      ctx.strokeStyle = '#78401F33';
+      ctx.stroke();
+    }
 
     // Draw axes
     ctx.strokeStyle = '#78401F';
@@ -171,19 +244,23 @@ const SimpleJobsDisplay = () => {
       ctx.lineTo(x, y);
       ctx.stroke();
 
-      // Draw metric labels on the arc
+      // Draw metric labels horizontally
       const labelRadius = radius + 30;
       const labelX = centerX + labelRadius * Math.cos(angles[i] - Math.PI / 2);
       const labelY = centerY + labelRadius * Math.sin(angles[i] - Math.PI / 2);
       
       ctx.save();
-      ctx.translate(labelX, labelY);
-      ctx.rotate(angles[i] - Math.PI / 2 + (angles[i] > Math.PI / 2 && angles[i] < 3 * Math.PI / 2 ? Math.PI : 0));
-      
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       ctx.fillStyle = '#78401F';
       ctx.font = '14px Montserrat';
-      ctx.textAlign = 'center';
-      ctx.fillText(metric.replace(/([A-Z])/g, ' $1').trim(), 0, 0);
+      
+      let text = metric.replace(/([A-Z])/g, ' $1').trim();
+      if (angles[i] > Math.PI / 2 && angles[i] < 3 * Math.PI / 2) {
+        text = text.split('').reverse().join('');
+      }
+      
+      ctx.fillText(text, labelX, labelY);
       ctx.restore();
     });
 
@@ -275,7 +352,8 @@ const SimpleJobsDisplay = () => {
               WebkitAppearance: 'none',
               MozAppearance: 'none',
               appearance: 'none',
-              backgroundColor: '#FFF3E9'
+              backgroundColor: companyA ? '#FFF3E9' : '#FFF',
+              borderColor: '#FF9C59'
             }}
             size={6}
           >
@@ -293,6 +371,14 @@ const SimpleJobsDisplay = () => {
             right: '-24px',
             pointerEvents: 'none'
           }} />
+          {scoreA !== null && (
+            <div style={{ textAlign: 'center', marginTop: '8px', color: '#78401F' }}>
+              Melt Index: {scoreA}
+              <span onClick={() => setShowInfoPopup(true)}>
+                <InfoIcon />
+              </span>
+            </div>
+          )}
         </div>
 
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
@@ -313,7 +399,8 @@ const SimpleJobsDisplay = () => {
               WebkitAppearance: 'none',
               MozAppearance: 'none',
               appearance: 'none',
-              backgroundColor: '#FFF3E9'
+              backgroundColor: companyB ? '#FFF3E9' : '#FFF',
+              borderColor: '#78401F'
             }}
             size={6}
           >
@@ -337,6 +424,11 @@ const SimpleJobsDisplay = () => {
             right: '-24px',
             pointerEvents: 'none'
           }} />
+          {scoreB !== null && (
+            <div style={{ textAlign: 'center', marginTop: '8px', color: '#78401F' }}>
+              Melt Index: {scoreB}
+            </div>
+          )}
         </div>
       </div>
 
@@ -363,6 +455,52 @@ const SimpleJobsDisplay = () => {
           />
         )}
       </div>
+
+      {/* Info Popup */}
+      {showInfoPopup && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: '#FFF3E9',
+            padding: '20px',
+            borderRadius: '8px',
+            maxWidth: '400px',
+            position: 'relative'
+          }}>
+            <h3 style={{ color: '#78401F', marginTop: 0 }}>Melt Index Explained</h3>
+            <p style={{ color: '#78401F' }}>
+              The Melt Index is the average score across five key metrics:
+              retention, engineer growth, engineer concentration, headcount growth, and size rank.
+              Each metric is scored from 1-5, and the final index is their average.
+              A higher score indicates stronger overall performance.
+            </p>
+            <button
+              onClick={() => setShowInfoPopup(false)}
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                border: 'none',
+                background: 'none',
+                color: '#78401F',
+                cursor: 'pointer'
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
