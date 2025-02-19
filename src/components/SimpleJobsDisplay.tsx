@@ -127,127 +127,17 @@ const SimpleJobsDisplay = () => {
     }
   }, [records]);
 
-  // Draw radar chart when companies are selected
-  useEffect(() => {
-    if (!canvasRef.current || !companyA || !companyB) return;
-
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
-
-    // Clear canvas
-    ctx.clearRect(0, 0, 600, 600);
-
-    // Find company data
-    const companyAData = records?.find(r => r.fields.company === companyA)?.fields;
-    const companyBData = records?.find(r => r.fields.company === companyB)?.fields;
-
-    if (!companyAData || !companyBData) return;
-
-    // Calculate metrics
-    const metricsA = calculateMetrics({
-      name: companyA,
-      currentHeadcount: companyAData.count_current_employees || 0,
-      headcount12MonthsAgo: companyAData.headcount_last_year || 0,
-      voluntaryLeaves: companyAData.voluntarily_left || 0,
-      currentEngineers: companyAData.engineers || 0,
-      engineers6MonthsAgo: companyAData.engineers_6mo || 0,
-      industryAverageHeadcount: calculateIndustryAverage(records)
-    });
-
-    const metricsB = calculateMetrics({
-      name: companyB,
-      currentHeadcount: companyBData.count_current_employees || 0,
-      headcount12MonthsAgo: companyBData.headcount_last_year || 0,
-      voluntaryLeaves: companyBData.voluntarily_left || 0,
-      currentEngineers: companyBData.engineers || 0,
-      engineers6MonthsAgo: companyBData.engineers_6mo || 0,
-      industryAverageHeadcount: calculateIndustryAverage(records)
-    });
-
-    // Draw radar chart
-    drawRadarChart(ctx, metricsA, metricsB);
-
-  }, [companyA, companyB, records]);
-
-  // Calculate and update scores when companies change
-  useEffect(() => {
-    if (companyA && companyB && records) {
-      const companyAData = records.find(r => r.fields.company === companyA)?.fields;
-      const companyBData = records.find(r => r.fields.company === companyB)?.fields;
-
-      if (companyAData && companyBData) {
-        const metricsA = calculateMetrics({
-          name: companyA,
-          currentHeadcount: companyAData.count_current_employees || 0,
-          headcount12MonthsAgo: companyAData.headcount_last_year || 0,
-          voluntaryLeaves: companyAData.voluntarily_left || 0,
-          currentEngineers: companyAData.engineers || 0,
-          engineers6MonthsAgo: companyAData.engineers_6mo || 0,
-          industryAverageHeadcount: calculateIndustryAverage(records)
-        });
-        const metricsB = calculateMetrics({
-          name: companyB,
-          currentHeadcount: companyBData.count_current_employees || 0,
-          headcount12MonthsAgo: companyBData.headcount_last_year || 0,
-          voluntaryLeaves: companyBData.voluntarily_left || 0,
-          currentEngineers: companyBData.engineers || 0,
-          engineers6MonthsAgo: companyBData.engineers_6mo || 0,
-          industryAverageHeadcount: calculateIndustryAverage(records)
-        });
-
-        setScoreA(calculateMeltIndex(metricsA));
-        setScoreB(calculateMeltIndex(metricsB));
-      }
-    }
-  }, [companyA, companyB, records]);
-
-  // Helper function to calculate industry average
-  const calculateIndustryAverage = (records: any[]) => {
-    const validHeadcounts = records
-      .map(r => r.fields.count_current_employees)
-      .filter(count => count && count > 0);
-    
-    return validHeadcounts.reduce((sum, count) => sum + count, 0) / validHeadcounts.length;
-  };
-
-  // Function to draw radar chart
-  const drawRadarChart = (ctx: CanvasRenderingContext2D, metricsA: CompanyMetrics, metricsB: CompanyMetrics) => {
+  const drawRadarChart = (ctx: CanvasRenderingContext2D, metricsA?: CompanyMetrics, metricsB?: CompanyMetrics) => {
     const centerX = 300;
     const centerY = 300;
     const radius = 200;
     const metrics = ['retention', 'engineerGrowth', 'engineerConcentration', 'headcountGrowth', 'sizeRank'];
     const angles = metrics.map((_, i) => (i * 2 * Math.PI) / metrics.length);
 
-    // Draw title in top left
-    ctx.fillStyle = '#78401F';
-    ctx.font = 'bold 16px Montserrat';
-    ctx.textAlign = 'left';
-    ctx.fillText('Company Comparison', 20, 30);
+    // Clear canvas
+    ctx.clearRect(0, 0, 600, 600);
 
-    // Draw Melt Index scores with larger font and better positioning
-    ctx.font = 'bold 28px Montserrat';
-    ctx.textAlign = 'left';
-    
-    // Left Melt Index
-    ctx.fillStyle = '#F78729';
-    ctx.fillText('Melt Index: ' + calculateMeltIndex(metricsA).toString(), 40, 60);
-    
-    // Right Melt Index with question mark
-    ctx.fillStyle = '#D46B13';
-    const rightScore = 'Melt Index: ' + calculateMeltIndex(metricsB).toString();
-    const rightScoreWidth = ctx.measureText(rightScore).width;
-    ctx.fillText(rightScore, 560 - rightScoreWidth - 30, 60); // Leave space for question mark
-    
-    // Draw question mark
-    ctx.font = 'bold 20px Montserrat';
-    ctx.fillText('?', 560 - 20, 60);
-    ctx.beginPath();
-    ctx.arc(560 - 10, 55, 12, 0, 2 * Math.PI);
-    ctx.strokeStyle = '#D46B13';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    // Draw background rings (1-5)
+    // Draw the base pentagon grid
     for (let score = 1; score <= 5; score++) {
       const ringRadius = (score / 5) * radius;
       ctx.beginPath();
@@ -262,68 +152,147 @@ const SimpleJobsDisplay = () => {
       ctx.stroke();
     }
 
-    // Draw axes
-    ctx.strokeStyle = '#78401F';
-    ctx.lineWidth = 1;
+    // Draw axes and labels
     metrics.forEach((metric, i) => {
+      // Draw axis line
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
       const x = centerX + radius * Math.cos(angles[i] - Math.PI / 2);
       const y = centerY + radius * Math.sin(angles[i] - Math.PI / 2);
       ctx.lineTo(x, y);
+      ctx.strokeStyle = '#78401F';
       ctx.stroke();
 
-      // Draw metric labels horizontally
+      // Draw label
       const labelRadius = radius + 30;
       const labelX = centerX + labelRadius * Math.cos(angles[i] - Math.PI / 2);
       const labelY = centerY + labelRadius * Math.sin(angles[i] - Math.PI / 2);
-      
-      ctx.save();
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
       ctx.fillStyle = '#78401F';
       ctx.font = '14px Montserrat';
+      ctx.textAlign = 'center';
+      ctx.fillText(metric.replace(/([A-Z])/g, ' $1').trim(), labelX, labelY);
+    });
+
+    // Draw Melt Index scores if companies are selected
+    if (metricsA || metricsB) {
+      ctx.font = 'bold 28px Montserrat';
+      ctx.textAlign = 'left';
+    }
+    
+    if (metricsA) {
+      // Draw Company A data
+      ctx.beginPath();
+      ctx.strokeStyle = '#F78729';
+      ctx.fillStyle = 'rgba(247, 135, 41, 0.3)';
+      metrics.forEach((metric, i) => {
+        const value = metricsA[metric as keyof CompanyMetrics];
+        const distance = (value / 5) * radius;
+        const x = centerX + distance * Math.cos(angles[i] - Math.PI / 2);
+        const y = centerY + distance * Math.sin(angles[i] - Math.PI / 2);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Draw Company A Melt Index
+      ctx.fillStyle = '#F78729';
+      ctx.fillText('Melt Index: ' + calculateMeltIndex(metricsA).toString(), 40, 60);
+    }
+
+    if (metricsB) {
+      // Draw Company B data
+      ctx.beginPath();
+      ctx.strokeStyle = '#D46B13';
+      ctx.fillStyle = 'rgba(212, 107, 19, 0.3)';
+      metrics.forEach((metric, i) => {
+        const value = metricsB[metric as keyof CompanyMetrics];
+        const distance = (value / 5) * radius;
+        const x = centerX + distance * Math.cos(angles[i] - Math.PI / 2);
+        const y = centerY + distance * Math.sin(angles[i] - Math.PI / 2);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Draw Company B Melt Index with question mark
+      ctx.fillStyle = '#D46B13';
+      const rightScore = 'Melt Index: ' + calculateMeltIndex(metricsB).toString();
+      const rightScoreWidth = ctx.measureText(rightScore).width;
+      ctx.fillText(rightScore, 560 - rightScoreWidth - 30, 60);
       
-      let text = metric.replace(/([A-Z])/g, ' $1').trim();
-      if (angles[i] > Math.PI / 2 && angles[i] < 3 * Math.PI / 2) {
-        text = text.split('').reverse().join('');
+      // Draw question mark
+      ctx.font = 'bold 20px Montserrat';
+      ctx.fillText('?', 560 - 20, 60);
+      ctx.beginPath();
+      ctx.arc(560 - 10, 55, 12, 0, 2 * Math.PI);
+      ctx.strokeStyle = '#D46B13';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  };
+
+  // Initialize empty chart when component mounts
+  useEffect(() => {
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      if (ctx) {
+        drawRadarChart(ctx);
       }
-      
-      ctx.fillText(text, labelX, labelY);
-      ctx.restore();
-    });
+    }
+  }, []);
 
-    // Draw company B data first (so it's underneath)
-    ctx.beginPath();
-    ctx.strokeStyle = '#D46B13';
-    ctx.fillStyle = 'rgba(212, 107, 19, 0.3)';
-    metrics.forEach((metric, i) => {
-      const value = metricsB[metric as keyof CompanyMetrics];
-      const distance = (value / 5) * radius;
-      const x = centerX + distance * Math.cos(angles[i] - Math.PI / 2);
-      const y = centerY + distance * Math.sin(angles[i] - Math.PI / 2);
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
+  // Update chart when companies are selected
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    const ctx = canvasRef.current.getContext('2d');
+    if (!ctx || !records) return;
 
-    // Draw company A data on top
-    ctx.beginPath();
-    ctx.strokeStyle = '#F78729';
-    ctx.fillStyle = 'rgba(247, 135, 41, 0.3)';
-    metrics.forEach((metric, i) => {
-      const value = metricsA[metric as keyof CompanyMetrics];
-      const distance = (value / 5) * radius;
-      const x = centerX + distance * Math.cos(angles[i] - Math.PI / 2);
-      const y = centerY + distance * Math.sin(angles[i] - Math.PI / 2);
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
+    let metricsA, metricsB;
+
+    if (companyA) {
+      const companyAData = records.find(r => r.fields.company === companyA)?.fields;
+      if (companyAData) {
+        metricsA = calculateMetrics({
+          name: companyA,
+          currentHeadcount: companyAData.count_current_employees || 0,
+          headcount12MonthsAgo: companyAData.headcount_last_year || 0,
+          voluntaryLeaves: companyAData.voluntarily_left || 0,
+          currentEngineers: companyAData.engineers || 0,
+          engineers6MonthsAgo: companyAData.engineers_6mo || 0,
+          industryAverageHeadcount: calculateIndustryAverage(records)
+        });
+      }
+    }
+
+    if (companyB) {
+      const companyBData = records.find(r => r.fields.company === companyB)?.fields;
+      if (companyBData) {
+        metricsB = calculateMetrics({
+          name: companyB,
+          currentHeadcount: companyBData.count_current_employees || 0,
+          headcount12MonthsAgo: companyBData.headcount_last_year || 0,
+          voluntaryLeaves: companyBData.voluntarily_left || 0,
+          currentEngineers: companyBData.engineers || 0,
+          engineers6MonthsAgo: companyBData.engineers_6mo || 0,
+          industryAverageHeadcount: calculateIndustryAverage(records)
+        });
+      }
+    }
+
+    drawRadarChart(ctx, metricsA, metricsB);
+  }, [companyA, companyB, records]);
+
+  // Helper function to calculate industry average
+  const calculateIndustryAverage = (records: any[]) => {
+    const validHeadcounts = records
+      .map(r => r.fields.count_current_employees)
+      .filter(count => count && count > 0);
+    
+    return validHeadcounts.reduce((sum, count) => sum + count, 0) / validHeadcounts.length;
   };
 
   if (error) {
