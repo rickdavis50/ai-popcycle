@@ -40,26 +40,27 @@ export default function Dashboard() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Background image - maintain aspect ratio in bottom half */}
+      {/* Background image - maintain aspect ratio */}
       <div style={{
         position: 'fixed',
         bottom: 0,
-        left: 0,
-        right: 0,
-        width: '100%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: 'auto',
         height: '50vh',
         zIndex: 1,
-        overflow: 'hidden' // Hide overflow
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end'
       }}>
         <div style={{
-          width: '100%',
-          height: '100vh', // Double the container height
-          position: 'absolute',
-          bottom: 0, // Align to bottom
+          width: 'auto',
+          height: '100%',
           backgroundImage: 'url(/images/dreamcycle.png)',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center bottom',
-          backgroundSize: 'contain', // Changed to contain
+          backgroundSize: 'contain',
+          aspectRatio: '16/9', // Maintain aspect ratio
           opacity: 0.8
         }} />
       </div>

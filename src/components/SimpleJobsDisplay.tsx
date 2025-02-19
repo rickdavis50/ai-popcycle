@@ -356,16 +356,18 @@ const SimpleJobsDisplay = () => {
           fontWeight: 'bold',
           color: '#78401F',
           fontFamily: 'Montserrat, sans-serif',
-          marginBottom: '24px'
+          marginBottom: '16px'
         }}>
           Company Comparison
         </h2>
 
         <div style={{
           display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
           justifyContent: 'center',
-          gap: '40px',
-          marginBottom: '20px'
+          gap: '20px',
+          marginBottom: '16px'
         }}>
           <select 
             value={companyA}
@@ -449,10 +451,12 @@ const SimpleJobsDisplay = () => {
 
         <div style={{ 
           width: '100%',
-          minHeight: '600px',
+          minHeight: '400px',
+          maxHeight: '500px',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          overflow: 'hidden'
         }}>
           {loading ? (
             <div style={{ color: '#78401F', fontFamily: 'Montserrat, sans-serif' }}>
@@ -469,7 +473,7 @@ const SimpleJobsDisplay = () => {
         </div>
       </div>
 
-      {/* How We Built This Section - Added background */}
+      {/* How We Built This Section */}
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: '8px',
@@ -494,31 +498,61 @@ const SimpleJobsDisplay = () => {
           fontSize: '16px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '12px'
+          gap: '16px'
         }}>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Data</strong> - Live Data API feeds Airtable, Airtable feeds the app
+          <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Data</strong>
+            </div>
+            <div style={{ marginLeft: '28px' }}>
+              Live Data API feeds Airtable, Airtable feeds the app
+            </div>
           </li>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Figma</strong> - Mockups, logos, design
+          <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Figma</strong>
+            </div>
+            <div style={{ marginLeft: '28px' }}>
+              Mockups, logos, design
+            </div>
           </li>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Bolt</strong> - Initial dashboard concept vetting
+          <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Bolt</strong>
+            </div>
+            <div style={{ marginLeft: '28px' }}>
+              Initial dashboard concept vetting
+            </div>
           </li>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Cursor</strong> - All final app coding in VS code (with mostly Claude, some ChatGPT)
+          <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Cursor</strong>
+            </div>
+            <div style={{ marginLeft: '28px' }}>
+              All final app coding in VS code (with mostly Claude, some ChatGPT)
+            </div>
           </li>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Github</strong> - connecting VS code to Vercel
+          <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Github</strong>
+            </div>
+            <div style={{ marginLeft: '28px' }}>
+              connecting VS code to Vercel
+            </div>
           </li>
-          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>•</span>
-            <strong>Vercel</strong> - App deployment
+          <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '20px' }}>•</span>
+              <strong>Vercel</strong>
+            </div>
+            <div style={{ marginLeft: '28px' }}>
+              App deployment
+            </div>
           </li>
         </ul>
       </div>
