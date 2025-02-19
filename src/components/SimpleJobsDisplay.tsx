@@ -336,138 +336,141 @@ const SimpleJobsDisplay = () => {
   }
 
   return (
-    <div style={{ 
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '40px',
-      width: '100%',
-      maxWidth: '1200px',
-      margin: '0 auto',
-    }}>
-      {/* Company Comparison Title */}
-      <h2 style={{
-        fontSize: '20px',
-        fontWeight: 'bold',
-        color: '#78401F',
-        fontFamily: 'Montserrat, sans-serif'
+    <>
+      {/* Company Comparison Section */}
+      <div style={{ 
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '40px',
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
       }}>
-        Company Comparison
-      </h2>
-
-      {/* Company Selection and Radar Chart Module - No background */}
-      <div style={{
-        padding: '24px',
-      }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '40px',
-          marginBottom: '20px'
+        <h2 style={{
+          fontSize: '20px',
+          fontWeight: 'bold',
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif'
         }}>
-          <select 
-            value={companyA}
-            onChange={(e) => setCompanyA(e.target.value)}
-            disabled={loading}
-            style={{
-              padding: '8px 32px 8px 12px',
-              borderRadius: '4px',
-              border: '1px solid #78401F',
-              color: '#78401F',
-              fontFamily: 'Montserrat, sans-serif',
-              opacity: loading ? 0.7 : 1,
-              cursor: loading ? 'wait' : 'pointer',
-              maxHeight: '200px',
-              overflow: 'auto',
-              WebkitAppearance: 'none',
-              MozAppearance: 'none',
-              appearance: 'none',
-              backgroundColor: '#FFF3E9',
-              borderColor: companyA ? '#F78729' : '#78401F',
-              outline: 'none',
-              width: '200px'
-            }}
-            size={6}
-          >
-            <option value="">Select Company A</option>
-            {companies.map(company => (
-              <option 
-                key={company} 
-                value={company}
-                style={{
-                  backgroundColor: company === companyA ? '#F78729' : 'transparent',
-                  color: company === companyA ? '#FFF' : '#78401F'
-                }}
-              >
-                {company}
-              </option>
-            ))}
-          </select>
+          Company Comparison
+        </h2>
 
-          <select
-            value={companyB}
-            onChange={(e) => setCompanyB(e.target.value)}
-            disabled={loading}
-            style={{
-              padding: '8px 32px 8px 12px',
-              borderRadius: '4px',
-              border: '1px solid #78401F',
-              color: '#78401F',
-              fontFamily: 'Montserrat, sans-serif',
-              opacity: loading ? 0.7 : 1,
-              cursor: loading ? 'wait' : 'pointer',
-              maxHeight: '200px',
-              overflow: 'auto',
-              WebkitAppearance: 'none',
-              MozAppearance: 'none',
-              appearance: 'none',
-              backgroundColor: '#FFF3E9',
-              borderColor: companyB ? '#D46B13' : '#78401F',
-              outline: 'none',
-              width: '200px'
-            }}
-            size={6}
-          >
-            <option value="">Select Company B</option>
-            {companies.map(company => (
-              <option 
-                key={company} 
-                value={company}
-                disabled={company === companyA}
-                style={{
-                  backgroundColor: company === companyB ? '#D46B13' : 'transparent',
-                  color: company === companyB ? '#FFF' : '#78401F'
-                }}
-              >
-                {company}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Company Selection and Radar Chart Module */}
+        <div style={{ padding: '24px' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '40px',
+            marginBottom: '20px'
+          }}>
+            <select 
+              value={companyA}
+              onChange={(e) => setCompanyA(e.target.value)}
+              disabled={loading}
+              style={{
+                padding: '8px 32px 8px 12px',
+                borderRadius: '4px',
+                border: '1px solid #78401F',
+                color: '#78401F',
+                fontFamily: 'Montserrat, sans-serif',
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? 'wait' : 'pointer',
+                maxHeight: '200px',
+                overflow: 'auto',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                appearance: 'none',
+                backgroundColor: '#FFF3E9',
+                borderColor: companyA ? '#F78729' : '#78401F',
+                outline: 'none',
+                width: '200px'
+              }}
+              size={6}
+            >
+              <option value="">Select Company A</option>
+              {companies.map(company => (
+                <option 
+                  key={company} 
+                  value={company}
+                  style={{
+                    backgroundColor: company === companyA ? '#F78729' : 'transparent',
+                    color: company === companyA ? '#FFF' : '#78401F'
+                  }}
+                >
+                  {company}
+                </option>
+              ))}
+            </select>
 
-        <div style={{ 
-          width: '100%',
-          minHeight: '600px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          {loading ? (
-            <div style={{ color: '#78401F', fontFamily: 'Montserrat, sans-serif' }}>
-              Loading companies...
-            </div>
-          ) : (
-            <canvas
-              ref={canvasRef}
-              width="600"
-              height="600"
-              style={{ maxWidth: '100%', height: 'auto' }}
-            />
-          )}
+            <select
+              value={companyB}
+              onChange={(e) => setCompanyB(e.target.value)}
+              disabled={loading}
+              style={{
+                padding: '8px 32px 8px 12px',
+                borderRadius: '4px',
+                border: '1px solid #78401F',
+                color: '#78401F',
+                fontFamily: 'Montserrat, sans-serif',
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? 'wait' : 'pointer',
+                maxHeight: '200px',
+                overflow: 'auto',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                appearance: 'none',
+                backgroundColor: '#FFF3E9',
+                borderColor: companyB ? '#D46B13' : '#78401F',
+                outline: 'none',
+                width: '200px'
+              }}
+              size={6}
+            >
+              <option value="">Select Company B</option>
+              {companies.map(company => (
+                <option 
+                  key={company} 
+                  value={company}
+                  disabled={company === companyA}
+                  style={{
+                    backgroundColor: company === companyB ? '#D46B13' : 'transparent',
+                    color: company === companyB ? '#FFF' : '#78401F'
+                  }}
+                >
+                  {company}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div style={{ 
+            width: '100%',
+            minHeight: '600px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            {loading ? (
+              <div style={{ color: '#78401F', fontFamily: 'Montserrat, sans-serif' }}>
+                Loading companies...
+              </div>
+            ) : (
+              <canvas
+                ref={canvasRef}
+                width="600"
+                height="600"
+                style={{ maxWidth: '100%', height: 'auto' }}
+              />
+            )}
+          </div>
         </div>
       </div>
 
-      {/* How We Built This Module - Keep white background */}
-      <div style={{
+      {/* How We Built This as a separate section */}
+      <div style={{ 
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '40px auto',
         backgroundColor: '#ffffff',
         borderRadius: '8px',
         padding: '24px',
@@ -520,12 +523,12 @@ const SimpleJobsDisplay = () => {
         </ul>
       </div>
 
-      {/* API Button */}
+      {/* API Button as a separate section */}
       <div style={{
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '20px',
-        marginBottom: '60px'
+        margin: '40px 0 60px'
       }}>
         <a 
           href="https://www.livedatatechnologies.com/api"
@@ -587,7 +590,7 @@ const SimpleJobsDisplay = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
