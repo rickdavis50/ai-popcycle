@@ -40,22 +40,29 @@ export default function Dashboard() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Background image - adjusted to show full image in bottom half */}
+      {/* Background image - maintain aspect ratio in bottom half */}
       <div style={{
         position: 'fixed',
         bottom: 0,
         left: 0,
         right: 0,
         width: '100%',
-        height: '100vh', // Keep full height
+        height: '50vh',
         zIndex: 1,
-        backgroundImage: 'url(/images/dreamcycle.png)',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center bottom',
-        backgroundSize: 'cover',
-        clipPath: 'inset(50% 0 0 0)', // Clip top 50% of the image
-        opacity: 0.8
-      }} />
+        overflow: 'hidden' // Hide overflow
+      }}>
+        <div style={{
+          width: '100%',
+          height: '100vh', // Double the container height
+          position: 'absolute',
+          bottom: 0, // Align to bottom
+          backgroundImage: 'url(/images/dreamcycle.png)',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center bottom',
+          backgroundSize: 'contain', // Changed to contain
+          opacity: 0.8
+        }} />
+      </div>
       
       {/* Content wrapper with higher z-index */}
       <div style={{ 
