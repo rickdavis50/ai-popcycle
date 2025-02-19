@@ -224,12 +224,28 @@ const SimpleJobsDisplay = () => {
     ctx.textAlign = 'left';
     ctx.fillText('Company Comparison', 20, 30);
 
-    // Draw Melt Index scores
-    ctx.font = 'bold 24px Montserrat';
+    // Draw Melt Index scores with larger font and better positioning
+    ctx.font = 'bold 28px Montserrat';
+    ctx.textAlign = 'left';
+    
+    // Left Melt Index
     ctx.fillStyle = '#F78729';
-    ctx.fillText(`Melt Index: ${calculateMeltIndex(metricsA)}`, 20, 60);
+    ctx.fillText('Melt Index: ' + calculateMeltIndex(metricsA).toString(), 40, 60);
+    
+    // Right Melt Index with question mark
     ctx.fillStyle = '#D46B13';
-    ctx.fillText(`Melt Index: ${calculateMeltIndex(metricsB)}`, 20, 90);
+    const rightScore = 'Melt Index: ' + calculateMeltIndex(metricsB).toString();
+    const rightScoreWidth = ctx.measureText(rightScore).width;
+    ctx.fillText(rightScore, 560 - rightScoreWidth - 30, 60); // Leave space for question mark
+    
+    // Draw question mark
+    ctx.font = 'bold 20px Montserrat';
+    ctx.fillText('?', 560 - 20, 60);
+    ctx.beginPath();
+    ctx.arc(560 - 10, 55, 12, 0, 2 * Math.PI);
+    ctx.strokeStyle = '#D46B13';
+    ctx.lineWidth = 1;
+    ctx.stroke();
 
     // Draw background rings (1-5)
     for (let score = 1; score <= 5; score++) {
@@ -336,7 +352,8 @@ const SimpleJobsDisplay = () => {
         marginBottom: '16px',
         color: '#78401F',
         fontFamily: 'Montserrat, sans-serif',
-        textAlign: 'center'
+        textAlign: 'left',
+        paddingLeft: '20px'
       }}>
         Company Comparison
       </h2>
@@ -344,105 +361,85 @@ const SimpleJobsDisplay = () => {
       <div style={{
         display: 'flex',
         justifyContent: 'center',
-        gap: '20px',
+        gap: '40px',
         marginBottom: '20px'
       }}>
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <select 
-            value={companyA}
-            onChange={(e) => setCompanyA(e.target.value)}
-            disabled={loading}
-            style={{
-              padding: '8px 32px 8px 12px',
-              borderRadius: '4px',
-              border: '1px solid #78401F',
-              color: '#78401F',
-              fontFamily: 'Montserrat, sans-serif',
-              opacity: loading ? 0.7 : 1,
-              cursor: loading ? 'wait' : 'pointer',
-              maxHeight: '200px',
-              overflow: 'auto',
-              WebkitAppearance: 'none',
-              MozAppearance: 'none',
-              appearance: 'none',
-              backgroundColor: '#FFF',
-              borderColor: companyA ? '#F78729' : '#78401F'
-            }}
-            size={6}
-          >
-            <option value="">Select Company A</option>
-            {companies.map(company => (
-              <option key={company} value={company}>{company}</option>
-            ))}
-          </select>
-          <div style={{
-            width: '16px',
-            height: '16px',
-            borderRadius: '50%',
-            backgroundColor: '#FF9C59',
-            position: 'absolute',
-            right: '-24px',
-            pointerEvents: 'none'
-          }} />
-          {scoreA !== null && (
-            <div style={{ textAlign: 'center', marginTop: '8px', color: '#78401F' }}>
-              Melt Index: {scoreA}
-              <span onClick={() => setShowInfoPopup(true)}>
-                <InfoIcon />
-              </span>
-            </div>
-          )}
-        </div>
+        <select 
+          value={companyA}
+          onChange={(e) => setCompanyA(e.target.value)}
+          disabled={loading}
+          style={{
+            padding: '8px 32px 8px 12px',
+            borderRadius: '4px',
+            border: '1px solid #78401F',
+            color: '#78401F',
+            fontFamily: 'Montserrat, sans-serif',
+            opacity: loading ? 0.7 : 1,
+            cursor: loading ? 'wait' : 'pointer',
+            maxHeight: '200px',
+            overflow: 'auto',
+            WebkitAppearance: 'none',
+            MozAppearance: 'none',
+            appearance: 'none',
+            backgroundColor: '#FFF3E9',
+            borderColor: companyA ? '#F78729' : '#78401F',
+            width: '200px'
+          }}
+          size={6}
+        >
+          <option value="">Select Company A</option>
+          {companies.map(company => (
+            <option 
+              key={company} 
+              value={company}
+              style={{
+                backgroundColor: company === companyA ? '#F78729' : 'transparent',
+                color: company === companyA ? '#FFF' : '#78401F'
+              }}
+            >
+              {company}
+            </option>
+          ))}
+        </select>
 
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <select
-            value={companyB}
-            onChange={(e) => setCompanyB(e.target.value)}
-            disabled={loading}
-            style={{
-              padding: '8px 32px 8px 12px',
-              borderRadius: '4px',
-              border: '1px solid #78401F',
-              color: '#78401F',
-              fontFamily: 'Montserrat, sans-serif',
-              opacity: loading ? 0.7 : 1,
-              cursor: loading ? 'wait' : 'pointer',
-              maxHeight: '200px',
-              overflow: 'auto',
-              WebkitAppearance: 'none',
-              MozAppearance: 'none',
-              appearance: 'none',
-              backgroundColor: '#FFF',
-              borderColor: companyB ? '#D46B13' : '#78401F'
-            }}
-            size={6}
-          >
-            <option value="">Select Company B</option>
-            {companies.map(company => (
-              <option 
-                key={company} 
-                value={company}
-                disabled={company === companyA}
-              >
-                {company}
-              </option>
-            ))}
-          </select>
-          <div style={{
-            width: '16px',
-            height: '16px',
-            borderRadius: '50%',
-            backgroundColor: '#78401F',
-            position: 'absolute',
-            right: '-24px',
-            pointerEvents: 'none'
-          }} />
-          {scoreB !== null && (
-            <div style={{ textAlign: 'center', marginTop: '8px', color: '#78401F' }}>
-              Melt Index: {scoreB}
-            </div>
-          )}
-        </div>
+        <select
+          value={companyB}
+          onChange={(e) => setCompanyB(e.target.value)}
+          disabled={loading}
+          style={{
+            padding: '8px 32px 8px 12px',
+            borderRadius: '4px',
+            border: '1px solid #78401F',
+            color: '#78401F',
+            fontFamily: 'Montserrat, sans-serif',
+            opacity: loading ? 0.7 : 1,
+            cursor: loading ? 'wait' : 'pointer',
+            maxHeight: '200px',
+            overflow: 'auto',
+            WebkitAppearance: 'none',
+            MozAppearance: 'none',
+            appearance: 'none',
+            backgroundColor: '#FFF3E9',
+            borderColor: companyB ? '#D46B13' : '#78401F',
+            width: '200px'
+          }}
+          size={6}
+        >
+          <option value="">Select Company B</option>
+          {companies.map(company => (
+            <option 
+              key={company} 
+              value={company}
+              disabled={company === companyA}
+              style={{
+                backgroundColor: company === companyB ? '#D46B13' : 'transparent',
+                color: company === companyB ? '#FFF' : '#78401F'
+              }}
+            >
+              {company}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div style={{ 
