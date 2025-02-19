@@ -5,7 +5,7 @@ export async function GET() {
     // Note: These should NOT be NEXT_PUBLIC_ prefixed for API routes
     const API_KEY = process.env.AIRTABLE_API_KEY;
     const BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const TABLE_ID = process.env.AIRTABLE_TABLE_ID;
+    const TABLE_ID = process.env.AIRTABLE_TABLE_ID; // This should be 'tblAUxKB14zGa7oqB'
 
     if (!API_KEY || !BASE_ID || !TABLE_ID) {
       console.error('Missing Airtable environment variables');

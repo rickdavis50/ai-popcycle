@@ -77,21 +77,18 @@ const SimpleJobsDisplay = () => {
 
   // Debug logging
   useEffect(() => {
-    console.log('Records:', records);
-  }, [records]);
-
-  useEffect(() => {
-    if (records && records.length > 0) {
-      const companyNames = Array.from(
+    if (records) {
+      console.log('Raw Records:', records);
+      // Extract and log unique company names
+      const uniqueCompanies = Array.from(
         new Set(
           records
-            .filter(record => record.fields.company)
+            .filter(record => record.fields?.company)
             .map(record => record.fields.company)
         )
       ).sort();
-      
-      console.log('Company Names:', companyNames); // Debug logging
-      setCompanies(companyNames);
+      console.log('Unique Companies:', uniqueCompanies);
+      setCompanies(uniqueCompanies);
     }
   }, [records]);
 
