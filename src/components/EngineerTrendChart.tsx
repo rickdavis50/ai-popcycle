@@ -24,8 +24,9 @@ export default function EngineerTrendChart({ data }: Props) {
 
     // Set dimensions
     const isMobile = window.innerWidth < 768;
-    const width = isMobile ? 300 : 400;
-    const height = isMobile ? 150 : 200;
+    const margin = { top: 20, right: 40, bottom: 30, left: 40 };
+    const width = (isMobile ? 300 : 400) - margin.left - margin.right;
+    const height = (isMobile ? 150 : 200) - margin.top - margin.bottom;
 
     // Create SVG
     const svg = d3.select(chartRef.current)
