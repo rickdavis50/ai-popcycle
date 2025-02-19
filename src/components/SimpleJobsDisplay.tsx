@@ -218,6 +218,19 @@ const SimpleJobsDisplay = () => {
     const metrics = ['retention', 'engineerGrowth', 'engineerConcentration', 'headcountGrowth', 'sizeRank'];
     const angles = metrics.map((_, i) => (i * 2 * Math.PI) / metrics.length);
 
+    // Draw title in top left
+    ctx.fillStyle = '#78401F';
+    ctx.font = 'bold 16px Montserrat';
+    ctx.textAlign = 'left';
+    ctx.fillText('Company Comparison', 20, 30);
+
+    // Draw Melt Index scores
+    ctx.font = 'bold 24px Montserrat';
+    ctx.fillStyle = '#F78729';
+    ctx.fillText(`Melt Index: ${calculateMeltIndex(metricsA)}`, 20, 60);
+    ctx.fillStyle = '#D46B13';
+    ctx.fillText(`Melt Index: ${calculateMeltIndex(metricsB)}`, 20, 90);
+
     // Draw background rings (1-5)
     for (let score = 1; score <= 5; score++) {
       const ringRadius = (score / 5) * radius;
@@ -264,12 +277,12 @@ const SimpleJobsDisplay = () => {
       ctx.restore();
     });
 
-    // Draw company A data
+    // Draw company B data first (so it's underneath)
     ctx.beginPath();
-    ctx.strokeStyle = '#FF9C59';
-    ctx.fillStyle = 'rgba(255, 156, 89, 0.3)';
+    ctx.strokeStyle = '#D46B13';
+    ctx.fillStyle = 'rgba(212, 107, 19, 0.3)';
     metrics.forEach((metric, i) => {
-      const value = metricsA[metric as keyof CompanyMetrics];
+      const value = metricsB[metric as keyof CompanyMetrics];
       const distance = (value / 5) * radius;
       const x = centerX + distance * Math.cos(angles[i] - Math.PI / 2);
       const y = centerY + distance * Math.sin(angles[i] - Math.PI / 2);
@@ -280,12 +293,12 @@ const SimpleJobsDisplay = () => {
     ctx.fill();
     ctx.stroke();
 
-    // Draw company B data
+    // Draw company A data on top
     ctx.beginPath();
-    ctx.strokeStyle = '#78401F';
-    ctx.fillStyle = 'rgba(120, 64, 31, 0.3)';
+    ctx.strokeStyle = '#F78729';
+    ctx.fillStyle = 'rgba(247, 135, 41, 0.3)';
     metrics.forEach((metric, i) => {
-      const value = metricsB[metric as keyof CompanyMetrics];
+      const value = metricsA[metric as keyof CompanyMetrics];
       const distance = (value / 5) * radius;
       const x = centerX + distance * Math.cos(angles[i] - Math.PI / 2);
       const y = centerY + distance * Math.sin(angles[i] - Math.PI / 2);
@@ -352,8 +365,8 @@ const SimpleJobsDisplay = () => {
               WebkitAppearance: 'none',
               MozAppearance: 'none',
               appearance: 'none',
-              backgroundColor: companyA ? '#FFF3E9' : '#FFF',
-              borderColor: '#FF9C59'
+              backgroundColor: '#FFF',
+              borderColor: companyA ? '#F78729' : '#78401F'
             }}
             size={6}
           >
@@ -399,8 +412,8 @@ const SimpleJobsDisplay = () => {
               WebkitAppearance: 'none',
               MozAppearance: 'none',
               appearance: 'none',
-              backgroundColor: companyB ? '#FFF3E9' : '#FFF',
-              borderColor: '#78401F'
+              backgroundColor: '#FFF',
+              borderColor: companyB ? '#D46B13' : '#78401F'
             }}
             size={6}
           >
