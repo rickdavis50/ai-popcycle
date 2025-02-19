@@ -61,6 +61,7 @@ export async function GET() {
         sum + (record.fields.engineers || 0), 0),
       insights: generateInsights(records),
       engineerTrends: calculateEngineerTrends(records),
+      records: records,
     };
 
     return NextResponse.json(stats);

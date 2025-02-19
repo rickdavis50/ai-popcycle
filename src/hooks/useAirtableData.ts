@@ -51,7 +51,6 @@ export function useAirtableData() {
           ...rawData,
           loading: false,
           error: null,
-          records: rawData.records || [],
         });
       } catch (error) {
         console.error('Error in useAirtableData:', error);
