@@ -354,12 +354,9 @@ const SimpleJobsDisplay = () => {
         Company Comparison
       </h2>
 
-      {/* Company Selection and Radar Chart Module */}
+      {/* Company Selection and Radar Chart Module - No background */}
       <div style={{
-        backgroundColor: '#ffffff',
-        borderRadius: '8px',
         padding: '24px',
-        boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
       }}>
         <div style={{
           display: 'flex',
@@ -469,12 +466,9 @@ const SimpleJobsDisplay = () => {
         </div>
       </div>
 
-      {/* How We Built This Section */}
+      {/* How We Built This Section - No background */}
       <div style={{
-        backgroundColor: '#ffffff',
-        borderRadius: '8px',
         padding: '24px',
-        boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
       }}>
         <h2 style={{
           fontSize: '20px',
@@ -523,27 +517,25 @@ const SimpleJobsDisplay = () => {
         </ul>
       </div>
 
-      {/* API Button */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        marginTop: '20px',
-        marginBottom: '60px'
-      }}>
-        <a 
-          href="https://www.livedatatechnologies.com/api"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            src="/images/api_button.svg"
-            alt="API Access"
-            width={200}
-            height={60}
-            priority
-          />
-        </a>
-      </div>
+      {/* API Button - No container div */}
+      <a 
+        href="https://www.livedatatechnologies.com/api"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'block',
+          width: '200px',
+          margin: '20px auto 60px'
+        }}
+      >
+        <Image
+          src="/images/api_button.svg"
+          alt="API Access"
+          width={200}
+          height={60}
+          priority
+        />
+      </a>
 
       {/* Info Popup */}
       {showInfoPopup && (
