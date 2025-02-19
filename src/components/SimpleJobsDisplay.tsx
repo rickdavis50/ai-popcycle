@@ -2,6 +2,22 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+// Add interface for API response
+interface AirtableRecord {
+  fields: {
+    company: string;
+    currentHeadcount?: number;
+    headcount12MonthsAgo?: number;
+    voluntaryLeaves?: number;
+    currentEngineers?: number;
+    engineers6MonthsAgo?: number;
+  };
+}
+
+interface AirtableResponse {
+  records: AirtableRecord[];
+}
+
 interface CompanyMetrics {
   retention: number;
   engineerGrowth: number;
@@ -62,8 +78,14 @@ const SimpleJobsDisplay = () => {
     // Fetch companies from Airtable
     fetch('/api/airtable')
       .then(res => res.json())
-      .then(data => {
-        const companyNames = Array.from(new Set(data.records.map((r: any) => r.fields.company)));
+      .then((data: AirtableResponse) => {
+        const companyNames = Array.from(
+          new Set(
+            data.records
+              .filter(r => r.fields.company) // Ensure company name exists
+              .map(r => r.fields.company)
+          )
+        );
         setCompanies(companyNames);
         setLoading(false);
       })
