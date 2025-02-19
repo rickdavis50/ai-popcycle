@@ -572,12 +572,18 @@ const SimpleJobsDisplay = () => {
           alignItems: 'center',
           gap: '12px'
         }}>
-          <Image
-            src="/images/api_icon.svg"
-            alt="API Icon"
-            width={40}
-            height={40}
-          />
+          <div style={{ width: 40, height: 40 }}>
+            <Image
+              src="/images/api_icon.svg"
+              alt="API Icon"
+              width={40}
+              height={40}
+              onError={(e) => {
+                console.error('Failed to load API icon');
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          </div>
           <a 
             href="https://www.livedatatechnologies.com/api"
             target="_blank"

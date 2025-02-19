@@ -47,22 +47,14 @@ export default function Dashboard() {
         left: 0,
         right: 0,
         width: '100%',
-        height: '50vh',
+        height: '100vh',
         zIndex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        overflow: 'hidden'
-      }}>
-        <div style={{
-          width: '100%',
-          backgroundImage: 'url(/images/dreamcycle.png)',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center bottom',
-          backgroundSize: 'contain',
-          opacity: 0.8
-        }} />
-      </div>
+        backgroundImage: 'url(/images/dreamcycle.png)',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center bottom',
+        backgroundSize: 'contain',
+        opacity: 0.8
+      }} />
       
       {/* Content wrapper with higher z-index */}
       <div style={{ 
