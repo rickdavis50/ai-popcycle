@@ -34,7 +34,7 @@ export default function Dashboard() {
   return (
     <div style={{ 
       minHeight: '100vh',
-      backgroundColor: '#FFE3D1',
+      backgroundColor: '#5F3F3F',
       padding: '32px',
       paddingBottom: '60vh',
       position: 'relative',
