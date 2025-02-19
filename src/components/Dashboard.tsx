@@ -40,7 +40,21 @@ export default function Dashboard() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Remove background image div since we don't have the asset */}
+      {/* Background image */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: '100%',
+        height: '50vh',
+        zIndex: 1,
+        backgroundImage: 'url(/images/dreamcycle.png)',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center bottom',
+        backgroundSize: 'cover',
+        opacity: 0.8
+      }} />
       
       <div style={{ 
         marginBottom: '32px',
