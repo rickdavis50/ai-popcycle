@@ -380,9 +380,7 @@ const SimpleJobsDisplay = () => {
             backgroundColor: '#FFF3E9',
             borderColor: companyA ? '#F78729' : '#78401F',
             outline: 'none',
-            '&:focus': {
-              borderColor: companyA ? '#F78729' : '#78401F',
-            }
+            width: '200px'
           }}
           size={6}
         >
@@ -420,6 +418,7 @@ const SimpleJobsDisplay = () => {
             appearance: 'none',
             backgroundColor: '#FFF3E9',
             borderColor: companyB ? '#D46B13' : '#78401F',
+            outline: 'none',
             width: '200px'
           }}
           size={6}
