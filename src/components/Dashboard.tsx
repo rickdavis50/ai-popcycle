@@ -40,14 +40,14 @@ export default function Dashboard() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Background image - moved up in stacking context */}
+      {/* Background image - adjusted to bottom 50% */}
       <div style={{
-        position: 'fixed', // Changed to fixed
-        top: 0,
+        position: 'fixed',
+        bottom: 0, // Changed from top: 0
         left: 0,
         right: 0,
         width: '100%',
-        height: '100vh',
+        height: '50vh', // Changed from 100vh
         zIndex: 1,
         backgroundImage: 'url(/images/dreamcycle.png)',
         backgroundRepeat: 'no-repeat',
@@ -62,21 +62,20 @@ export default function Dashboard() {
         zIndex: 2,
         width: '100%'
       }}>
-        {/* Header */}
+        {/* Header - Restored logo */}
         <div style={{ 
           marginBottom: '32px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
-          <h1 style={{
-            fontSize: '24px',
-            fontWeight: 'bold',
-            color: '#78401F',
-            fontFamily: 'Montserrat, sans-serif'
-          }}>
-            AI Pop-Cycle
-          </h1>
+          <Image
+            src="/images/pop_logo.svg"
+            alt="Pop Logo"
+            width={250}
+            height={63}
+            priority
+          />
         </div>
 
         {/* Main content */}
