@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useAirtableData } from '../hooks/useAirtableData';
+import Image from 'next/image';
 
 // Add interface for API response
 interface AirtableRecord {
@@ -337,10 +338,12 @@ const SimpleJobsDisplay = () => {
   return (
     <div style={{ 
       position: 'relative', 
-      padding: '40px 0',
       width: '100%',
       maxWidth: '1200px',
-      margin: '0 auto'
+      margin: '0 auto',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '40px'
     }}>
       <h2 style={{
         fontSize: '20px',
@@ -509,6 +512,84 @@ const SimpleJobsDisplay = () => {
           </div>
         </div>
       )}
+
+      {/* How We Built This Section */}
+      <div style={{
+        backgroundColor: '#FFF3E9',
+        borderRadius: '8px',
+        padding: '24px',
+        marginTop: '40px'
+      }}>
+        <h2 style={{
+          fontSize: '20px',
+          fontWeight: 'bold',
+          marginBottom: '16px',
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif'
+        }}>
+          How We Built This:
+        </h2>
+        <ul style={{
+          listStyle: 'none',
+          padding: 0,
+          margin: 0,
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif',
+          fontSize: '16px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
+        }}>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Data</strong> - Live Data API feeds Airtable, Airtable feeds the app
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Figma</strong> - Mockups, logos, design
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Bolt</strong> - Initial dashboard concept vetting
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Cursor</strong> - All final app coding in VS code (with mostly Claude, some ChatGPT)
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Github</strong> - connecting VS code to Vercel
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Vercel</strong> - App deployment
+          </li>
+        </ul>
+      </div>
+
+      {/* API Button */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: '40px',
+        marginBottom: '60px'
+      }}>
+        <a 
+          href="/api/documentation" 
+          style={{
+            display: 'inline-block',
+            textDecoration: 'none'
+          }}
+        >
+          <Image
+            src="/images/api_button.svg"
+            alt="View API Documentation"
+            width={200}
+            height={60}
+            priority
+          />
+        </a>
+      </div>
     </div>
   );
 };
