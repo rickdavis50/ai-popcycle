@@ -336,22 +336,27 @@ const SimpleJobsDisplay = () => {
   }
 
   return (
-    <>
-      <div style={{ 
-        position: 'relative', 
-        width: '100%',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        marginBottom: '40px'
+    <div style={{ 
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '40px', // This creates the spacing between sections
+      width: '100%',
+      maxWidth: '1200px',
+      margin: '0 auto',
+    }}>
+      {/* Company Comparison Section */}
+      <div style={{
+        backgroundColor: '#ffffff',
+        borderRadius: '8px',
+        padding: '24px',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
       }}>
         <h2 style={{
           fontSize: '20px',
           fontWeight: 'bold',
           marginBottom: '16px',
           color: '#78401F',
-          fontFamily: 'Montserrat, sans-serif',
-          textAlign: 'left',
-          paddingLeft: '20px'
+          fontFamily: 'Montserrat, sans-serif'
         }}>
           Company Comparison
         </h2>
@@ -513,74 +518,65 @@ const SimpleJobsDisplay = () => {
         )}
       </div>
 
-      {/* How We Built This as a separate module */}
+      {/* How We Built This Section */}
       <div style={{
-        width: '100%',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        marginBottom: '40px'
+        backgroundColor: '#ffffff',
+        borderRadius: '8px',
+        padding: '24px',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
       }}>
-        <div style={{
-          backgroundColor: '#ffffff',
-          borderRadius: '8px',
-          padding: '24px',
-          boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+        <h2 style={{
+          fontSize: '20px',
+          fontWeight: 'bold',
+          marginBottom: '16px',
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif'
         }}>
-          <h2 style={{
-            fontSize: '20px',
-            fontWeight: 'bold',
-            marginBottom: '16px',
-            color: '#78401F',
-            fontFamily: 'Montserrat, sans-serif'
-          }}>
-            How We Built This:
-          </h2>
-          <ul style={{
-            listStyle: 'none',
-            padding: 0,
-            margin: 0,
-            color: '#78401F',
-            fontFamily: 'Montserrat, sans-serif',
-            fontSize: '16px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px'
-          }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Data</strong> - Live Data API feeds Airtable, Airtable feeds the app
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Figma</strong> - Mockups, logos, design
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Bolt</strong> - Initial dashboard concept vetting
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Cursor</strong> - All final app coding in VS code (with mostly Claude, some ChatGPT)
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Github</strong> - connecting VS code to Vercel
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Vercel</strong> - App deployment
-            </li>
-          </ul>
-        </div>
+          How We Built This:
+        </h2>
+        <ul style={{
+          listStyle: 'none',
+          padding: 0,
+          margin: 0,
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif',
+          fontSize: '16px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
+        }}>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Data</strong> - Live Data API feeds Airtable, Airtable feeds the app
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Figma</strong> - Mockups, logos, design
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Bolt</strong> - Initial dashboard concept vetting
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Cursor</strong> - All final app coding in VS code (with mostly Claude, some ChatGPT)
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Github</strong> - connecting VS code to Vercel
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '20px' }}>•</span>
+            <strong>Vercel</strong> - App deployment
+          </li>
+        </ul>
       </div>
 
-      {/* API Button as a separate section */}
+      {/* API Button - no background */}
       <div style={{
-        width: '100%',
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '40px',
-        marginBottom: '60px'
+        padding: '20px 0'
       }}>
         <a 
           href="https://www.livedatatechnologies.com/api"
@@ -591,16 +587,24 @@ const SimpleJobsDisplay = () => {
             textDecoration: 'none'
           }}
         >
-          <Image
-            src="/images/api_button.svg"
-            alt="View API Documentation"
-            width={200}
-            height={60}
-            priority
-          />
+          <div style={{
+            width: '200px',
+            height: '60px',
+            backgroundColor: '#78401F',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontFamily: 'Montserrat, sans-serif',
+            fontSize: '16px',
+            fontWeight: '600'
+          }}>
+            @api
+          </div>
         </a>
       </div>
-    </>
+    </div>
   );
 };
 
