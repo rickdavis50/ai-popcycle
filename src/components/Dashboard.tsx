@@ -40,14 +40,14 @@ export default function Dashboard() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Background image */}
+      {/* Background image - moved up in stacking context */}
       <div style={{
-        position: 'absolute',
-        bottom: 0,
+        position: 'fixed', // Changed to fixed
+        top: 0,
         left: 0,
         right: 0,
         width: '100%',
-        height: '50vh',
+        height: '100vh',
         zIndex: 1,
         backgroundImage: 'url(/images/dreamcycle.png)',
         backgroundRepeat: 'no-repeat',
@@ -56,95 +56,102 @@ export default function Dashboard() {
         opacity: 0.8
       }} />
       
+      {/* Content wrapper with higher z-index */}
       <div style={{ 
-        marginBottom: '32px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        {/* Replace with text until we have the logo */}
-        <h1 style={{
-          fontSize: '24px',
-          fontWeight: 'bold',
-          color: '#78401F',
-          fontFamily: 'Montserrat, sans-serif'
-        }}>
-          AI Pop-Cycle
-        </h1>
-      </div>
-      <div style={{ 
-        maxWidth: '1400px', 
-        margin: '0 auto', 
         position: 'relative',
-        zIndex: 2
+        zIndex: 2,
+        width: '100%'
       }}>
-        {errorMessage}
-        
+        {/* Header */}
         <div style={{ 
-          display: 'grid',
-          gridTemplateColumns: '450px 450px 450px',
-          gap: '25px',
           marginBottom: '32px',
-          justifyContent: 'center',
-          position: 'relative',
-          zIndex: 2
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
         }}>
-          <div style={{ 
-            backgroundColor: '#ffffff',
-            borderRadius: '8px',
-            padding: '24px',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 'bold',
+            color: '#78401F',
+            fontFamily: 'Montserrat, sans-serif'
           }}>
-            <h2 style={{
-              fontSize: '20px',
-              fontWeight: 'bold',
-              marginBottom: '16px',
-              color: '#78401F',
-              fontFamily: 'Montserrat, sans-serif'
-            }}>AI Industry Summary</h2>
-            <IndustryStats />
-          </div>
-          
-          <div style={{ 
-            backgroundColor: '#ffffff',
-            borderRadius: '8px',
-            padding: '24px',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-          }}>
-            <h2 style={{
-              fontSize: '20px',
-              fontWeight: 'bold',
-              marginBottom: '16px',
-              color: '#78401F',
-              fontFamily: 'Montserrat, sans-serif'
-            }}>Engineer Growth Trend</h2>
-            <EngineerTrendChart data={loading ? [] : engineerTrends} />
-          </div>
-          
-          <div style={{ 
-            backgroundColor: '#ffffff',
-            borderRadius: '8px',
-            padding: '24px',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
-          }}>
-            <h2 style={{
-              fontSize: '20px',
-              fontWeight: 'bold',
-              marginBottom: '24px',
-              color: '#78401F',
-              fontFamily: 'Montserrat, sans-serif'
-            }}>Outlier Insights</h2>
-            <InsightsModule insights={displayInsights} />
-          </div>
+            AI Pop-Cycle
+          </h1>
         </div>
-        
+
+        {/* Main content */}
         <div style={{ 
-          position: 'relative',
-          zIndex: 2,
-          maxWidth: '1400px',
-          margin: '0 auto',
+          maxWidth: '1400px', 
+          margin: '0 auto'
         }}>
-          <SimpleJobsDisplay />
+          {errorMessage}
+          
+          {/* Top modules grid - Made responsive */}
+          <div style={{ 
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '25px',
+            marginBottom: '32px'
+          }}>
+            {/* Industry Summary */}
+            <div style={{ 
+              backgroundColor: '#ffffff',
+              borderRadius: '8px',
+              padding: '24px',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+            }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '16px',
+                color: '#78401F',
+                fontFamily: 'Montserrat, sans-serif'
+              }}>AI Industry Summary</h2>
+              <IndustryStats />
+            </div>
+            
+            {/* Engineer Growth Trend */}
+            <div style={{ 
+              backgroundColor: '#ffffff',
+              borderRadius: '8px',
+              padding: '24px',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+            }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '16px',
+                color: '#78401F',
+                fontFamily: 'Montserrat, sans-serif'
+              }}>Engineer Growth Trend</h2>
+              <EngineerTrendChart data={loading ? [] : engineerTrends} />
+            </div>
+            
+            {/* Outlier Insights */}
+            <div style={{ 
+              backgroundColor: '#ffffff',
+              borderRadius: '8px',
+              padding: '24px',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+            }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '24px',
+                color: '#78401F',
+                fontFamily: 'Montserrat, sans-serif'
+              }}>Outlier Insights</h2>
+              <InsightsModule insights={displayInsights} />
+            </div>
+          </div>
+          
+          {/* SimpleJobsDisplay */}
+          <div style={{ 
+            position: 'relative',
+            zIndex: 2
+          }}>
+            <SimpleJobsDisplay />
+          </div>
         </div>
       </div>
     </div>
