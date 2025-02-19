@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
 
 interface CompanyMetrics {
   retention: number;
@@ -57,7 +56,7 @@ const SimpleJobsDisplay = () => {
   const [companyA, setCompanyA] = useState<string>('');
   const [companyB, setCompanyB] = useState<string>('');
   const [loading, setLoading] = useState(true);
-  const chartRef = useRef<SVGSVGElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     // Fetch companies from Airtable
@@ -73,27 +72,6 @@ const SimpleJobsDisplay = () => {
         setLoading(false);
       });
   }, []);
-
-  useEffect(() => {
-    if (companyA && companyB && chartRef.current) {
-      drawRadarChart();
-    }
-  }, [companyA, companyB]);
-
-  const drawRadarChart = () => {
-    if (!chartRef.current) return;
-
-    const width = 600;
-    const height = 600;
-    const margin = 60;
-    const radius = Math.min(width, height) / 2 - margin;
-
-    const svg = d3.select(chartRef.current);
-    svg.selectAll("*").remove();
-
-    // Create the radar chart here using D3.js
-    // (I'll provide this code in the next message)
-  };
 
   return (
     <div style={{ 
@@ -165,11 +143,10 @@ const SimpleJobsDisplay = () => {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <svg
-          ref={chartRef}
+        <canvas
+          ref={canvasRef}
           width="600"
           height="600"
-          viewBox="0 0 600 600"
           style={{ maxWidth: '100%', height: 'auto' }}
         />
       </div>
