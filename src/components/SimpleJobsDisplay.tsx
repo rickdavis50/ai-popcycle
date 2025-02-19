@@ -341,19 +341,9 @@ const SimpleJobsDisplay = () => {
       flexDirection: 'column',
       gap: '40px',
       width: '100%',
-      maxWidth: '1200px',
+      maxWidth: '1400px',
       margin: '0 auto',
     }}>
-      {/* Company Comparison Title */}
-      <h2 style={{
-        fontSize: '20px',
-        fontWeight: 'bold',
-        color: '#78401F',
-        fontFamily: 'Montserrat, sans-serif'
-      }}>
-        Company Comparison
-      </h2>
-
       {/* Company Selection and Radar Chart Module */}
       <div style={{
         backgroundColor: '#ffffff',
@@ -361,6 +351,16 @@ const SimpleJobsDisplay = () => {
         padding: '24px',
         boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
       }}>
+        <h2 style={{
+          fontSize: '20px',
+          fontWeight: 'bold',
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif',
+          marginBottom: '24px'
+        }}>
+          Company Comparison
+        </h2>
+
         <div style={{
           display: 'flex',
           justifyContent: 'center',
@@ -469,8 +469,13 @@ const SimpleJobsDisplay = () => {
         </div>
       </div>
 
-      {/* How We Built This Section - No background */}
-      <div style={{ padding: '24px' }}>
+      {/* How We Built This Section - Added background */}
+      <div style={{
+        backgroundColor: '#ffffff',
+        borderRadius: '8px',
+        padding: '24px',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+      }}>
         <h2 style={{
           fontSize: '20px',
           fontWeight: 'bold',
