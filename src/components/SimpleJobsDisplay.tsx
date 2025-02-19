@@ -523,7 +523,7 @@ const SimpleJobsDisplay = () => {
         </ul>
       </div>
 
-      {/* API Button - No container div */}
+      {/* API Button - Adjusted positioning */}
       <a 
         href="https://www.livedatatechnologies.com/api"
         target="_blank"
@@ -531,7 +531,9 @@ const SimpleJobsDisplay = () => {
         style={{
           display: 'block',
           width: '200px',
-          margin: '20px auto 60px'
+          margin: '40px auto',
+          position: 'relative',
+          zIndex: 3 // Ensure it's above the background
         }}
       >
         <Image

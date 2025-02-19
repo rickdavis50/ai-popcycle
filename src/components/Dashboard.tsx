@@ -40,19 +40,20 @@ export default function Dashboard() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Background image - adjusted to bottom 50% */}
+      {/* Background image - adjusted to show full image in bottom half */}
       <div style={{
         position: 'fixed',
-        bottom: 0, // Changed from top: 0
+        bottom: 0,
         left: 0,
         right: 0,
         width: '100%',
-        height: '50vh', // Changed from 100vh
+        height: '100vh', // Keep full height
         zIndex: 1,
         backgroundImage: 'url(/images/dreamcycle.png)',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center bottom',
         backgroundSize: 'cover',
+        clipPath: 'inset(50% 0 0 0)', // Clip top 50% of the image
         opacity: 0.8
       }} />
       
