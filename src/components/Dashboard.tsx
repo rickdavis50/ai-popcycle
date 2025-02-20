@@ -329,12 +329,43 @@ export default function Dashboard() {
             maxWidth: '400px',
             position: 'relative'
           }}>
-            <h3 style={{ color: '#78401F', marginTop: 0 }}>Melt Index Explained</h3>
-            <p style={{ color: '#78401F' }}>
-              The Melt Index is the average score across five key metrics:
-              Retention, Engineer growth, Engineer %, headcount growth, and size.
+            <h3 style={{ color: '#78401F', marginTop: 0 }}>Why We Think This is Important</h3>
+            <p style={{ 
+              color: '#78401F',
+              lineHeight: '1.6',
+              marginBottom: '16px'
+            }}>
+              We track millions of people and with that data can create lots of metrics to measure trends. With AI tools bringing the cost of UI way down we thought it'd be fun to try our hand at a dashboard to monitor the AI industry.
+            </p>
+            <p style={{ 
+              color: '#78401F',
+              lineHeight: '1.6',
+              marginBottom: '16px'
+            }}>
+              <strong>The Engineer Hiring Melt Index:</strong><br />
+              This measures the change in headcount of engineers over time to spot slowing or even shrinking if an AI industry meltdown starts.
+            </p>
+            <p style={{ 
+              color: '#78401F',
+              lineHeight: '1.6',
+              marginBottom: '16px'
+            }}>
+              <strong>The Company Melt Index:</strong><br />
+              This is an AI company's average score across five key metrics:
+              <ul style={{ marginTop: '8px', marginLeft: '20px' }}>
+                <li>Retention</li>
+                <li>Engineer growth</li>
+                <li>Engineer %</li>
+                <li>Headcount growth</li>
+                <li>Size</li>
+              </ul>
               Each metric is scored from 1-5, and the final index is their average.
-              A higher score indicates less melt momentum.
+            </p>
+            <p style={{ 
+              color: '#78401F',
+              lineHeight: '1.6'
+            }}>
+              Higher scores indicate less sign of melt.
             </p>
             <button
               onClick={() => setShowInfoPopup(false)}

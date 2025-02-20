@@ -83,7 +83,7 @@ export default function EngineerTrendChart({ data }: Props) {
         displayColors: false,
         callbacks: {
           title: () => '',
-          label: (context) => `${context.parsed.y}%`
+          label: (context) => `${context.parsed.y}`
         }
       }
     },
