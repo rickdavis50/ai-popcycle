@@ -95,7 +95,7 @@ export default function Dashboard() {
         width: '100%',
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: isMobile ? '0 4px' : '0 32px', // Reduced padding for mobile
+        padding: isMobile ? '0 2px' : '0 32px', // Reduced mobile padding to 2px
         boxSizing: 'border-box'
       }}>
         {/* Header - Simple logo and info icon */}
@@ -155,17 +155,19 @@ export default function Dashboard() {
         <div style={{ 
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, minmax(300px, 1fr))',
-          gap: isMobile ? '16px' : '25px',
+          gap: isMobile ? '8px' : '25px', // Reduced gap on mobile
           marginBottom: '32px',
-          width: '100%'
+          width: '100%',
+          maxWidth: isMobile ? '100%' : '1200px', // Match bottom section width on desktop
+          margin: '0 auto'
         }}>
           {/* Industry Summary */}
           <div style={{ 
             backgroundColor: '#ffffff',
             borderRadius: '8px',
-            padding: '24px 24px 16px',
+            padding: isMobile ? '24px 12px 16px' : '24px 24px 16px', // Less padding on mobile
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: '100%', // Ensure full width
+            width: '100%',
             boxSizing: 'border-box'
           }}>
             <div style={{
@@ -197,9 +199,9 @@ export default function Dashboard() {
           <div style={{ 
             backgroundColor: '#ffffff',
             borderRadius: '8px',
-            padding: '24px 24px 16px',
+            padding: isMobile ? '24px 12px 16px' : '24px 24px 16px', // Less padding on mobile
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: '100%', // Ensure full width
+            width: '100%',
             boxSizing: 'border-box'
           }}>
             <h2 style={{
@@ -216,9 +218,9 @@ export default function Dashboard() {
           <div style={{ 
             backgroundColor: '#ffffff',
             borderRadius: '8px',
-            padding: '24px 24px 16px',
+            padding: isMobile ? '24px 12px 16px' : '24px 24px 16px', // Less padding on mobile
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: '100%', // Ensure full width
+            width: '100%',
             boxSizing: 'border-box'
           }}>
             <h2 style={{
