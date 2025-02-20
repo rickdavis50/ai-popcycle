@@ -7,6 +7,7 @@ import SimpleJobsDisplay from './SimpleJobsDisplay';
 import { useAirtableData } from '../hooks/useAirtableData';
 import { insights } from '../utils/dummyData';
 import EngineerTrendChart from './EngineerTrendChart';
+import { useState } from 'react';
 
 export default function Dashboard() {
   const { 
@@ -31,11 +32,14 @@ export default function Dashboard() {
     </div>
   ) : null;
 
+  // Add new state
+  const [showCompanyList, setShowCompanyList] = useState(false);
+
   return (
     <div style={{ 
       minHeight: '100vh',
       backgroundColor: '#FFF6EF',
-      padding: '0px',
+      padding: '32px',
       paddingBottom: '60vh',
       position: 'relative',
       overflow: 'hidden'
@@ -99,13 +103,28 @@ export default function Dashboard() {
               padding: '24px',
               boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
             }}>
-              <h2 style={{
-                fontSize: '20px',
-                fontWeight: 'bold',
-                marginBottom: '16px',
-                color: '#78401F',
-                fontFamily: 'Montserrat, sans-serif'
-              }}>AI Industry Summary</h2>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '16px'
+              }}>
+                <h2 style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  color: '#78401F',
+                  fontFamily: 'Montserrat, sans-serif',
+                  margin: 0
+                }}>AI Industry Summary</h2>
+                <Image
+                  src="/images/list.svg"
+                  alt="Show Companies List"
+                  width={21}
+                  height={21}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setShowCompanyList(true)}
+                />
+              </div>
               <IndustryStats />
             </div>
             
@@ -153,6 +172,83 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Company List Popup */}
+      {showCompanyList && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: '#FFF3E9',
+            padding: '24px',
+            borderRadius: '8px',
+            maxWidth: '600px',
+            maxHeight: '80vh',
+            width: '90%',
+            position: 'relative',
+            overflowY: 'auto'
+          }}>
+            <h3 style={{ 
+              color: '#78401F', 
+              marginTop: 0,
+              marginBottom: '16px',
+              fontSize: '20px',
+              fontWeight: 'bold'
+            }}>
+              Tracked AI Companies
+            </h3>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+              gap: '12px'
+            }}>
+              {records?.map((record: any) => (
+                <a
+                  key={record.fields.company}
+                  href={`https://www.linkedin.com/company/${record.fields.company_id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#78401F',
+                    textDecoration: 'none',
+                    padding: '8px',
+                    borderRadius: '4px',
+                    backgroundColor: '#fff',
+                    display: 'block',
+                    fontFamily: 'Montserrat, sans-serif'
+                  }}
+                >
+                  {record.fields.company}
+                </a>
+              ))}
+            </div>
+            <button
+              onClick={() => setShowCompanyList(false)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                border: 'none',
+                background: 'none',
+                color: '#78401F',
+                cursor: 'pointer',
+                fontSize: '20px'
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

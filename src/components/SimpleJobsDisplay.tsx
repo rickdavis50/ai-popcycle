@@ -641,20 +641,14 @@ const SimpleJobsDisplay = () => {
               Each metric is scored from 1-5, and the final index is their average.
               A higher score indicates stronger overall performance.
             </p>
-            <button
-              onClick={() => setShowInfoPopup(false)}
-              style={{
-                position: 'absolute',
-                top: '10px',
-                right: '10px',
-                border: 'none',
-                background: 'none',
-                color: '#78401F',
-                cursor: 'pointer'
-              }}
-            >
-              ✕
-            </button>
+            <Image
+              src="/images/question.svg"
+              alt="Show Info"
+              width={21}
+              height={21}
+              style={{ cursor: 'pointer' }}
+              onClick={() => setShowInfoPopup(true)}
+            />
           </div>
         </div>
       )}
