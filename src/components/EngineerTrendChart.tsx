@@ -24,14 +24,14 @@ export default function EngineerTrendChart({ data }: Props) {
   
   // Calculate Y-axis scale based on actual data
   const maxValue = Math.max(...indexedData.map(d => d.value));
-  const yAxisMax = Math.ceil(maxValue / 25) * 25; // Round up to nearest 25
-  const yAxisValues = Array.from({ length: 5 }, (_, i) => yAxisMax - (i * (yAxisMax - 100) / 4));
+  const yAxisMax = Math.ceil(maxValue / 50) * 50; // Round up to nearest 50
+  const yAxisValues = [yAxisMax, yAxisMax - (yAxisMax - 100) / 2, 100]; // Only 3 values for better spacing
 
   return (
     <div style={{ 
       position: 'relative',
-      height: '300px',
-      padding: '20px 40px',
+      height: '200px', // Reduced height
+      padding: '20px 40px 60px', // Added padding bottom for footer
       fontFamily: 'Montserrat, sans-serif'
     }}>
       {/* Y-axis labels */}
@@ -85,6 +85,30 @@ export default function EngineerTrendChart({ data }: Props) {
         alignItems: 'flex-end',
         justifyContent: 'space-between'
       }}>
+        {/* Connecting line */}
+        <svg
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: '100%',
+            width: '100%',
+            zIndex: 1
+          }}
+        >
+          <path
+            d={indexedData.map((point, i) => {
+              const x = (i / (indexedData.length - 1)) * 100;
+              const y = 100 - ((point.value - 100) / (yAxisMax - 100)) * 100;
+              return `${i === 0 ? 'M' : 'L'} ${x}% ${y}%`;
+            }).join(' ')}
+            stroke="#FF7300"
+            strokeWidth="2"
+            fill="none"
+          />
+        </svg>
+
         {indexedData.map((point, i) => (
           <div
             key={i}
@@ -127,30 +151,20 @@ export default function EngineerTrendChart({ data }: Props) {
             </div>
           </div>
         ))}
+      </div>
 
-        {/* Curved line connecting points */}
-        <svg
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: '100%',
-            width: '100%',
-            zIndex: 1
-          }}
-        >
-          <path
-            d={indexedData.map((point, i) => {
-              const x = (i / (indexedData.length - 1)) * 100;
-              const y = 100 - ((point.value - 100) / (yAxisMax - 100)) * 100;
-              return `${i === 0 ? 'M' : 'L'} ${x}% ${y}%`;
-            }).join(' ')}
-            stroke="#FF7300"
-            strokeWidth="2"
-            fill="none"
-          />
-        </svg>
+      {/* Footer note */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 40,
+        right: 0,
+        color: '#78401F',
+        fontSize: '12px',
+        lineHeight: '1.4'
+      }}>
+        Source: Live Data API<br />
+        Engineer Hiring index based on {data[data.length - 1]?.value.toLocaleString()} tracked engineers at {data.length} tracked companies in the AI industry. Month 24 Engineer headcount is indexed to 100.
       </div>
     </div>
   );
