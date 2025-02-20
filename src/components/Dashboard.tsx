@@ -80,6 +80,7 @@ export default function Dashboard() {
             width={250}
             height={63}
             priority
+            style={{ maxWidth: '100%', height: 'auto' }}
           />
         </div>
 
