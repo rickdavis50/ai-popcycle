@@ -210,15 +210,17 @@ export default function EngineerTrendChart({ data }: Props) {
     return velocity;
   };
 
-  const calculateIndexValues = (data: number[]) => {
+  // Calculate index values relative to 24m baseline
+  const calculateIndexValues = (data: DataPoint[]) => {
     if (data.length < 5) return [];
-    const baseline = data[0]; // 24m value
-    return data.map(value => {
-      return Number((((value - baseline) / baseline) * 100).toFixed(1));
-    });
+    const baseline = data[0].value; // 24m value
+    return data.map(point => ({
+      date: point.date,
+      value: Number((((point.value - baseline) / baseline) * 100).toFixed(1))
+    }));
   };
 
-  const indexedValues = calculateIndexValues(data.map(d => d.value));
+  const indexedData = calculateIndexValues(data);
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -238,81 +240,105 @@ export default function EngineerTrendChart({ data }: Props) {
       )}
       <div style={{ 
         position: 'relative',
-        height: '200px',
-        padding: '20px 0'
+        height: '300px',
+        padding: '20px 40px',
+        fontFamily: 'Montserrat, sans-serif'
       }}>
-        {/* Draw grid lines */}
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              bottom: `${(i * 20)}%`,
-              borderBottom: '1px dashed rgba(120, 64, 31, 0.1)',
-              zIndex: 1
-            }}
-          />
-        ))}
-
-        {/* Draw trend line */}
+        {/* Y-axis labels */}
         <div style={{
-          position: 'relative',
-          height: '100%',
+          position: 'absolute',
+          left: 0,
+          top: 20,
+          bottom: 40,
+          width: '40px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          color: '#78401F',
+          fontSize: '12px'
+        }}>
+          {[100, 75, 50, 25, 0].map((value) => (
+            <div key={value}>{value}%</div>
+          ))}
+        </div>
+
+        {/* Grid lines */}
+        <div style={{
+          position: 'absolute',
+          left: 40,
+          right: 0,
+          top: 20,
+          bottom: 40,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}>
+          {[100, 75, 50, 25, 0].map((value) => (
+            <div
+              key={value}
+              style={{
+                width: '100%',
+                borderBottom: '1px dashed rgba(120, 64, 31, 0.1)'
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Data points and line */}
+        <div style={{
+          position: 'absolute',
+          left: 40,
+          right: 0,
+          top: 20,
+          bottom: 40,
           display: 'flex',
           alignItems: 'flex-end',
-          justifyContent: 'space-between',
-          padding: '0 20px'
+          justifyContent: 'space-between'
         }}>
-          {indexedValues.map((value, i) => (
+          {indexedData.map((point, i) => (
             <div
               key={i}
               style={{
                 position: 'relative',
-                height: '100%',
-                flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center'
+                alignItems: 'center',
+                flex: 1
               }}
             >
               {/* Value label */}
               <div style={{
                 position: 'absolute',
-                top: `-25px`,
+                top: -25,
                 color: '#78401F',
-                fontSize: '14px',
-                fontFamily: 'Montserrat, sans-serif'
+                fontSize: '14px'
               }}>
-                {value > 0 ? `+${value}%` : `${value}%`}
+                {point.value > 0 ? `+${point.value}%` : `${point.value}%`}
               </div>
 
               {/* Data point */}
               <div style={{
-                width: '12px',
-                height: '12px',
+                width: '8px',
+                height: '8px',
                 borderRadius: '50%',
                 backgroundColor: '#FF7300',
-                marginBottom: `${Math.max(0, value)}%`,
-                position: 'relative',
+                marginBottom: `${point.value}%`,
                 zIndex: 2
               }} />
 
               {/* X-axis label */}
               <div style={{
                 position: 'absolute',
-                bottom: '-25px',
+                bottom: -25,
                 color: '#78401F',
-                fontSize: '14px',
-                fontFamily: 'Montserrat, sans-serif'
+                fontSize: '14px'
               }}>
                 {['24m', '18m', '12m', '6m', 'Now'][i]}
               </div>
             </div>
           ))}
 
-          {/* Connect points with line */}
+          {/* Line connecting points */}
           <svg
             style={{
               position: 'absolute',
@@ -325,9 +351,9 @@ export default function EngineerTrendChart({ data }: Props) {
             }}
           >
             <path
-              d={indexedValues.map((value, i) => {
-                const x = (i / (indexedValues.length - 1)) * 100;
-                const y = 100 - Math.max(0, value);
+              d={indexedData.map((point, i) => {
+                const x = (i / (indexedData.length - 1)) * 100;
+                const y = 100 - point.value;
                 return `${i === 0 ? 'M' : 'L'} ${x}% ${y}%`;
               }).join(' ')}
               stroke="#FF7300"
