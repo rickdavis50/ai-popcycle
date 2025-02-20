@@ -54,7 +54,8 @@ export default function Dashboard() {
       padding: '32px',
       paddingBottom: '60vh',
       position: 'relative',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      backgroundImage: 'linear-gradient(to bottom, #FFFBF7 75%, transparent)',
     }}>
       {/* Background image - full width */}
       <div style={{
@@ -63,15 +64,21 @@ export default function Dashboard() {
         left: 0,
         right: 0,
         width: '100%',
-        height: '100vh',
+        height: '75vh',
         zIndex: 1,
-        backgroundImage: 'url(/images/dreamcycle.png)',
+        backgroundImage: `
+          linear-gradient(to top, transparent 0%, #FFFBF7 100%) 0 0 / 100% 25%,
+          linear-gradient(to right, #FFFBF7, transparent 10%, transparent 90%, #FFFBF7),
+          url(/images/dreamcycle.png)
+        `,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center bottom',
         backgroundSize: 'contain',
         opacity: 0.8,
         maxWidth: '2000px',
-        margin: '0 auto'
+        margin: '0 auto',
+        maskImage: 'linear-gradient(to top, black 0%, black 75%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to top, black 0%, black 75%, transparent 100%)',
       }} />
       
       {/* Content wrapper with higher z-index */}
