@@ -142,7 +142,7 @@ const SimpleJobsDisplay = () => {
       { key: 'engineerGrowth', label: 'Engineer Growth' },
       { key: 'engineerConcentration', label: 'Engineer Concentration' },
       { key: 'headcountGrowth', label: 'Headcount Growth' },
-      { key: 'sizeRank', label: 'Size Rank' }
+      { key: 'sizeRank', label: 'Size' }
     ];
     const angles = metrics.map((_, i) => (i * 2 * Math.PI) / metrics.length);
 
@@ -230,41 +230,11 @@ const SimpleJobsDisplay = () => {
       ctx.fill();
       ctx.stroke();
 
-      // Draw Company B Melt Index with question mark higher up
+      // Draw Company B Melt Index (removed question mark)
       ctx.fillStyle = '#D46B13';
       const rightScore = 'Melt Index: ' + calculateMeltIndex(companyB).toString();
       const rightScoreWidth = ctx.measureText(rightScore).width;
       ctx.fillText(rightScore, 560 - rightScoreWidth - 30, 40);
-      
-      // Draw clickable question mark circle
-      const qMarkX = 560 - 10;
-      const qMarkY = 35;
-      const qMarkRadius = 12;
-      
-      ctx.beginPath();
-      ctx.arc(qMarkX, qMarkY, qMarkRadius, 0, 2 * Math.PI);
-      ctx.strokeStyle = '#D46B13';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      // Draw question mark centered in circle
-      ctx.font = 'bold 16px Montserrat';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('?', qMarkX, qMarkY);
-
-      // Add click detection for the question mark
-      canvasRef.current?.addEventListener('click', (event) => {
-        const rect = canvasRef.current?.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        
-        // Check if click is within question mark circle
-        const distance = Math.sqrt(Math.pow(x - qMarkX, 0) + Math.pow(y - qMarkY, 0));
-        if (distance <= qMarkRadius) {
-          setShowInfoPopup(true);
-        }
-      });
     }
   };
 
@@ -637,7 +607,7 @@ const SimpleJobsDisplay = () => {
               <strong>Github</strong>
             </div>
             <div style={{ marginLeft: '28px' }}>
-              connecting VS code to Vercel
+              Connecting VS code to Vercel
             </div>
           </li>
           <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>

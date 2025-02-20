@@ -302,6 +302,58 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
+      {/* Info Popup */}
+      {showInfoPopup && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowInfoPopup(false);
+          }}
+        >
+          <div style={{
+            backgroundColor: '#FFF3E9',
+            padding: '20px',
+            borderRadius: '8px',
+            maxWidth: '400px',
+            position: 'relative'
+          }}>
+            <h3 style={{ color: '#78401F', marginTop: 0 }}>Melt Index Explained</h3>
+            <p style={{ color: '#78401F' }}>
+              The Melt Index is the average score across five key metrics:
+              Retention, Engineer growth, Engineer %, headcount growth, and size.
+              Each metric is scored from 1-5, and the final index is their average.
+              A higher score indicates less melt momentum.
+            </p>
+            <button
+              onClick={() => setShowInfoPopup(false)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                border: 'none',
+                background: 'none',
+                color: '#78401F',
+                cursor: 'pointer',
+                fontSize: '20px'
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
