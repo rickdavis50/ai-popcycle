@@ -39,7 +39,7 @@ export default function Dashboard() {
   return (
     <div style={{ 
       minHeight: '100vh',
-      backgroundColor: '#FFF6EF',
+      backgroundColor: '#FFFBF7',
       padding: '32px',
       paddingBottom: '60vh',
       position: 'relative',
@@ -221,14 +221,22 @@ export default function Dashboard() {
                   style={{
                     color: '#78401F',
                     textDecoration: 'none',
-                    padding: '8px',
+                    padding: '12px',
                     borderRadius: '4px',
                     backgroundColor: '#fff',
-                    display: 'block',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                     fontFamily: 'Montserrat, sans-serif'
                   }}
                 >
                   {record.fields.company}
+                  <Image
+                    src="/images/link.svg"
+                    alt="Visit LinkedIn"
+                    width={16}
+                    height={16}
+                  />
                 </a>
               ))}
             </div>

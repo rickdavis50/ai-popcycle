@@ -384,44 +384,71 @@ const SimpleJobsDisplay = () => {
           gap: '20px',
           marginBottom: '16px'
         }}>
-          <select 
-            value={companyA}
-            onChange={(e) => setCompanyA(e.target.value)}
-            disabled={loading}
-            style={{
-              padding: '8px 32px 8px 12px',
-              borderRadius: '4px',
-              border: '1px solid #78401F',
-              color: '#78401F',
-              fontFamily: 'Montserrat, sans-serif',
-              opacity: loading ? 0.7 : 1,
-              cursor: loading ? 'wait' : 'pointer',
-              maxHeight: '200px',
-              overflow: 'auto',
-              WebkitAppearance: 'none',
-              MozAppearance: 'none',
-              appearance: 'none',
-              backgroundColor: '#FFF3E9',
-              borderColor: companyA ? '#F78729' : '#78401F',
-              outline: 'none',
-              width: '200px'
-            }}
-            size={6}
-          >
-            <option value="">Select Company A</option>
-            {companies.map(company => (
-              <option 
-                key={company} 
-                value={company}
-                style={{
-                  backgroundColor: company === companyA ? '#F78729' : 'transparent',
-                  color: company === companyA ? '#FFF' : '#78401F'
-                }}
-              >
-                {company}
-              </option>
-            ))}
-          </select>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            alignItems: 'center'
+          }}>
+            <select 
+              value={companyA}
+              onChange={(e) => setCompanyA(e.target.value)}
+              disabled={loading}
+              style={{
+                padding: '8px 32px 8px 12px',
+                borderRadius: '4px',
+                border: '1px solid #78401F',
+                color: '#78401F',
+                fontFamily: 'Montserrat, sans-serif',
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? 'wait' : 'pointer',
+                maxHeight: '200px',
+                overflow: 'auto',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                appearance: 'none',
+                backgroundColor: '#FFF3E9',
+                borderColor: companyA ? '#F78729' : '#78401F',
+                outline: 'none',
+                width: '200px'
+              }}
+              size={6}
+            >
+              <option value="">Select Company A</option>
+              {companies.map(company => (
+                <option 
+                  key={company} 
+                  value={company}
+                  style={{
+                    backgroundColor: company === companyA ? '#F78729' : 'transparent',
+                    color: company === companyA ? '#FFF' : '#78401F'
+                  }}
+                >
+                  {company}
+                </option>
+              ))}
+            </select>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <span style={{
+                color: '#78401F',
+                fontFamily: 'Montserrat, sans-serif'
+              }}>
+                Melt Index: {companyA ? calculateMeltIndex(companyA) : '-'}
+              </span>
+              <Image
+                src="/images/question.svg"
+                alt="Show Info"
+                width={16}
+                height={16}
+                style={{ cursor: 'pointer' }}
+                onClick={() => setShowInfoPopup(true)}
+              />
+            </div>
+          </div>
 
           <select
             value={companyB}
@@ -577,28 +604,36 @@ const SimpleJobsDisplay = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '16px',
+        gap: '24px',
         margin: '40px auto',
         position: 'relative',
         zIndex: 3
       }}>
+        <p style={{
+          color: '#78401F',
+          fontFamily: 'Montserrat, sans-serif',
+          fontSize: '18px',
+          textAlign: 'center',
+          maxWidth: '400px',
+          margin: 0
+        }}>
+          Get API Access and start building apps today!
+        </p>
         <div style={{
           display: 'flex',
           alignItems: 'center',
           gap: '12px'
         }}>
-          <div style={{ width: 40, height: 40 }}>
-            <Image
-              src="/images/api_icon.svg"
-              alt="API Icon"
-              width={40}
-              height={40}
-              onError={(e) => {
-                console.error('Failed to load API icon');
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          </div>
+          <Image
+            src="/images/api_icon.svg"
+            alt="API Icon"
+            width={60}
+            height={60}
+            onError={(e) => {
+              console.error('Failed to load API icon');
+              e.currentTarget.style.display = 'none';
+            }}
+          />
           <a 
             href="https://www.livedatatechnologies.com/api"
             target="_blank"
@@ -617,15 +652,6 @@ const SimpleJobsDisplay = () => {
             />
           </a>
         </div>
-        <p style={{
-          color: '#78401F',
-          fontFamily: 'Montserrat, sans-serif',
-          fontSize: '14px',
-          textAlign: 'center',
-          maxWidth: '300px'
-        }}>
-          Get API Access and start building apps today!
-        </p>
       </div>
 
       {/* Info Popup */}
