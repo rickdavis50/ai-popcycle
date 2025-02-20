@@ -95,7 +95,7 @@ export default function Dashboard() {
         width: '100%',
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: isMobile ? '0 4px' : '0 32px', // Conditional padding
+        padding: isMobile ? '0 8px' : '0 32px', // Slightly more padding on mobile
         boxSizing: 'border-box'
       }}>
         {/* Header - Simple logo and info icon */}
@@ -121,12 +121,12 @@ export default function Dashboard() {
                 objectFit: 'contain'
               }}
             />
-            {/* Info Icon - repositioned */}
+            {/* Info Icon - adjusted positioning */}
             <div 
               onClick={() => setShowInfoPopup(true)}
               style={{
                 position: 'absolute',
-                bottom: -8,
+                bottom: '0', // Align with bottom of logo
                 right: -24,
                 display: 'flex',
                 justifyContent: 'center',
@@ -161,9 +161,10 @@ export default function Dashboard() {
           {/* Top modules grid */}
           <div style={{ 
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, minmax(300px, 1fr))',
-            gap: '25px',
-            marginBottom: '32px'
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, minmax(300px, 1fr))', // Single column on mobile
+            gap: isMobile ? '16px' : '25px', // Smaller gap on mobile
+            marginBottom: '32px',
+            width: '100%'
           }}>
             {/* Industry Summary */}
             <div style={{ 
