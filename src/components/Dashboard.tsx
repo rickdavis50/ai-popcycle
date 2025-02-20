@@ -77,8 +77,9 @@ export default function Dashboard() {
         bottom: 0,
         left: '50%',
         transform: 'translateX(-50%)',
-        width: '100%',
-        minWidth: 'calc(min(100vw, 1400px) + 20px)', // Match widest module + 20px
+        width: isMobile ? '100%' : 'calc(1200px + 40px)', // 20px wider on each side on desktop
+        minWidth: isMobile ? '100%' : 'calc(1200px + 40px)',
+        maxWidth: isMobile ? '100%' : 'calc(1200px + 40px)',
         height: '100vh',
         zIndex: 0,
         backgroundImage: 'url(/images/dreamcycle.png)',
@@ -95,7 +96,7 @@ export default function Dashboard() {
         width: '100%',
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: isMobile ? '0 2px' : '0 32px', // Reduced mobile padding to 2px
+        padding: isMobile ? '0 2px' : '0 32px',
         boxSizing: 'border-box'
       }}>
         {/* Header - Simple logo and info icon */}
@@ -155,10 +156,10 @@ export default function Dashboard() {
         <div style={{ 
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, minmax(300px, 1fr))',
-          gap: isMobile ? '8px' : '25px', // Reduced gap on mobile
+          gap: isMobile ? '8px' : '25px', // Keep desktop gap
           marginBottom: '32px',
           width: '100%',
-          maxWidth: isMobile ? '100%' : '1200px', // Match bottom section width on desktop
+          maxWidth: '1200px', // Match bottom section width
           margin: '0 auto'
         }}>
           {/* Industry Summary */}
@@ -240,7 +241,7 @@ export default function Dashboard() {
           zIndex: 2,
           maxWidth: '1200px',
           margin: '0 auto',
-          width: '100%' // Ensure full width
+          width: '100%'
         }}>
           <SimpleJobsDisplay />
         </div>
