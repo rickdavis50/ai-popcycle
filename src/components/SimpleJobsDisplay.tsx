@@ -70,11 +70,11 @@ const calculateMetrics = (company: CompanyData): CompanyMetrics => {
 };
 
 const quickPicks = [
-  { label: 'OpenAI vs Anthropic', c1: 'openai', c2: 'anthropicresearch' },
-  { label: 'xAI vs OpenAI', c1: 'xai', c2: 'openai' },
-  { label: 'Anysphere vs StackBlitz', c1: 'anysphereinc', c2: 'stackblitz' },
-  { label: 'HuggingFace vs LangChain', c1: 'huggingface', c2: 'langchain' },
-  { label: 'Runway vs Midjourney', c1: 'runwayml', c2: 'midjourney' }
+  { label: 'OpenAI vs Anthropic', c1: 'OpenAI', c2: 'Anthropic' },
+  { label: 'xAI vs OpenAI', c1: 'xAI', c2: 'OpenAI' },
+  { label: 'Anysphere vs StackBlitz', c1: 'Anysphere', c2: 'StackBlitz' },
+  { label: 'HuggingFace vs LangChain', c1: 'Hugging Face', c2: 'LangChain' },
+  { label: 'Runway vs Midjourney', c1: 'Runway', c2: 'Midjourney' }
 ];
 
 const SimpleJobsDisplay = () => {

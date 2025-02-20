@@ -67,20 +67,15 @@ export default function Dashboard() {
         zIndex: 2,
         width: '100%'
       }}>
-        {/* Header - Restore logo */}
-        <div style={{ 
-          marginBottom: '32px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <Image
-            src="/images/pop_logo.svg"
-            alt="Pop Logo"
-            width={250}
-            height={63}
-            priority
-            style={{ maxWidth: '100%', height: 'auto' }}
+        {/* Header - Simple logo div */}
+        <div style={{ marginBottom: '32px' }}>
+          <img 
+            src="/images/pop_logo.svg" 
+            alt="Pop Logo" 
+            style={{ 
+              width: '250px',
+              height: 'auto'
+            }} 
           />
         </div>
 
