@@ -560,7 +560,7 @@ const SimpleJobsDisplay = () => {
           <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Data: Priceless</strong>
+              <strong>Live Data API: Priceless</strong>
             </div>
             <div style={{ marginLeft: '28px' }}>
               Live Data API feeds Airtable, Airtable feeds the app
