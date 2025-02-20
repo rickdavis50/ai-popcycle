@@ -181,7 +181,7 @@ export default function Dashboard() {
                 marginBottom: '16px',
                 color: '#78401F',
                 fontFamily: 'Montserrat, sans-serif'
-              }}>Engineer Hiring Index</h2>
+              }}>Engineer Hiring Melt Index</h2>
               <EngineerTrendChart data={loading ? [] : engineerTrends} />
             </div>
             
