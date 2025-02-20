@@ -88,14 +88,13 @@ export default function InsightsModule({ insights }: InsightsModuleProps) {
           No notable insights at this time
         </div>
       ) : (
-        <ul className="list-none">
+        <div>
           {insights.map((insight, index) => (
-            <li key={index} className={getInsightStyle(insight.type)}>
-              <span className="mr-2" style={{ color: '#78401F' }}>•</span>
+            <div key={index} style={{ marginBottom: '12px', color: '#78401F' }}>
               {formatInsightText(insight.text)}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

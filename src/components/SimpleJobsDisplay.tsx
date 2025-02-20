@@ -627,19 +627,25 @@ const SimpleJobsDisplay = () => {
         <p style={{
           color: '#000000',
           fontFamily: 'Montserrat, sans-serif',
-          fontSize: '18px',
-          fontWeight: 600,
+          fontSize: '16px',
+          fontWeight: 500,
           textAlign: 'center',
           maxWidth: '400px',
           margin: 0
         }}>
           Get API Access and start building today!
         </p>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px'
-        }}>
+        <a 
+          href="https://www.livedatatechnologies.com/api"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            textDecoration: 'none'
+          }}
+        >
           <Image
             src="/images/api_icon.svg"
             alt="API Icon"
@@ -647,24 +653,15 @@ const SimpleJobsDisplay = () => {
             height={60}
             priority
           />
-          <a 
-            href="https://www.livedatatechnologies.com/api"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'block',
-              width: '200px'
-            }}
-          >
-            <Image
-              src="/images/api_button.svg"
-              alt="API Access"
-              width={200}
-              height={60}
-              priority
-            />
-          </a>
-        </div>
+          <span style={{
+            color: '#78401F',
+            fontFamily: 'Montserrat, sans-serif',
+            fontSize: '16px',
+            fontWeight: 600
+          }}>
+            Access the API
+          </span>
+        </a>
       </div>
 
       {/* Info Popup */}
