@@ -7,7 +7,7 @@ import SimpleJobsDisplay from './SimpleJobsDisplay';
 import { useAirtableData } from '../hooks/useAirtableData';
 import { insights } from '../utils/dummyData';
 import EngineerTrendChart from './EngineerTrendChart';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const styles = {
   header: {
@@ -47,6 +47,21 @@ export default function Dashboard() {
   const [showCompanyList, setShowCompanyList] = useState(false);
   const [showInfoPopup, setShowInfoPopup] = useState(false);
 
+  // Add state for mobile detection
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Add effect to handle window resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile(); // Check initially
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <div style={{ 
       minHeight: '100vh',
@@ -80,11 +95,8 @@ export default function Dashboard() {
         width: '100%',
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: '0 32px',
-        boxSizing: 'border-box',
-        '@media (max-width: 768px)': {
-          padding: '0 4px' // Reduce padding on mobile
-        }
+        padding: isMobile ? '0 4px' : '0 32px', // Conditional padding
+        boxSizing: 'border-box'
       }}>
         {/* Header - Simple logo and info icon */}
         <div style={{ 
