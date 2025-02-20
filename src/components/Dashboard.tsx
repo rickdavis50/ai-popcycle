@@ -178,7 +178,7 @@ export default function Dashboard() {
               <h2 style={{
                 fontSize: '20px',
                 fontWeight: 'bold',
-                marginBottom: '16px',
+                marginBottom: '8px',
                 color: '#78401F',
                 fontFamily: 'Montserrat, sans-serif'
               }}>Engineer Hiring Melt Index</h2>
@@ -195,7 +195,7 @@ export default function Dashboard() {
               <h2 style={{
                 fontSize: '20px',
                 fontWeight: 'bold',
-                marginBottom: '24px',
+                marginBottom: '8px',
                 color: '#78401F',
                 fontFamily: 'Montserrat, sans-serif'
               }}>Outlier Insights</h2>

@@ -104,11 +104,13 @@ export default function EngineerTrendChart({ data }: Props) {
   return (
     <div style={{ 
       position: 'relative',
-      height: '260px',
-      padding: '0 40px 30px',
+      height: '240px',
+      padding: '0 40px 40px',
       fontFamily: 'Montserrat, sans-serif'
     }}>
-      <Line data={chartData} options={options} />
+      <div style={{ height: '180px' }}>
+        <Line data={chartData} options={options} />
+      </div>
       <div style={{
         position: 'absolute',
         bottom: 8,
@@ -118,7 +120,8 @@ export default function EngineerTrendChart({ data }: Props) {
         fontSize: '11px',
         lineHeight: '1.3',
         opacity: 0.8,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        padding: '4px 0'
       }}>
         Source: Live Data API<br />
         Engineer Hiring index based on {engineerCount?.toLocaleString() || '0'} tracked engineers at {companyCount || '0'} tracked companies in the AI industry. Month 24 Engineer headcount is indexed to 100.
