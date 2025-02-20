@@ -69,7 +69,22 @@ export default function EngineerTrendChart({ data }: Props) {
         display: false
       },
       tooltip: {
-        enabled: false
+        enabled: true,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        titleColor: '#78401F',
+        bodyColor: '#78401F',
+        titleFont: {
+          family: 'Montserrat'
+        },
+        bodyFont: {
+          family: 'Montserrat'
+        },
+        padding: 12,
+        displayColors: false,
+        callbacks: {
+          title: () => '',
+          label: (context) => `${context.parsed.y}%`
+        }
       }
     },
     scales: {

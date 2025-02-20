@@ -13,7 +13,7 @@ const styles = {
   header: {
     '@media (max-width: 768px)': {
       '& img': {
-        width: '200px',  // Smaller on mobile
+        width: '308px',  // 75% of 411px
       }
     }
   }
@@ -94,7 +94,7 @@ export default function Dashboard() {
             style={{ 
               height: 'auto',
               width: '411px',
-              maxWidth: '80vw', // Responsive width
+              maxWidth: '75vw', // Adjusted for mobile
               objectFit: 'contain'
             }}
           />
