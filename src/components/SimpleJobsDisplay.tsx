@@ -69,7 +69,23 @@ const calculateMetrics = (company: CompanyData): CompanyMetrics => {
   };
 };
 
-const calculateMeltIndex = (metrics: CompanyMetrics): number => {
+const calculateMeltIndex = (companyName: string) => {
+  if (!records) return '-';
+  
+  const companyData = records.find(r => r.fields.company === companyName)?.fields;
+  if (!companyData) return '-';
+
+  const metrics = calculateMetrics({
+    name: companyName,
+    currentHeadcount: companyData.count_current_employees || 0,
+    headcount12MonthsAgo: companyData.headcount_last_year || 0,
+    voluntaryLeaves: companyData.voluntarily_left || 0,
+    currentEngineers: companyData.engineers || 0,
+    engineers6MonthsAgo: companyData.engineers_6mo || 0,
+    industryAverageHeadcount: calculateIndustryAverage(records)
+  });
+
+  // Calculate average of all metrics
   const scores = [
     metrics.retention,
     metrics.engineerGrowth,
@@ -77,7 +93,9 @@ const calculateMeltIndex = (metrics: CompanyMetrics): number => {
     metrics.headcountGrowth,
     metrics.sizeRank
   ];
-  return Number((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1));
+  
+  const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+  return average.toFixed(1);
 };
 
 const InfoIcon = () => (
@@ -205,7 +223,7 @@ const SimpleJobsDisplay = () => {
 
       // Draw Company A Melt Index higher up
       ctx.fillStyle = '#F78729';
-      ctx.fillText('Melt Index: ' + calculateMeltIndex(metricsA).toString(), 40, 40);
+      ctx.fillText('Melt Index: ' + calculateMeltIndex(companyA).toString(), 40, 40);
     }
 
     if (metricsB) {
@@ -227,7 +245,7 @@ const SimpleJobsDisplay = () => {
 
       // Draw Company B Melt Index with question mark higher up
       ctx.fillStyle = '#D46B13';
-      const rightScore = 'Melt Index: ' + calculateMeltIndex(metricsB).toString();
+      const rightScore = 'Melt Index: ' + calculateMeltIndex(companyB).toString();
       const rightScoreWidth = ctx.measureText(rightScore).width;
       ctx.fillText(rightScore, 560 - rightScoreWidth - 30, 40);
       
@@ -450,45 +468,72 @@ const SimpleJobsDisplay = () => {
             </div>
           </div>
 
-          <select
-            value={companyB}
-            onChange={(e) => setCompanyB(e.target.value)}
-            disabled={loading}
-            style={{
-              padding: '8px 32px 8px 12px',
-              borderRadius: '4px',
-              border: '1px solid #78401F',
-              color: '#78401F',
-              fontFamily: 'Montserrat, sans-serif',
-              opacity: loading ? 0.7 : 1,
-              cursor: loading ? 'wait' : 'pointer',
-              maxHeight: '200px',
-              overflow: 'auto',
-              WebkitAppearance: 'none',
-              MozAppearance: 'none',
-              appearance: 'none',
-              backgroundColor: '#FFF3E9',
-              borderColor: companyB ? '#D46B13' : '#78401F',
-              outline: 'none',
-              width: '200px'
-            }}
-            size={6}
-          >
-            <option value="">Select Company B</option>
-            {companies.map(company => (
-              <option 
-                key={company} 
-                value={company}
-                disabled={company === companyA}
-                style={{
-                  backgroundColor: company === companyB ? '#D46B13' : 'transparent',
-                  color: company === companyB ? '#FFF' : '#78401F'
-                }}
-              >
-                {company}
-              </option>
-            ))}
-          </select>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            alignItems: 'center'
+          }}>
+            <select
+              value={companyB}
+              onChange={(e) => setCompanyB(e.target.value)}
+              disabled={loading}
+              style={{
+                padding: '8px 32px 8px 12px',
+                borderRadius: '4px',
+                border: '1px solid #78401F',
+                color: '#78401F',
+                fontFamily: 'Montserrat, sans-serif',
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? 'wait' : 'pointer',
+                maxHeight: '200px',
+                overflow: 'auto',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                appearance: 'none',
+                backgroundColor: '#FFF3E9',
+                borderColor: companyB ? '#D46B13' : '#78401F',
+                outline: 'none',
+                width: '200px'
+              }}
+              size={6}
+            >
+              <option value="">Select Company B</option>
+              {companies.map(company => (
+                <option 
+                  key={company} 
+                  value={company}
+                  disabled={company === companyA}
+                  style={{
+                    backgroundColor: company === companyB ? '#D46B13' : 'transparent',
+                    color: company === companyB ? '#FFF' : '#78401F'
+                  }}
+                >
+                  {company}
+                </option>
+              ))}
+            </select>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <span style={{
+                color: '#78401F',
+                fontFamily: 'Montserrat, sans-serif'
+              }}>
+                Melt Index: {companyB ? calculateMeltIndex(companyB) : '-'}
+              </span>
+              <Image
+                src="/images/question.svg"
+                alt="Show Info"
+                width={16}
+                height={16}
+                style={{ cursor: 'pointer' }}
+                onClick={() => setShowInfoPopup(true)}
+              />
+            </div>
+          </div>
         </div>
 
         <div style={{ 
