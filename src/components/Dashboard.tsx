@@ -67,7 +67,7 @@ export default function Dashboard() {
         zIndex: 2,
         width: '100%'
       }}>
-        {/* Header - Restored logo */}
+        {/* Header - Restore logo */}
         <div style={{ 
           marginBottom: '32px',
           display: 'flex',
@@ -174,20 +174,25 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Company List Popup */}
+      {/* Company List Popup - Add click outside */}
       {showCompanyList && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}>
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowCompanyList(false);
+          }}
+        >
           <div style={{
             backgroundColor: '#FFF3E9',
             padding: '24px',

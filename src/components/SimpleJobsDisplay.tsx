@@ -436,14 +436,6 @@ const SimpleJobsDisplay = () => {
               }}>
                 Melt Index: {companyA ? calculateMeltIndex(companyA) : '-'}
               </span>
-              <Image
-                src="/images/question.svg"
-                alt="Show Info"
-                width={16}
-                height={16}
-                style={{ cursor: 'pointer' }}
-                onClick={() => setShowInfoPopup(true)}
-              />
             </div>
           </div>
 
@@ -503,14 +495,6 @@ const SimpleJobsDisplay = () => {
               }}>
                 Melt Index: {companyB ? calculateMeltIndex(companyB) : '-'}
               </span>
-              <Image
-                src="/images/question.svg"
-                alt="Show Info"
-                width={16}
-                height={16}
-                style={{ cursor: 'pointer' }}
-                onClick={() => setShowInfoPopup(true)}
-              />
             </div>
           </div>
         </div>
@@ -634,9 +618,10 @@ const SimpleJobsDisplay = () => {
         zIndex: 3
       }}>
         <p style={{
-          color: '#78401F',
+          color: '#000000',
           fontFamily: 'Montserrat, sans-serif',
           fontSize: '18px',
+          fontWeight: 600,
           textAlign: 'center',
           maxWidth: '400px',
           margin: 0
@@ -653,10 +638,7 @@ const SimpleJobsDisplay = () => {
             alt="API Icon"
             width={60}
             height={60}
-            onError={(e) => {
-              console.error('Failed to load API icon');
-              e.currentTarget.style.display = 'none';
-            }}
+            priority
           />
           <a 
             href="https://www.livedatatechnologies.com/api"
@@ -680,18 +662,23 @@ const SimpleJobsDisplay = () => {
 
       {/* Info Popup */}
       {showInfoPopup && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}>
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowInfoPopup(false);
+          }}
+        >
           <div style={{
             backgroundColor: '#FFF3E9',
             padding: '20px',
