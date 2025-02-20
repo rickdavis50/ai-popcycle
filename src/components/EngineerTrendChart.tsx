@@ -210,13 +210,14 @@ export default function EngineerTrendChart({ data }: Props) {
     return velocity;
   };
 
-  // Calculate index values relative to 24m baseline
+  // Calculate index values with 24m as 100
   const calculateIndexValues = (data: DataPoint[]) => {
     if (data.length < 5) return [];
     const baseline = data[0].value; // 24m value
     return data.map(point => ({
       date: point.date,
-      value: Number((((point.value - baseline) / baseline) * 100).toFixed(1))
+      // Set 24m to 100 and calculate other points relative to that
+      value: point === data[0] ? 100 : Number((((point.value - baseline) / baseline) * 100 + 100).toFixed(1))
     }));
   };
 
@@ -257,8 +258,8 @@ export default function EngineerTrendChart({ data }: Props) {
           color: '#78401F',
           fontSize: '12px'
         }}>
-          {[100, 75, 50, 25, 0].map((value) => (
-            <div key={value}>{value}%</div>
+          {[200, 175, 150, 125, 100].map((value) => (
+            <div key={value}>{value}</div>
           ))}
         </div>
 
@@ -273,7 +274,7 @@ export default function EngineerTrendChart({ data }: Props) {
           flexDirection: 'column',
           justifyContent: 'space-between'
         }}>
-          {[100, 75, 50, 25, 0].map((value) => (
+          {[200, 175, 150, 125, 100].map((value) => (
             <div
               key={value}
               style={{
@@ -313,7 +314,7 @@ export default function EngineerTrendChart({ data }: Props) {
                 color: '#78401F',
                 fontSize: '14px'
               }}>
-                {point.value > 0 ? `+${point.value}%` : `${point.value}%`}
+                {point.value}
               </div>
 
               {/* Data point */}
@@ -322,7 +323,7 @@ export default function EngineerTrendChart({ data }: Props) {
                 height: '8px',
                 borderRadius: '50%',
                 backgroundColor: '#FF7300',
-                marginBottom: `${point.value}%`,
+                marginBottom: `${point.value - 100}%`,
                 zIndex: 2
               }} />
 
@@ -338,7 +339,7 @@ export default function EngineerTrendChart({ data }: Props) {
             </div>
           ))}
 
-          {/* Line connecting points */}
+          {/* Curved line connecting points */}
           <svg
             style={{
               position: 'absolute',
@@ -351,11 +352,11 @@ export default function EngineerTrendChart({ data }: Props) {
             }}
           >
             <path
-              d={indexedData.map((point, i) => {
+              d={`M ${indexedData.map((point, i) => {
                 const x = (i / (indexedData.length - 1)) * 100;
-                const y = 100 - point.value;
-                return `${i === 0 ? 'M' : 'L'} ${x}% ${y}%`;
-              }).join(' ')}
+                const y = 100 - (point.value - 100);
+                return `${x},${y}`;
+              }).join(' S ')}`}
               stroke="#FF7300"
               strokeWidth="2"
               fill="none"
