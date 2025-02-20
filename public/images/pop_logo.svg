@@ -1,6 +1,7 @@
 <svg width="250" height="63" viewBox="0 0 250 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M0 31.5C0 14.103 14.103 0 31.5 0H218.5C235.897 0 250 14.103 250 31.5C250 48.897 235.897 63 218.5 63H31.5C14.103 63 0 48.897 0 31.5Z" fill="#78401F"/>
-  <text x="125" y="38" font-family="Montserrat" font-size="24" font-weight="700" fill="white" text-anchor="middle">
-    AI POP-CYCLE
-  </text>
+  <path d="M50.4 31.5C50.4 48.8 36.8 63 20.2 63C3.6 63 -10 48.8 -10 31.5C-10 14.2 3.6 0 20.2 0C36.8 0 50.4 14.2 50.4 31.5Z" fill="#FF7E26"/>
+  <path d="M72.9 15.8H83.1V47.2H72.9V15.8Z" fill="#78401F"/>
+  <path d="M92.4 15.8H102.6V47.2H92.4V15.8Z" fill="#78401F"/>
+  <path d="M141.9 31.5C141.9 40.8 134.7 48.4 125.9 48.4C117.1 48.4 109.9 40.8 109.9 31.5C109.9 22.2 117.1 14.6 125.9 14.6C134.7 14.6 141.9 22.2 141.9 31.5Z" fill="#78401F"/>
+  <text x="160" y="40" font-family="Montserrat" font-size="32" font-weight="600" fill="#78401F">CYCLE</text>
 </svg>

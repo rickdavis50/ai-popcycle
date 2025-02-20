@@ -69,6 +69,14 @@ const calculateMetrics = (company: CompanyData): CompanyMetrics => {
   };
 };
 
+const quickPicks = [
+  { label: 'OpenAI vs Anthropic', c1: 'openai', c2: 'anthropicresearch' },
+  { label: 'xAI vs OpenAI', c1: 'xai', c2: 'openai' },
+  { label: 'Anysphere vs StackBlitz', c1: 'anysphereinc', c2: 'stackblitz' },
+  { label: 'HuggingFace vs LangChain', c1: 'huggingface', c2: 'langchain' },
+  { label: 'Runway vs Midjourney', c1: 'runwayml', c2: 'midjourney' }
+];
+
 const SimpleJobsDisplay = () => {
   const [companies, setCompanies] = useState<string[]>([]);
   const [companyA, setCompanyA] = useState<string>('');
@@ -375,6 +383,40 @@ const SimpleJobsDisplay = () => {
 
         <div style={{
           display: 'flex',
+          gap: '12px',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          marginBottom: '24px'
+        }}>
+          {quickPicks.map((pick, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                setCompanyA(pick.c1);
+                setCompanyB(pick.c2);
+              }}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #78401F',
+                backgroundColor: 'white',
+                color: '#78401F',
+                cursor: 'pointer',
+                fontFamily: 'Montserrat, sans-serif',
+                fontSize: '14px',
+                transition: 'all 0.2s',
+                ':hover': {
+                  backgroundColor: '#FFF3E9'
+                }
+              }}
+            >
+              {pick.label}
+            </button>
+          ))}
+        </div>
+
+        <div style={{
+          display: 'flex',
           flexDirection: 'row',
           flexWrap: 'wrap',
           justifyContent: 'center',
@@ -626,7 +668,7 @@ const SimpleJobsDisplay = () => {
           maxWidth: '400px',
           margin: 0
         }}>
-          Get API Access and start building apps today!
+          Get API Access and start building today!
         </p>
         <div style={{
           display: 'flex',
@@ -689,9 +731,9 @@ const SimpleJobsDisplay = () => {
             <h3 style={{ color: '#78401F', marginTop: 0 }}>Melt Index Explained</h3>
             <p style={{ color: '#78401F' }}>
               The Melt Index is the average score across five key metrics:
-              retention, engineer growth, engineer concentration, headcount growth, and size rank.
+              Retention, Engineer growth, Engineer %, headcount growth, and size.
               Each metric is scored from 1-5, and the final index is their average.
-              A higher score indicates stronger overall performance.
+              A higher score indicates less melt momentum.
             </p>
             <button
               onClick={() => setShowInfoPopup(false)}
