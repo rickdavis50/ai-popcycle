@@ -210,6 +210,16 @@ export default function EngineerTrendChart({ data }: Props) {
     return velocity;
   };
 
+  const calculateIndexValues = (data: number[]) => {
+    if (data.length < 5) return [];
+    const baseline = data[0]; // 24m value
+    return data.map(value => {
+      return Number((((value - baseline) / baseline) * 100).toFixed(1));
+    });
+  };
+
+  const indexedValues = calculateIndexValues(data.map(d => d.value));
+
   return (
     <div className="w-full flex flex-col items-center">
       <div ref={chartRef} style={{ width: '400px' }} />
@@ -226,6 +236,107 @@ export default function EngineerTrendChart({ data }: Props) {
           {velocityText}
         </div>
       )}
+      <div style={{ 
+        position: 'relative',
+        height: '200px',
+        padding: '20px 0'
+      }}>
+        {/* Draw grid lines */}
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: `${(i * 20)}%`,
+              borderBottom: '1px dashed rgba(120, 64, 31, 0.1)',
+              zIndex: 1
+            }}
+          />
+        ))}
+
+        {/* Draw trend line */}
+        <div style={{
+          position: 'relative',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          padding: '0 20px'
+        }}>
+          {indexedValues.map((value, i) => (
+            <div
+              key={i}
+              style={{
+                position: 'relative',
+                height: '100%',
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}
+            >
+              {/* Value label */}
+              <div style={{
+                position: 'absolute',
+                top: `-25px`,
+                color: '#78401F',
+                fontSize: '14px',
+                fontFamily: 'Montserrat, sans-serif'
+              }}>
+                {value > 0 ? `+${value}%` : `${value}%`}
+              </div>
+
+              {/* Data point */}
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: '#FF7300',
+                marginBottom: `${Math.max(0, value)}%`,
+                position: 'relative',
+                zIndex: 2
+              }} />
+
+              {/* X-axis label */}
+              <div style={{
+                position: 'absolute',
+                bottom: '-25px',
+                color: '#78401F',
+                fontSize: '14px',
+                fontFamily: 'Montserrat, sans-serif'
+              }}>
+                {['24m', '18m', '12m', '6m', 'Now'][i]}
+              </div>
+            </div>
+          ))}
+
+          {/* Connect points with line */}
+          <svg
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: '100%',
+              width: '100%',
+              zIndex: 1
+            }}
+          >
+            <path
+              d={indexedValues.map((value, i) => {
+                const x = (i / (indexedValues.length - 1)) * 100;
+                const y = 100 - Math.max(0, value);
+                return `${i === 0 ? 'M' : 'L'} ${x}% ${y}%`;
+              }).join(' ')}
+              stroke="#FF7300"
+              strokeWidth="2"
+              fill="none"
+            />
+          </svg>
+        </div>
+      </div>
     </div>
   );
 } 
