@@ -60,9 +60,10 @@ export default function Dashboard() {
       <div style={{
         position: 'fixed',
         bottom: 0,
-        left: 0,
-        right: 0,
+        left: '50%',
+        transform: 'translateX(-50%)',
         width: '100%',
+        minWidth: 'calc(min(100vw, 1400px) + 20px)', // Match widest module + 20px
         height: '100vh',
         zIndex: 0,
         backgroundImage: 'url(/images/dreamcycle.png)',
@@ -79,8 +80,11 @@ export default function Dashboard() {
         width: '100%',
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: '0 16px', // Reduced padding for mobile
-        boxSizing: 'border-box'
+        padding: '0 32px',
+        boxSizing: 'border-box',
+        '@media (max-width: 768px)': {
+          padding: '0 4px' // Reduce padding on mobile
+        }
       }}>
         {/* Header - Simple logo and info icon */}
         <div style={{ 
