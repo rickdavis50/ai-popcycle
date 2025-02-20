@@ -1,6 +1,6 @@
 "use client";
 
-import { useAirtableData } from '../contexts/AirtableContext';
+import { useAirtableData } from '../hooks/useAirtableData';
 
 interface DataPoint {
   date: string;
@@ -17,7 +17,7 @@ export default function EngineerTrendChart({ data }: Props) {
   // Calculate index values with 24m as 100
   const calculateIndexValues = (data: DataPoint[]) => {
     if (data.length < 5) return [];
-    const baseline = data[0].value; // 24m value
+    const baseline = data[0].value;
     return data.map(point => ({
       date: point.date,
       value: point === data[0] ? 100 : Number((((point.value - baseline) / baseline) * 100 + 100).toFixed(1))
@@ -37,76 +37,70 @@ export default function EngineerTrendChart({ data }: Props) {
   return (
     <div style={{ 
       position: 'relative',
-      height: '260px', // Increased to accommodate footer
-      padding: '20px 40px',
+      height: '220px', // Reduced overall height
+      padding: '20px 40px 30px', // Reduced bottom padding
       fontFamily: 'Montserrat, sans-serif'
     }}>
       {/* Chart container */}
       <div style={{
         position: 'relative',
-        height: '200px', // Fixed height for chart
-        marginBottom: '40px' // Space for footer
+        height: '160px', // Reduced chart height
+        marginBottom: '30px' // Reduced footer margin
       }}>
-        {/* Y-axis labels */}
+        {/* Y-axis and grid lines container */}
         <div style={{
           position: 'absolute',
           left: 0,
-          top: 20,
-          bottom: 40,
-          width: '40px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          color: '#78401F',
-          fontSize: '12px'
-        }}>
-          {yAxisValues.map((value) => (
-            <div key={value}>{Math.round(value)}</div>
-          ))}
-        </div>
-
-        {/* Grid lines */}
-        <div style={{
-          position: 'absolute',
-          left: 40,
           right: 0,
-          top: 20,
-          bottom: 40,
+          top: 0,
+          bottom: 25px, // Space for x-axis labels
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between'
         }}>
           {yAxisValues.map((value) => (
-            <div
-              key={value}
-              style={{
-                width: '100%',
+            <div key={value} style={{ position: 'relative', width: '100%', height: 0 }}>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                width: '40px',
+                color: '#78401F',
+                fontSize: '12px',
+                transform: 'translateY(-50%)'
+              }}>
+                {Math.round(value)}
+              </div>
+              <div style={{
+                position: 'absolute',
+                left: '40px',
+                right: 0,
                 borderBottom: '1px dashed rgba(120, 64, 31, 0.1)'
-              }}
-            />
+              }} />
+            </div>
           ))}
         </div>
 
-        {/* Data points and line */}
+        {/* Data visualization */}
         <div style={{
           position: 'absolute',
           left: 40,
           right: 0,
-          top: 20,
-          bottom: 40,
+          top: 0,
+          bottom: 25px,
           display: 'flex',
           alignItems: 'flex-end',
           justifyContent: 'space-between'
         }}>
-          {/* Connecting line */}
+          {/* Line connecting points */}
           <svg
             style={{
               position: 'absolute',
               left: 0,
               right: 0,
+              top: 0,
               bottom: 0,
-              height: '100%',
               width: '100%',
+              height: '100%',
               zIndex: 1
             }}
           >
@@ -122,41 +116,36 @@ export default function EngineerTrendChart({ data }: Props) {
             />
           </svg>
 
+          {/* Data points */}
           {indexedData.map((point, i) => (
-            <div
-              key={i}
-              style={{
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                flex: 1
-              }}
-            >
-              {/* Value label */}
+            <div key={i} style={{ flex: 1, position: 'relative', height: '100%' }}>
               <div style={{
                 position: 'absolute',
-                top: -25,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                top: `${100 - ((point.value - 100) / (yAxisMax - 100)) * 100}%`,
                 color: '#78401F',
-                fontSize: '14px'
+                fontSize: '14px',
+                marginTop: '-20px'
               }}>
                 {point.value}
               </div>
-
-              {/* Data point */}
               <div style={{
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                top: `${100 - ((point.value - 100) / (yAxisMax - 100)) * 100}%`,
                 width: '8px',
                 height: '8px',
                 borderRadius: '50%',
                 backgroundColor: '#FF7300',
-                marginBottom: `${((point.value - 100) / (yAxisMax - 100)) * 100}%`,
                 zIndex: 2
               }} />
-
-              {/* X-axis label */}
               <div style={{
                 position: 'absolute',
-                bottom: -25,
+                bottom: '-25px',
+                left: '50%',
+                transform: 'translateX(-50%)',
                 color: '#78401F',
                 fontSize: '14px'
               }}>
