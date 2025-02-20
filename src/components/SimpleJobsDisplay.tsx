@@ -85,7 +85,6 @@ const calculateMeltIndex = (companyName: string) => {
     industryAverageHeadcount: calculateIndustryAverage(records)
   });
 
-  // Calculate average of all metrics
   const scores = [
     metrics.retention,
     metrics.engineerGrowth,
