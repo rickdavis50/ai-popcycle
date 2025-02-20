@@ -56,7 +56,7 @@ export default function Dashboard() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Background image - simplified */}
+      {/* Background image */}
       <div style={{
         position: 'fixed',
         bottom: 0,
@@ -64,20 +64,18 @@ export default function Dashboard() {
         right: 0,
         width: '100%',
         height: '100vh',
-        zIndex: 1,
+        zIndex: 0,
         backgroundImage: 'url(/images/dreamcycle.png)',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center bottom',
         backgroundSize: 'contain',
-        opacity: 0.8,
-        maxWidth: '2000px',
-        margin: '0 auto'
+        opacity: 0.8
       }} />
 
       {/* Content wrapper */}
       <div style={{ 
         position: 'relative',
-        zIndex: 2,
+        zIndex: 1,
         width: '100%',
         maxWidth: '1400px',
         margin: '0 auto',
