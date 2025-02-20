@@ -1,38 +1,76 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-  const TABLE_NAME = 'Companies';
-
   try {
-    let allRecords: any[] = [];
-    let offset = undefined;
+    // Note: These should NOT be NEXT_PUBLIC_ prefixed for API routes
+    const API_KEY = process.env.AIRTABLE_API_KEY;
+    const BASE_ID = process.env.AIRTABLE_BASE_ID;
+    const TABLE_ID = process.env.AIRTABLE_TABLE_ID; // This should be 'tblAUxKB14zGa7oqB'
 
-    // Keep fetching until we get all records
-    do {
-      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${TABLE_NAME}${offset ? `?offset=${offset}` : ''}`;
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${AIRTABLE_API_KEY}`
-        }
-      });
+    if (!API_KEY || !BASE_ID || !TABLE_ID) {
+      console.error('Missing Airtable environment variables');
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      );
+    }
 
-      if (!response.ok) {
-        throw new Error(`Airtable API error: ${response.statusText}`);
-      }
+    // Updated URL format
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?view=Grid%20view&maxRecords=1000`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store'
+    });
 
-      const data = await response.json();
-      allRecords = [...allRecords, ...data.records];
-      offset = data.offset; // Will be undefined when there are no more records
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Airtable response:', response.status, errorData);
+      throw new Error(`Airtable API responded with status: ${response.status}`);
+    }
 
-    } while (offset);
+    const rawData = await response.json();
+    const records = rawData.records;
+    
+    // Calculate totals using the proven method
+    const peopleCount = records.reduce((sum, record) => 
+      sum + (record.fields.count_current_employees || 0), 0);
+    
+    const lastYearPeopleCount = records.reduce((sum, record) => 
+      sum + (record.fields.headcount_last_year || 0), 0);
 
-    return NextResponse.json(allRecords);
+    const engineerCount = records.reduce((sum, record) => 
+      sum + (record.fields.engineers || 0), 0);
+    
+    const lastYearEngineerCount = records.reduce((sum, record) => 
+      sum + (record.fields.engineers_1yr || 0), 0);
 
+    // Calculate growth percentages
+    const peopleGrowth = ((peopleCount - lastYearPeopleCount) / lastYearPeopleCount) * 100;
+    const engineerGrowth = ((engineerCount - lastYearEngineerCount) / lastYearEngineerCount) * 100;
+
+    const stats = {
+      companyCount: records.length,
+      peopleCount: records.reduce((sum, record) => 
+        sum + (record.fields.count_current_employees || 0), 0),
+      engineerCount: records.reduce((sum, record) => 
+        sum + (record.fields.engineers || 0), 0),
+      insights: generateInsights(records),
+      engineerTrends: calculateEngineerTrends(records),
+      records: records,
+    };
+
+    return NextResponse.json(stats);
   } catch (error) {
-    console.error('Error fetching from Airtable:', error);
-    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
+    console.error('API Error:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch data' },
+      { status: 500 }
+    );
   }
 }
 
