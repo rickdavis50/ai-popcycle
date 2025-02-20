@@ -14,7 +14,8 @@ export default function Dashboard() {
     engineerTrends, 
     insights: airtableInsights, 
     loading, 
-    error 
+    error,
+    records
   } = useAirtableData();
 
   // Use dummy insights from utils/dummyData if loading or error
