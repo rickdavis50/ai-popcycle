@@ -544,7 +544,7 @@ const SimpleJobsDisplay = () => {
           color: '#78401F',
           fontFamily: 'Montserrat, sans-serif'
         }}>
-          How We Built This: With Cost:
+          How We Built This:
         </h2>
         <ul style={{
           listStyle: 'none',
