@@ -77,9 +77,7 @@ export default function Dashboard() {
         bottom: 0,
         left: '50%',
         transform: 'translateX(-50%)',
-        width: isMobile ? '100%' : 'calc(1200px + 40px)', // 20px wider on each side on desktop
-        minWidth: isMobile ? '100%' : 'calc(1200px + 40px)',
-        maxWidth: isMobile ? '100%' : 'calc(1200px + 40px)',
+        width: isMobile ? '100%' : 'calc(1200px + 40px)', // 20px wider on each side
         height: '100vh',
         zIndex: 0,
         backgroundImage: 'url(/images/dreamcycle.png)',
@@ -94,9 +92,9 @@ export default function Dashboard() {
         position: 'relative',
         zIndex: 1,
         width: '100%',
-        maxWidth: '1400px',
+        maxWidth: '1200px', // Changed from 1400px to match other sections
         margin: '0 auto',
-        padding: isMobile ? '0 2px' : '0 32px',
+        padding: isMobile ? '0 2px' : '0',
         boxSizing: 'border-box'
       }}>
         {/* Header - Simple logo and info icon */}
@@ -155,12 +153,10 @@ export default function Dashboard() {
         {/* Top modules grid */}
         <div style={{ 
           display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, minmax(300px, 1fr))',
-          gap: isMobile ? '8px' : '25px', // Keep desktop gap
-          marginBottom: '32px',
-          width: '100%',
-          maxWidth: '1200px', // Match bottom section width
-          margin: '0 auto'
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', // Simplified grid
+          gap: isMobile ? '8px' : '25px',
+          marginBottom: '25px', // Match the gap size
+          width: '100%'
         }}>
           {/* Industry Summary */}
           <div style={{ 
@@ -239,9 +235,8 @@ export default function Dashboard() {
         <div style={{ 
           position: 'relative',
           zIndex: 2,
-          maxWidth: '1200px',
-          margin: '0 auto',
-          width: '100%'
+          width: '100%',
+          marginTop: isMobile ? '8px' : '25px' // Match the gap size
         }}>
           <SimpleJobsDisplay />
         </div>
