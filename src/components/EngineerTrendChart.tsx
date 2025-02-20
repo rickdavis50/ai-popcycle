@@ -1,8 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
-
 interface DataPoint {
   date: string;
   value: number;
