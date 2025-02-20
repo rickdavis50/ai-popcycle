@@ -95,7 +95,7 @@ export default function Dashboard() {
         width: '100%',
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: isMobile ? '0 8px' : '0 32px', // Slightly more padding on mobile
+        padding: isMobile ? '0 4px' : '0 32px', // Reduced padding for mobile
         boxSizing: 'border-box'
       }}>
         {/* Header - Simple logo and info icon */}
@@ -149,99 +149,98 @@ export default function Dashboard() {
         </div>
 
         {/* Main content */}
+        {errorMessage}
+        
+        {/* Top modules grid */}
         <div style={{ 
-          maxWidth: '1400px', 
-          margin: '0 auto',
-          padding: '0 32px',
-          width: '100%',
-          boxSizing: 'border-box'
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, minmax(300px, 1fr))',
+          gap: isMobile ? '16px' : '25px',
+          marginBottom: '32px',
+          width: '100%'
         }}>
-          {errorMessage}
-          
-          {/* Top modules grid */}
+          {/* Industry Summary */}
           <div style={{ 
-            display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, minmax(300px, 1fr))', // Single column on mobile
-            gap: isMobile ? '16px' : '25px', // Smaller gap on mobile
-            marginBottom: '32px',
-            width: '100%'
+            backgroundColor: '#ffffff',
+            borderRadius: '8px',
+            padding: '24px 24px 16px',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+            width: '100%', // Ensure full width
+            boxSizing: 'border-box'
           }}>
-            {/* Industry Summary */}
-            <div style={{ 
-              backgroundColor: '#ffffff',
-              borderRadius: '8px',
-              padding: '24px 24px 16px',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '16px'
-              }}>
-                <h2 style={{
-                  fontSize: '20px',
-                  fontWeight: 'bold',
-                  color: '#78401F',
-                  fontFamily: 'Montserrat, sans-serif',
-                  margin: 0
-                }}>AI Industry Summary</h2>
-                <Image
-                  src="/images/list.svg"
-                  alt="Show Companies List"
-                  width={21}
-                  height={21}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setShowCompanyList(true)}
-                />
-              </div>
-              <IndustryStats />
-            </div>
-            
-            {/* Engineer Growth Trend */}
-            <div style={{ 
-              backgroundColor: '#ffffff',
-              borderRadius: '8px',
-              padding: '24px 24px 16px',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '16px'
             }}>
               <h2 style={{
                 fontSize: '20px',
                 fontWeight: 'bold',
-                marginBottom: '8px',
                 color: '#78401F',
-                fontFamily: 'Montserrat, sans-serif'
-              }}>Engineer Hiring Melt Index</h2>
-              <EngineerTrendChart data={loading ? [] : engineerTrends} />
+                fontFamily: 'Montserrat, sans-serif',
+                margin: 0
+              }}>AI Industry Summary</h2>
+              <Image
+                src="/images/list.svg"
+                alt="Show Companies List"
+                width={21}
+                height={21}
+                style={{ cursor: 'pointer' }}
+                onClick={() => setShowCompanyList(true)}
+              />
             </div>
-            
-            {/* Outlier Insights */}
-            <div style={{ 
-              backgroundColor: '#ffffff',
-              borderRadius: '8px',
-              padding: '24px 24px 16px',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
-            }}>
-              <h2 style={{
-                fontSize: '20px',
-                fontWeight: 'bold',
-                marginBottom: '8px',
-                color: '#78401F',
-                fontFamily: 'Montserrat, sans-serif'
-              }}>Outlier Insights</h2>
-              <InsightsModule insights={displayInsights} />
-            </div>
+            <IndustryStats />
           </div>
           
-          {/* Bottom section - update max-width */}
+          {/* Engineer Growth Trend */}
           <div style={{ 
-            position: 'relative',
-            zIndex: 2,
-            maxWidth: '1200px',
-            margin: '0 auto'
+            backgroundColor: '#ffffff',
+            borderRadius: '8px',
+            padding: '24px 24px 16px',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+            width: '100%', // Ensure full width
+            boxSizing: 'border-box'
           }}>
-            <SimpleJobsDisplay />
+            <h2 style={{
+              fontSize: '20px',
+              fontWeight: 'bold',
+              marginBottom: '8px',
+              color: '#78401F',
+              fontFamily: 'Montserrat, sans-serif'
+            }}>Engineer Hiring Melt Index</h2>
+            <EngineerTrendChart data={loading ? [] : engineerTrends} />
           </div>
+          
+          {/* Outlier Insights */}
+          <div style={{ 
+            backgroundColor: '#ffffff',
+            borderRadius: '8px',
+            padding: '24px 24px 16px',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+            width: '100%', // Ensure full width
+            boxSizing: 'border-box'
+          }}>
+            <h2 style={{
+              fontSize: '20px',
+              fontWeight: 'bold',
+              marginBottom: '8px',
+              color: '#78401F',
+              fontFamily: 'Montserrat, sans-serif'
+            }}>Outlier Insights</h2>
+            <InsightsModule insights={displayInsights} />
+          </div>
+        </div>
+        
+        {/* Bottom section */}
+        <div style={{ 
+          position: 'relative',
+          zIndex: 2,
+          maxWidth: '1200px',
+          margin: '0 auto',
+          width: '100%' // Ensure full width
+        }}>
+          <SimpleJobsDisplay />
         </div>
       </div>
 
