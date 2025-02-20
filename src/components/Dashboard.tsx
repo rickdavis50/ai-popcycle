@@ -72,14 +72,15 @@ export default function Dashboard() {
           marginBottom: '32px',
           display: 'flex',
           alignItems: 'center',
-          height: '63px'  // Match logo height
+          height: '79px'  // Match new logo height
         }}>
           <img 
             src="/images/pop_logo.svg" 
             alt="Pop Logo"
             style={{ 
-              height: '63px',
-              width: 'auto'
+              height: '79px',
+              width: '411px', // Match new logo width
+              objectFit: 'contain'
             }}
           />
         </div>
