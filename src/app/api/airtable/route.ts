@@ -15,38 +15,51 @@ export async function GET() {
       );
     }
 
-    // Updated URL format
-    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?view=Grid%20view&maxRecords=1000`;
-    
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      cache: 'no-store'
-    });
+    let allRecords: any[] = [];
+    let offset: string | undefined = undefined;
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Airtable response:', response.status, errorData);
-      throw new Error(`Airtable API responded with status: ${response.status}`);
-    }
+    // Fetch all records using pagination
+    do {
+      const urlParams = new URLSearchParams({
+        view: 'Grid view',
+        pageSize: '100', // Fetch maximum allowed per request
+        ...(offset ? { offset } : {})
+      });
 
-    const rawData = await response.json();
-    const records = rawData.records;
-    
-    // Calculate totals using the proven method
-    const peopleCount = records.reduce((sum, record) => 
+      const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?${urlParams}`;
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-store'
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Airtable response:', response.status, errorData);
+        throw new Error(`Airtable API responded with status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      allRecords = [...allRecords, ...data.records];
+      offset = data.offset; // Will be undefined when there are no more records
+
+    } while (offset);
+
+    // Calculate stats using all records
+    const peopleCount = allRecords.reduce((sum, record) => 
       sum + (record.fields.count_current_employees || 0), 0);
     
-    const lastYearPeopleCount = records.reduce((sum, record) => 
+    const lastYearPeopleCount = allRecords.reduce((sum, record) => 
       sum + (record.fields.headcount_last_year || 0), 0);
 
-    const engineerCount = records.reduce((sum, record) => 
+    const engineerCount = allRecords.reduce((sum, record) => 
       sum + (record.fields.engineers || 0), 0);
     
-    const lastYearEngineerCount = records.reduce((sum, record) => 
+    const lastYearEngineerCount = allRecords.reduce((sum, record) => 
       sum + (record.fields.engineers_1yr || 0), 0);
 
     // Calculate growth percentages
@@ -54,14 +67,12 @@ export async function GET() {
     const engineerGrowth = ((engineerCount - lastYearEngineerCount) / lastYearEngineerCount) * 100;
 
     const stats = {
-      companyCount: records.length,
-      peopleCount: records.reduce((sum, record) => 
-        sum + (record.fields.count_current_employees || 0), 0),
-      engineerCount: records.reduce((sum, record) => 
-        sum + (record.fields.engineers || 0), 0),
-      insights: generateInsights(records),
-      engineerTrends: calculateEngineerTrends(records),
-      records: records,
+      companyCount: allRecords.length,
+      peopleCount,
+      engineerCount,
+      insights: generateInsights(allRecords),
+      engineerTrends: calculateEngineerTrends(allRecords),
+      records: allRecords,
     };
 
     return NextResponse.json(stats);
