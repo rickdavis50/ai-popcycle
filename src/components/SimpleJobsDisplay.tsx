@@ -611,57 +611,53 @@ const SimpleJobsDisplay = () => {
               App deployment
             </div>
           </li>
-        </ul>
-      </div>
-
-      {/* API Button Section */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '24px',
-        margin: '40px auto',
-        position: 'relative',
-        zIndex: 3
-      }}>
-        <p style={{
-          color: '#000000',
-          fontFamily: 'Montserrat, sans-serif',
-          fontSize: '16px',
-          fontWeight: 500,
-          textAlign: 'center',
-          maxWidth: '400px',
-          margin: 0
-        }}>
-          Get API Access and start building today!
-        </p>
-        <a 
-          href="https://www.livedatatechnologies.com/api"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'flex',
+          <li style={{ 
+            borderTop: '1px solid rgba(120, 64, 31, 0.1)', 
+            margin: '16px 0' 
+          }} />
+          <li style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
             alignItems: 'center',
-            gap: '12px',
-            textDecoration: 'none'
-          }}
-        >
-          <Image
-            src="/images/api_icon.svg"
-            alt="API Icon"
-            width={60}
-            height={60}
-            priority
-          />
-          <span style={{
-            color: '#78401F',
-            fontFamily: 'Montserrat, sans-serif',
-            fontSize: '16px',
-            fontWeight: 600
+            gap: '16px',
+            padding: '8px 0'
           }}>
-            Access the API
-          </span>
-        </a>
+            <p style={{
+              margin: 0,
+              textAlign: 'center',
+              fontSize: '16px',
+              fontWeight: 500
+            }}>
+              Get API Access and start building today!
+            </p>
+            <a 
+              href="https://www.livedatatechnologies.com/api"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                textDecoration: 'none'
+              }}
+            >
+              <Image
+                src="/images/api_icon.svg"
+                alt="API Icon"
+                width={60}
+                height={60}
+                priority
+              />
+              <span style={{
+                color: '#78401F',
+                fontSize: '16px',
+                fontWeight: 600
+              }}>
+                Access the API
+              </span>
+            </a>
+          </li>
+        </ul>
       </div>
 
       {/* Info Popup */}

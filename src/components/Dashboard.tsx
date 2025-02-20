@@ -67,9 +67,11 @@ export default function Dashboard() {
       minHeight: '100vh',
       backgroundColor: '#FFFBF7',
       padding: '32px',
-      paddingBottom: '60vh',
+      paddingBottom: '200px', // Fixed padding at bottom
       position: 'relative',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      maxHeight: 'calc(100% + 200px)', // Prevent excessive scrolling
+      overflowY: 'auto'
     }}>
       {/* Background image */}
       <div style={{
@@ -207,7 +209,7 @@ export default function Dashboard() {
               marginBottom: '8px',
               color: '#78401F',
               fontFamily: 'Montserrat, sans-serif'
-            }}>Engineer Hiring Melt Index</h2>
+            }}>AI Engineer Headcount Index</h2>
             <EngineerTrendChart data={loading ? [] : engineerTrends} />
           </div>
           
@@ -371,7 +373,7 @@ export default function Dashboard() {
               lineHeight: '1.6',
               marginBottom: '16px'
             }}>
-              <strong>The Engineer Hiring Melt Index:</strong><br />
+              <strong>AI Engineer Headcount Index:</strong><br />
               This measures the change in headcount of engineers over time to spot slowing or even shrinking if an AI industry meltdown starts.
             </p>
             <p style={{ 
