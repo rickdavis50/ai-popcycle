@@ -404,10 +404,13 @@ const SimpleJobsDisplay = () => {
                 cursor: 'pointer',
                 fontFamily: 'Montserrat, sans-serif',
                 fontSize: '14px',
-                transition: 'all 0.2s',
-                ':hover': {
-                  backgroundColor: '#FFF3E9'
-                }
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#FFF3E9';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
               }}
             >
               {pick.label}
