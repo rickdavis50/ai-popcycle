@@ -351,15 +351,30 @@ const SimpleJobsDisplay = () => {
         padding: '24px',
         boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
       }}>
-        <h2 style={{
-          fontSize: '20px',
-          fontWeight: 'bold',
-          color: '#78401F',
-          fontFamily: 'Montserrat, sans-serif',
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
           marginBottom: '16px'
         }}>
-          Company Comparison
-        </h2>
+          <h2 style={{
+            fontSize: '20px',
+            fontWeight: 'bold',
+            color: '#78401F',
+            fontFamily: 'Montserrat, sans-serif',
+            margin: 0
+          }}>
+            Company Comparison
+          </h2>
+          <Image
+            src="/images/question.svg"
+            alt="Show Info"
+            width={21}
+            height={21}
+            style={{ cursor: 'pointer' }}
+            onClick={() => setShowInfoPopup(true)}
+          />
+        </div>
 
         <div style={{
           display: 'flex',
@@ -641,14 +656,21 @@ const SimpleJobsDisplay = () => {
               Each metric is scored from 1-5, and the final index is their average.
               A higher score indicates stronger overall performance.
             </p>
-            <Image
-              src="/images/question.svg"
-              alt="Show Info"
-              width={21}
-              height={21}
-              style={{ cursor: 'pointer' }}
-              onClick={() => setShowInfoPopup(true)}
-            />
+            <button
+              onClick={() => setShowInfoPopup(false)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                border: 'none',
+                background: 'none',
+                color: '#78401F',
+                cursor: 'pointer',
+                fontSize: '20px'
+              }}
+            >
+              ✕
+            </button>
           </div>
         </div>
       )}
