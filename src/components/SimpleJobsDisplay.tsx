@@ -693,12 +693,15 @@ const SimpleJobsDisplay = () => {
             maxWidth: '400px',
             position: 'relative'
           }}>
-            <h3 style={{ color: '#78401F', marginTop: 0 }}>Melt Index Explained</h3>
+            <h3 style={{ color: '#78401F', marginTop: 0 }}>Why We Think This is Important</h3>
             <p style={{ color: '#78401F' }}>
-              The Melt Index is the average score across five key metrics:
+              We track millions of people and with that data can create lots of metrics to measure trends. With AI tools bringing the cost of UI way down we thought it'd be fun to try our hand at a dashboard to monitor the AI industry. 
+              The Engineer Hiring Melt Index: This measures the change in headcount of engineers over time to spot slowing or even shrinking if an AI industry meltdown starts.
+              The Company Melt Index: This is an AI company's average score across five key metrics -
               Retention, Engineer growth, Engineer %, headcount growth, and size.
               Each metric is scored from 1-5, and the final index is their average.
-              A higher score indicates less melt momentum.
+              
+              Higher scores indicate less sign of melt.
             </p>
             <button
               onClick={() => setShowInfoPopup(false)}
