@@ -129,7 +129,7 @@ export default function Dashboard() {
         }}>
           {errorMessage}
           
-          {/* Top modules grid - Made responsive */}
+          {/* Top modules grid */}
           <div style={{ 
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
@@ -140,7 +140,7 @@ export default function Dashboard() {
             <div style={{ 
               backgroundColor: '#ffffff',
               borderRadius: '8px',
-              padding: '24px',
+              padding: '24px 24px 16px',
               boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
             }}>
               <div style={{
@@ -172,7 +172,7 @@ export default function Dashboard() {
             <div style={{ 
               backgroundColor: '#ffffff',
               borderRadius: '8px',
-              padding: '24px',
+              padding: '24px 24px 16px',
               boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
             }}>
               <h2 style={{
@@ -189,7 +189,7 @@ export default function Dashboard() {
             <div style={{ 
               backgroundColor: '#ffffff',
               borderRadius: '8px',
-              padding: '24px',
+              padding: '24px 24px 16px',
               boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
             }}>
               <h2 style={{
