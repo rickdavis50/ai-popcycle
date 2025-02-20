@@ -69,7 +69,9 @@ export default function Dashboard() {
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center bottom',
         backgroundSize: 'contain',
-        opacity: 0.8
+        opacity: 0.8,
+        maxWidth: '2000px',
+        margin: '0 auto'
       }} />
       
       {/* Content wrapper with higher z-index */}
@@ -82,57 +84,66 @@ export default function Dashboard() {
         <div style={{ 
           marginBottom: '32px',
           display: 'flex',
-          justifyContent: 'space-between',
           alignItems: 'center',
           height: '79px',
+          position: 'relative',
+          maxWidth: '1400px',
+          margin: '0 auto 32px',
           ...styles.header
         }}>
-          {/* Logo with responsive sizing */}
-          <img 
-            src="/images/pop_logo.svg" 
-            alt="Pop Logo"
-            style={{ 
-              height: 'auto',
-              width: '411px',
-              maxWidth: '75vw', // Adjusted for mobile
-              objectFit: 'contain'
-            }}
-          />
-          
-          {/* Info Icon */}
-          <div 
-            onClick={() => setShowInfoPopup(true)}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%',
-              border: '2px solid #78401F',
-              color: '#78401F',
-              fontSize: '20px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              marginLeft: '16px',
-              fontFamily: 'Montserrat, sans-serif'
-            }}
-          >
-            ?
+          {/* Logo container */}
+          <div style={{ position: 'relative' }}>
+            <img 
+              src="/images/pop_logo.svg" 
+              alt="Pop Logo"
+              style={{ 
+                height: 'auto',
+                width: '411px',
+                maxWidth: '75vw',
+                objectFit: 'contain'
+              }}
+            />
+            {/* Info Icon - repositioned */}
+            <div 
+              onClick={() => setShowInfoPopup(true)}
+              style={{
+                position: 'absolute',
+                bottom: -8,
+                right: -24,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                border: '1.5px solid #78401F',
+                color: '#78401F',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                fontFamily: 'Montserrat, sans-serif',
+                backgroundColor: '#FFFBF7'
+              }}
+            >
+              ?
+            </div>
           </div>
         </div>
 
         {/* Main content */}
         <div style={{ 
           maxWidth: '1400px', 
-          margin: '0 auto'
+          margin: '0 auto',
+          padding: '0 32px',
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
           {errorMessage}
           
           {/* Top modules grid */}
           <div style={{ 
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(3, minmax(300px, 1fr))',
             gap: '25px',
             marginBottom: '32px'
           }}>
@@ -203,10 +214,12 @@ export default function Dashboard() {
             </div>
           </div>
           
-          {/* SimpleJobsDisplay */}
+          {/* Bottom section - update max-width */}
           <div style={{ 
             position: 'relative',
-            zIndex: 2
+            zIndex: 2,
+            maxWidth: '1200px',
+            margin: '0 auto'
           }}>
             <SimpleJobsDisplay />
           </div>
