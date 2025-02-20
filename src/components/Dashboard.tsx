@@ -13,7 +13,7 @@ const styles = {
   header: {
     '@media (max-width: 768px)': {
       '& img': {
-        width: '308px',  // 75% of 411px
+        width: '200px',  // Back to original mobile size
       }
     }
   }
@@ -54,38 +54,35 @@ export default function Dashboard() {
       padding: '32px',
       paddingBottom: '60vh',
       position: 'relative',
-      overflow: 'hidden',
-      backgroundImage: 'linear-gradient(to bottom, #FFFBF7 75%, transparent)',
+      overflow: 'hidden'
     }}>
-      {/* Background image - full width */}
+      {/* Background image - simplified */}
       <div style={{
         position: 'fixed',
         bottom: 0,
         left: 0,
         right: 0,
         width: '100%',
-        height: '75vh',
+        height: '100vh',
         zIndex: 1,
-        backgroundImage: `
-          linear-gradient(to top, transparent 0%, #FFFBF7 100%) 0 0 / 100% 25%,
-          linear-gradient(to right, #FFFBF7, transparent 10%, transparent 90%, #FFFBF7),
-          url(/images/dreamcycle.png)
-        `,
+        backgroundImage: 'url(/images/dreamcycle.png)',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center bottom',
         backgroundSize: 'contain',
         opacity: 0.8,
         maxWidth: '2000px',
-        margin: '0 auto',
-        maskImage: 'linear-gradient(to top, black 0%, black 75%, transparent 100%)',
-        WebkitMaskImage: 'linear-gradient(to top, black 0%, black 75%, transparent 100%)',
+        margin: '0 auto'
       }} />
-      
-      {/* Content wrapper with higher z-index */}
+
+      {/* Content wrapper */}
       <div style={{ 
         position: 'relative',
         zIndex: 2,
-        width: '100%'
+        width: '100%',
+        maxWidth: '1400px',
+        margin: '0 auto',
+        padding: '0 16px', // Reduced padding for mobile
+        boxSizing: 'border-box'
       }}>
         {/* Header - Simple logo and info icon */}
         <div style={{ 
