@@ -9,6 +9,16 @@ import { insights } from '../utils/dummyData';
 import EngineerTrendChart from './EngineerTrendChart';
 import { useState } from 'react';
 
+const styles = {
+  header: {
+    '@media (max-width: 768px)': {
+      '& img': {
+        width: '200px',  // Smaller on mobile
+      }
+    }
+  }
+};
+
 export default function Dashboard() {
   const { 
     engineerTrends, 
@@ -35,6 +45,7 @@ export default function Dashboard() {
 
   // Add new state
   const [showCompanyList, setShowCompanyList] = useState(false);
+  const [showInfoPopup, setShowInfoPopup] = useState(false);
 
   return (
     <div style={{ 
@@ -67,22 +78,48 @@ export default function Dashboard() {
         zIndex: 2,
         width: '100%'
       }}>
-        {/* Header - Simple logo */}
+        {/* Header - Simple logo and info icon */}
         <div style={{ 
           marginBottom: '32px',
           display: 'flex',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          height: '79px'  // Match new logo height
+          height: '79px',
+          ...styles.header
         }}>
+          {/* Logo with responsive sizing */}
           <img 
             src="/images/pop_logo.svg" 
             alt="Pop Logo"
             style={{ 
-              height: '79px',
-              width: '411px', // Match new logo width
+              height: 'auto',
+              width: '411px',
+              maxWidth: '80vw', // Responsive width
               objectFit: 'contain'
             }}
           />
+          
+          {/* Info Icon */}
+          <div 
+            onClick={() => setShowInfoPopup(true)}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              border: '2px solid #78401F',
+              color: '#78401F',
+              fontSize: '20px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              marginLeft: '16px',
+              fontFamily: 'Montserrat, sans-serif'
+            }}
+          >
+            ?
+          </div>
         </div>
 
         {/* Main content */}
