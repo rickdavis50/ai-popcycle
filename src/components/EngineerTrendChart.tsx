@@ -21,6 +21,11 @@ export default function EngineerTrendChart({ data }: Props) {
   };
 
   const indexedData = calculateIndexValues(data);
+  
+  // Calculate Y-axis scale based on actual data
+  const maxValue = Math.max(...indexedData.map(d => d.value));
+  const yAxisMax = Math.ceil(maxValue / 25) * 25; // Round up to nearest 25
+  const yAxisValues = Array.from({ length: 5 }, (_, i) => yAxisMax - (i * (yAxisMax - 100) / 4));
 
   return (
     <div style={{ 
@@ -42,8 +47,8 @@ export default function EngineerTrendChart({ data }: Props) {
         color: '#78401F',
         fontSize: '12px'
       }}>
-        {[200, 175, 150, 125, 100].map((value) => (
-          <div key={value}>{value}</div>
+        {yAxisValues.map((value) => (
+          <div key={value}>{Math.round(value)}</div>
         ))}
       </div>
 
@@ -58,7 +63,7 @@ export default function EngineerTrendChart({ data }: Props) {
         flexDirection: 'column',
         justifyContent: 'space-between'
       }}>
-        {[200, 175, 150, 125, 100].map((value) => (
+        {yAxisValues.map((value) => (
           <div
             key={value}
             style={{
@@ -107,7 +112,7 @@ export default function EngineerTrendChart({ data }: Props) {
               height: '8px',
               borderRadius: '50%',
               backgroundColor: '#FF7300',
-              marginBottom: `${point.value - 100}%`,
+              marginBottom: `${((point.value - 100) / (yAxisMax - 100)) * 100}%`,
               zIndex: 2
             }} />
 
@@ -136,11 +141,11 @@ export default function EngineerTrendChart({ data }: Props) {
           }}
         >
           <path
-            d={`M ${indexedData.map((point, i) => {
+            d={indexedData.map((point, i) => {
               const x = (i / (indexedData.length - 1)) * 100;
-              const y = 100 - (point.value - 100);
-              return `${x},${y}`;
-            }).join(' S ')}`}
+              const y = 100 - ((point.value - 100) / (yAxisMax - 100)) * 100;
+              return `${i === 0 ? 'M' : 'L'} ${x}% ${y}%`;
+            }).join(' ')}
             stroke="#FF7300"
             strokeWidth="2"
             fill="none"

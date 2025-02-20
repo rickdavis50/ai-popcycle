@@ -544,7 +544,7 @@ const SimpleJobsDisplay = () => {
           color: '#78401F',
           fontFamily: 'Montserrat, sans-serif'
         }}>
-          How We Built This:
+          How We Built This: With Cost:
         </h2>
         <ul style={{
           listStyle: 'none',
@@ -560,7 +560,7 @@ const SimpleJobsDisplay = () => {
           <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Data</strong>
+              <strong>Data: Priceless</strong>
             </div>
             <div style={{ marginLeft: '28px' }}>
               Live Data API feeds Airtable, Airtable feeds the app
@@ -569,7 +569,7 @@ const SimpleJobsDisplay = () => {
           <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Figma</strong>
+              <strong>Figma: $15/mo</strong>
             </div>
             <div style={{ marginLeft: '28px' }}>
               Mockups, logos, design
@@ -578,7 +578,7 @@ const SimpleJobsDisplay = () => {
           <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Bolt</strong>
+              <strong>Bolt: $20/mo</strong>
             </div>
             <div style={{ marginLeft: '28px' }}>
               Initial dashboard concept vetting
@@ -587,7 +587,7 @@ const SimpleJobsDisplay = () => {
           <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Cursor</strong>
+              <strong>Cursor: $6.78 usage based</strong>
             </div>
             <div style={{ marginLeft: '28px' }}>
               All final app coding in VS code (with mostly Claude, some ChatGPT)
@@ -596,7 +596,7 @@ const SimpleJobsDisplay = () => {
           <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Github</strong>
+              <strong>Github: Free</strong>
             </div>
             <div style={{ marginLeft: '28px' }}>
               Connecting VS code to Vercel
@@ -605,7 +605,7 @@ const SimpleJobsDisplay = () => {
           <li style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '20px' }}>•</span>
-              <strong>Vercel</strong>
+              <strong>Vercel: $20/mo</strong>
             </div>
             <div style={{ marginLeft: '28px' }}>
               App deployment
