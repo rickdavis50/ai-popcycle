@@ -330,7 +330,7 @@ const SimpleJobsDisplay = () => {
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          marginBottom: '16px'
+          marginBottom: '24px'
         }}>
           <h2 style={{
             fontSize: '20px',
@@ -341,14 +341,6 @@ const SimpleJobsDisplay = () => {
           }}>
             Company Comparison
           </h2>
-          <Image
-            src="/images/question.svg"
-            alt="Show Info"
-            width={21}
-            height={21}
-            style={{ cursor: 'pointer' }}
-            onClick={() => setShowInfoPopup(true)}
-          />
         </div>
 
         <div style={{
