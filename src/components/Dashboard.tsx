@@ -67,15 +67,20 @@ export default function Dashboard() {
         zIndex: 2,
         width: '100%'
       }}>
-        {/* Header - Simple logo div */}
-        <div style={{ marginBottom: '32px' }}>
+        {/* Header - Simple logo */}
+        <div style={{ 
+          marginBottom: '32px',
+          display: 'flex',
+          alignItems: 'center',
+          height: '63px'  // Match logo height
+        }}>
           <img 
             src="/images/pop_logo.svg" 
-            alt="Pop Logo" 
+            alt="Pop Logo"
             style={{ 
-              width: '250px',
-              height: 'auto'
-            }} 
+              height: '63px',
+              width: 'auto'
+            }}
           />
         </div>
 
