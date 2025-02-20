@@ -69,55 +69,6 @@ const calculateMetrics = (company: CompanyData): CompanyMetrics => {
   };
 };
 
-const calculateMeltIndex = (companyName: string) => {
-  if (!records) return '-';
-  
-  const companyData = records.find(r => r.fields.company === companyName)?.fields;
-  if (!companyData) return '-';
-
-  const metrics = calculateMetrics({
-    name: companyName,
-    currentHeadcount: companyData.count_current_employees || 0,
-    headcount12MonthsAgo: companyData.headcount_last_year || 0,
-    voluntaryLeaves: companyData.voluntarily_left || 0,
-    currentEngineers: companyData.engineers || 0,
-    engineers6MonthsAgo: companyData.engineers_6mo || 0,
-    industryAverageHeadcount: calculateIndustryAverage(records)
-  });
-
-  const scores = [
-    metrics.retention,
-    metrics.engineerGrowth,
-    metrics.engineerConcentration,
-    metrics.headcountGrowth,
-    metrics.sizeRank
-  ];
-  
-  const average = scores.reduce((a, b) => a + b, 0) / scores.length;
-  return average.toFixed(1);
-};
-
-const InfoIcon = () => (
-  <div 
-    style={{ 
-      display: 'inline-block',
-      marginLeft: '4px',
-      cursor: 'pointer',
-      color: '#78401F',
-      fontSize: '14px',
-      fontWeight: 'bold',
-      width: '16px',
-      height: '16px',
-      borderRadius: '50%',
-      border: '1px solid #78401F',
-      textAlign: 'center',
-      lineHeight: '14px'
-    }}
-  >
-    ?
-  </div>
-);
-
 const SimpleJobsDisplay = () => {
   const [companies, setCompanies] = useState<string[]>([]);
   const [companyA, setCompanyA] = useState<string>('');
@@ -144,6 +95,35 @@ const SimpleJobsDisplay = () => {
       setCompanies(uniqueCompanies);
     }
   }, [records]);
+
+  // Move calculateMeltIndex inside the component
+  const calculateMeltIndex = (companyName: string) => {
+    if (!records) return '-';
+    
+    const companyData = records.find(r => r.fields.company === companyName)?.fields;
+    if (!companyData) return '-';
+
+    const metrics = calculateMetrics({
+      name: companyName,
+      currentHeadcount: companyData.count_current_employees || 0,
+      headcount12MonthsAgo: companyData.headcount_last_year || 0,
+      voluntaryLeaves: companyData.voluntarily_left || 0,
+      currentEngineers: companyData.engineers || 0,
+      engineers6MonthsAgo: companyData.engineers_6mo || 0,
+      industryAverageHeadcount: calculateIndustryAverage(records)
+    });
+
+    const scores = [
+      metrics.retention,
+      metrics.engineerGrowth,
+      metrics.engineerConcentration,
+      metrics.headcountGrowth,
+      metrics.sizeRank
+    ];
+    
+    const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+    return average.toFixed(1);
+  };
 
   const drawRadarChart = (ctx: CanvasRenderingContext2D, metricsA?: CompanyMetrics, metricsB?: CompanyMetrics) => {
     const centerX = 300;
