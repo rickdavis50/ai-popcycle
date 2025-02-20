@@ -72,8 +72,8 @@ const calculateMetrics = (company: CompanyData): CompanyMetrics => {
 const quickPicks = [
   { label: 'OpenAI vs Anthropic', c1: 'OpenAI', c2: 'Anthropic' },
   { label: 'xAI vs OpenAI', c1: 'xAI', c2: 'OpenAI' },
-  { label: 'Anysphere vs StackBlitz', c1: 'Anysphere', c2: 'StackBlitz' },
-  { label: 'HuggingFace vs LangChain', c1: 'Hugging Face', c2: 'LangChain' },
+  { label: 'Cursor vs Bolt', c1: 'Cursor', c2: 'Bolt' },
+  { label: 'Hugging Face vs LangChain', c1: 'Hugging Face', c2: 'LangChain' },
   { label: 'Runway vs Midjourney', c1: 'Runway', c2: 'Midjourney' }
 ];
 
