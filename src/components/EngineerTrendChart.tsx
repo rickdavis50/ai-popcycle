@@ -139,7 +139,7 @@ export default function EngineerTrendChart({ data }: Props) {
         padding: '4px 0'
       }}>
         Source: Live Data API<br />
-        Engineer Hiring index based on {engineerCount?.toLocaleString() || '0'} tracked engineers at {companyCount || '0'} tracked companies in the AI industry. Month 24 Engineer headcount is indexed to 100.
+        Index based on {engineerCount?.toLocaleString() || '0'} tracked engineers at {companyCount || '0'} tracked companies in the AI industry. Month 24 Engineer headcount is indexed to 100.
       </div>
     </div>
   );
