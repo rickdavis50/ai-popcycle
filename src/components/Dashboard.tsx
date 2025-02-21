@@ -164,10 +164,11 @@ export default function Dashboard() {
           <div style={{ 
             backgroundColor: '#ffffff',
             borderRadius: '8px',
-            padding: isMobile ? '24px 12px 16px' : '24px 24px 16px', // Less padding on mobile
+            padding: isMobile ? '24px 16px' : '24px 24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
             width: '100%',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            margin: '0 auto'
           }}>
             <div style={{
               display: 'flex',
@@ -198,10 +199,11 @@ export default function Dashboard() {
           <div style={{ 
             backgroundColor: '#ffffff',
             borderRadius: '8px',
-            padding: isMobile ? '24px 12px 16px' : '24px 24px 16px', // Less padding on mobile
+            padding: isMobile ? '24px 16px' : '24px 24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
             width: '100%',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            margin: '0 auto'
           }}>
             <h2 style={{
               fontSize: '20px',
@@ -217,10 +219,11 @@ export default function Dashboard() {
           <div style={{ 
             backgroundColor: '#ffffff',
             borderRadius: '8px',
-            padding: isMobile ? '24px 12px 16px' : '24px 24px 16px', // Less padding on mobile
+            padding: isMobile ? '24px 16px' : '24px 24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
             width: '100%',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            margin: '0 auto'
           }}>
             <h2 style={{
               fontSize: '20px',

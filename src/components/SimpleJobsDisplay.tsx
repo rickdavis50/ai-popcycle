@@ -300,6 +300,18 @@ const SimpleJobsDisplay = () => {
     return validHeadcounts.reduce((sum, count) => sum + count, 0) / validHeadcounts.length;
   };
 
+  // Add useEffect for mobile detection at the top of component
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile(); // Check initially
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   if (error) {
     return (
       <div style={{ 
@@ -616,7 +628,9 @@ const SimpleJobsDisplay = () => {
           <li style={{ 
             borderTop: '1px solid rgba(120, 64, 31, 0.1)', 
             margin: '16px 0',
-            padding: '24px 0'
+            padding: '24px 16px', // Add horizontal padding
+            width: '100%',
+            boxSizing: 'border-box'
           }}>
             {/* Call to action text */}
             <p style={{
@@ -633,7 +647,7 @@ const SimpleJobsDisplay = () => {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '24px',
-              position: 'relative'
+              width: '100%' // Ensure full width
             }}>
               {/* API Button - centered */}
               <a 
@@ -651,28 +665,47 @@ const SimpleJobsDisplay = () => {
                   fontFamily: 'Montserrat, sans-serif',
                   fontSize: '16px',
                   fontWeight: 600,
-                  transition: 'background-color 0.2s ease'
+                  transition: 'background-color 0.2s ease',
+                  textAlign: 'center'
                 }}
               >
                 Access the API
               </a>
 
-              {/* Logo - positioned below button on mobile */}
-              <div style={{
-                position: isMobile ? 'relative' : 'absolute',
-                left: isMobile ? 'auto' : 0,
-                top: isMobile ? 'auto' : '50%',
-                transform: isMobile ? 'none' : 'translateY(-50%)',
-                marginTop: isMobile ? '8px' : 0
-              }}>
-                <Image
-                  src="/images/live_data_logo.svg"
-                  alt="Live Data Logo"
-                  width={127}
-                  height={31}
-                  priority
-                />
-              </div>
+              {/* Logo - always below button on mobile */}
+              {isMobile && (
+                <div style={{
+                  marginTop: '16px',
+                  display: 'flex',
+                  justifyContent: 'center'
+                }}>
+                  <Image
+                    src="/images/live_data_logo.svg"
+                    alt="Live Data Logo"
+                    width={127}
+                    height={31}
+                    priority
+                  />
+                </div>
+              )}
+
+              {/* Logo - only show on desktop */}
+              {!isMobile && (
+                <div style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: '50%',
+                  transform: 'translateY(-50%)'
+                }}>
+                  <Image
+                    src="/images/live_data_logo.svg"
+                    alt="Live Data Logo"
+                    width={127}
+                    height={31}
+                    priority
+                  />
+                </div>
+              )}
             </div>
           </li>
         </ul>
