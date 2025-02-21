@@ -28,6 +28,15 @@ interface AirtableData {
   records: AirtableRecord[];
 }
 
+function shuffleArray<T>(array: T[]): T[] {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+}
+
 export function useAirtableData() {
   const [data, setData] = useState<AirtableData>({
     companyCount: 0,
@@ -117,7 +126,8 @@ export function useAirtableData() {
       }
     ];
 
-    return insights;
+    // Shuffle insights before returning
+    return shuffleArray(insights);
   };
 
   return data;

@@ -79,7 +79,7 @@ export default function Dashboard() {
         bottom: 0,
         left: '50%',
         transform: 'translateX(-50%)',
-        width: isMobile ? '100%' : 'calc(1200px + 40px)', // 20px wider on each side
+        width: isMobile ? '100%' : 'calc(1200px + 40px)', // 20px wider on each side than 1200px modules
         height: '100vh',
         zIndex: 0,
         backgroundImage: 'url(/images/dreamcycle.png)',
