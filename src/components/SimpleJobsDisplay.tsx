@@ -647,7 +647,8 @@ const SimpleJobsDisplay = () => {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '24px',
-              width: '100%' // Ensure full width
+              width: '100%', // Ensure full width
+              position: 'relative' // Add back position relative for desktop logo
             }}>
               {/* API Button - centered */}
               <a 
@@ -672,7 +673,7 @@ const SimpleJobsDisplay = () => {
                 Access the API
               </a>
 
-              {/* Logo - always below button on mobile */}
+              {/* Logo - mobile version */}
               {isMobile && (
                 <div style={{
                   marginTop: '16px',
@@ -689,7 +690,7 @@ const SimpleJobsDisplay = () => {
                 </div>
               )}
 
-              {/* Logo - only show on desktop */}
+              {/* Logo - desktop version */}
               {!isMobile && (
                 <div style={{
                   position: 'absolute',

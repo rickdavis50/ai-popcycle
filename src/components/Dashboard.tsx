@@ -96,7 +96,7 @@ export default function Dashboard() {
         width: '100%',
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: isMobile ? '0 16px' : '0', // Add consistent mobile padding
+        padding: isMobile ? '0' : '0', // Remove padding from wrapper
         boxSizing: 'border-box'
       }}>
         {/* Header - Simple logo and info icon */}
@@ -164,11 +164,11 @@ export default function Dashboard() {
           <div style={{ 
             backgroundColor: '#ffffff',
             borderRadius: '8px',
-            padding: isMobile ? '24px 16px' : '24px 24px 16px',
+            padding: '24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: '100%',
+            width: isMobile ? 'calc(100% - 32px)' : '100%', // Account for padding
             boxSizing: 'border-box',
-            margin: '0 auto'
+            margin: isMobile ? '0 16px' : '0 auto' // Add margin instead of padding
           }}>
             <div style={{
               display: 'flex',
@@ -199,11 +199,11 @@ export default function Dashboard() {
           <div style={{ 
             backgroundColor: '#ffffff',
             borderRadius: '8px',
-            padding: isMobile ? '24px 16px' : '24px 24px 16px',
+            padding: '24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: '100%',
+            width: isMobile ? 'calc(100% - 32px)' : '100%', // Account for padding
             boxSizing: 'border-box',
-            margin: '0 auto'
+            margin: isMobile ? '0 16px' : '0 auto' // Add margin instead of padding
           }}>
             <h2 style={{
               fontSize: '20px',
@@ -219,11 +219,11 @@ export default function Dashboard() {
           <div style={{ 
             backgroundColor: '#ffffff',
             borderRadius: '8px',
-            padding: isMobile ? '24px 16px' : '24px 24px 16px',
+            padding: '24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: '100%',
+            width: isMobile ? 'calc(100% - 32px)' : '100%', // Account for padding
             boxSizing: 'border-box',
-            margin: '0 auto'
+            margin: isMobile ? '0 16px' : '0 auto' // Add margin instead of padding
           }}>
             <h2 style={{
               fontSize: '20px',
