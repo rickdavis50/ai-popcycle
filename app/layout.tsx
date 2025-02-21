@@ -3,20 +3,29 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'AI Pop-Cycle | Super Cycle Melt Monitor',
   description: 'Track AI industry trends and company growth with real-time metrics',
-  icons: {
-    icon: '/images/favicon.svg',
-  },
+  icons: [
+    {
+      rel: 'icon',
+      url: '/images/favicon.svg',
+      type: 'image/svg+xml',
+    },
+    {
+      rel: 'apple-touch-icon',
+      url: '/images/favicon.svg',
+    }
+  ],
   openGraph: {
     title: 'AI Pop-Cycle | Super Cycle Melt Monitor',
     description: 'Track AI industry trends and company growth with real-time metrics',
-    url: 'https://your-domain.com',
+    url: 'https://ai-popcycle.vercel.app',
     siteName: 'AI Pop-Cycle',
     images: [
       {
-        url: 'https://your-domain.com/api/og',
+        url: '/images/ai_pop_cycle.png',
         width: 1200,
         height: 630,
-      },
+        alt: 'AI Pop-Cycle'
+      }
     ],
     locale: 'en_US',
     type: 'website',
@@ -25,7 +34,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'AI Pop-Cycle | Super Cycle Melt Monitor',
     description: 'Track AI industry trends and company growth with real-time metrics',
-    images: ['https://your-domain.com/api/og'],
+    images: ['/images/ai_pop_cycle.png'],
   },
 };
 
