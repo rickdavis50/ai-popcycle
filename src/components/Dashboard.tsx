@@ -166,10 +166,10 @@ export default function Dashboard() {
             borderRadius: '8px',
             padding: '24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: isMobile ? '100%' : '100%', // Full width on mobile
-            maxWidth: isMobile ? '400px' : '100%', // Max width on mobile
+            width: '100%',
+            maxWidth: isMobile ? '343px' : '100%', // Match Company Comparison width
             boxSizing: 'border-box',
-            margin: '0 auto' // Center the module
+            margin: '0 auto'
           }}>
             <div style={{
               display: 'flex',
@@ -202,10 +202,10 @@ export default function Dashboard() {
             borderRadius: '8px',
             padding: '24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: isMobile ? '100%' : '100%', // Full width on mobile
-            maxWidth: isMobile ? '400px' : '100%', // Max width on mobile
+            width: '100%',
+            maxWidth: isMobile ? '343px' : '100%', // Match Company Comparison width
             boxSizing: 'border-box',
-            margin: '0 auto' // Center the module
+            margin: '0 auto'
           }}>
             <h2 style={{
               fontSize: '20px',
@@ -223,10 +223,10 @@ export default function Dashboard() {
             borderRadius: '8px',
             padding: '24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: isMobile ? '100%' : '100%', // Full width on mobile
-            maxWidth: isMobile ? '400px' : '100%', // Max width on mobile
+            width: '100%',
+            maxWidth: isMobile ? '343px' : '100%', // Match Company Comparison width
             boxSizing: 'border-box',
-            margin: '0 auto' // Center the module
+            margin: '0 auto'
           }}>
             <h2 style={{
               fontSize: '20px',
