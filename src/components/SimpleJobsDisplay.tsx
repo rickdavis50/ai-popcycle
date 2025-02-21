@@ -86,6 +86,7 @@ const SimpleJobsDisplay = () => {
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const [scoreA, setScoreA] = useState<number | null>(null);
   const [scoreB, setScoreB] = useState<number | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Debug logging
   useEffect(() => {
@@ -613,49 +614,64 @@ const SimpleJobsDisplay = () => {
           </li>
           <li style={{ 
             borderTop: '1px solid rgba(120, 64, 31, 0.1)', 
-            margin: '16px 0' 
-          }} />
-          <li style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center',
-            gap: '16px',
-            padding: '8px 0'
+            margin: '16px 0',
+            padding: '24px 0'
           }}>
+            {/* Call to action text */}
             <p style={{
-              margin: 0,
               textAlign: 'center',
+              color: '#78401F',
               fontSize: '16px',
-              fontWeight: 500
+              marginBottom: '24px'
             }}>
               Get API Access and start building today!
             </p>
-            <a 
-              href="https://www.livedatatechnologies.com/api"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                textDecoration: 'none'
-              }}
-            >
-              <Image
-                src="/images/api_icon.svg"
-                alt="API Icon"
-                width={60}
-                height={60}
-                priority
-              />
-              <span style={{
-                color: '#78401F',
-                fontSize: '16px',
-                fontWeight: 600
+
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '24px',
+              position: 'relative'
+            }}>
+              {/* Logo - positioned left */}
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '50%',
+                transform: 'translateY(-50%)'
               }}>
+                <Image
+                  src="/images/live_data_logo.svg"
+                  alt="Live Data Logo"
+                  width={127}
+                  height={31}
+                  priority
+                />
+              </div>
+
+              {/* API Button - centered */}
+              <a 
+                href="https://www.livedatatechnologies.com/api"
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                style={{
+                  backgroundColor: isHovered ? '#E66800' : '#FF7300',
+                  color: '#FFFFFF',
+                  padding: '12px 24px',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  fontFamily: 'Montserrat, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  transition: 'background-color 0.2s ease'
+                }}
+              >
                 Access the API
-              </span>
-            </a>
+              </a>
+            </div>
           </li>
         </ul>
       </div>
