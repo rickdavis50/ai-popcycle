@@ -11,6 +11,9 @@ interface AirtableRecord {
     engineers_6mo?: number;
     engineers_1yr?: number;
     voluntarily_left?: number;
+    retention?: number;
+    eng_velocity?: number;
+    pct_change?: number;
   };
 }
 
@@ -64,6 +67,54 @@ export function useAirtableData() {
 
     loadData();
   }, []);
+
+  const processInsights = (records: any[]) => {
+    if (!records?.length) return [];
+
+    // Sort records by different metrics
+    const byRetention = [...records].sort((a, b) => 
+      (b.fields.retention || 0) - (a.fields.retention || 0)
+    );
+    const byEngVelocity = [...records].sort((a, b) => 
+      (b.fields.eng_velocity || 0) - (a.fields.eng_velocity || 0)
+    );
+    const byGrowth = [...records].sort((a, b) => 
+      (b.fields.pct_change || 0) - (a.fields.pct_change || 0)
+    );
+
+    // Helper to get random item from 3rd-5th position
+    const getRandomMidTop = (arr: any[]) => arr[2 + Math.floor(Math.random() * 3)];
+
+    const insights = [
+      // High retention insight
+      {
+        text: `**${getRandomMidTop(byRetention).fields.company}** has great employee retention at ${(getRandomMidTop(byRetention).fields.retention * 100).toFixed(0)}%`,
+        type: 'retention'
+      },
+      // Engineer velocity insight
+      {
+        text: `**${getRandomMidTop(byEngVelocity).fields.company}**'s engineer hiring is up ${(getRandomMidTop(byEngVelocity).fields.eng_velocity + 1).toFixed(1)}x in the last 6m vs the previous 6m`,
+        type: 'eng_velocity'
+      },
+      // High growth insight
+      {
+        text: `**${getRandomMidTop(byGrowth).fields.company}** is ripping with ${(getRandomMidTop(byGrowth).fields.pct_change * 100).toFixed(0)}% YoY headcount growth`,
+        type: 'growth'
+      },
+      // Low growth insight
+      {
+        text: `**${getRandomMidTop(byGrowth.reverse()).fields.company}**'s headcount is down ${Math.abs(getRandomMidTop(byGrowth).fields.pct_change * 100).toFixed(0)}% YoY`,
+        type: 'decline'
+      },
+      // Low retention insight
+      {
+        text: `Why has ${((1 - getRandomMidTop(byRetention.reverse()).fields.retention) * 100).toFixed(0)}% of **${getRandomMidTop(byRetention).fields.company}**'s team left over time?`,
+        type: 'churn'
+      }
+    ];
+
+    return insights;
+  };
 
   return data;
 } 

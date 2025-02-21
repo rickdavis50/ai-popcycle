@@ -90,8 +90,17 @@ export default function InsightsModule({ insights }: InsightsModuleProps) {
       ) : (
         <div>
           {insights.map((insight, index) => (
-            <div key={index} style={{ marginBottom: '12px', color: '#78401F' }}>
-              {formatInsightText(insight.text)}
+            <div key={index} style={{ 
+              marginBottom: '12px', 
+              color: '#78401F',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '8px'
+            }}>
+              <span style={{ marginTop: '6px' }}>•</span>
+              <span dangerouslySetInnerHTML={{ 
+                __html: insight.text.replace(/\*\*([^*]+)\*\*/g, '<span style="font-weight: 600">$1</span>')
+              }} />
             </div>
           ))}
         </div>
