@@ -94,9 +94,9 @@ export default function Dashboard() {
         position: 'relative',
         zIndex: 1,
         width: '100%',
-        maxWidth: '1200px', // Changed from 1400px to match other sections
+        maxWidth: '1200px',
         margin: '0 auto',
-        padding: isMobile ? '0 2px' : '0',
+        padding: isMobile ? '0 16px' : '0', // Add consistent mobile padding
         boxSizing: 'border-box'
       }}>
         {/* Header - Simple logo and info icon */}
@@ -155,9 +155,9 @@ export default function Dashboard() {
         {/* Top modules grid */}
         <div style={{ 
           display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', // Simplified grid
-          gap: isMobile ? '8px' : '25px',
-          marginBottom: '25px', // Match the gap size
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+          gap: isMobile ? '16px' : '25px', // Consistent gap on mobile
+          marginBottom: isMobile ? '16px' : '25px',
           width: '100%'
         }}>
           {/* Industry Summary */}

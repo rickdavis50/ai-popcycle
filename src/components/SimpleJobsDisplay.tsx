@@ -87,6 +87,7 @@ const SimpleJobsDisplay = () => {
   const [scoreA, setScoreA] = useState<number | null>(null);
   const [scoreB, setScoreB] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Debug logging
   useEffect(() => {
@@ -634,22 +635,6 @@ const SimpleJobsDisplay = () => {
               gap: '24px',
               position: 'relative'
             }}>
-              {/* Logo - positioned left */}
-              <div style={{
-                position: 'absolute',
-                left: 0,
-                top: '50%',
-                transform: 'translateY(-50%)'
-              }}>
-                <Image
-                  src="/images/live_data_logo.svg"
-                  alt="Live Data Logo"
-                  width={127}
-                  height={31}
-                  priority
-                />
-              </div>
-
               {/* API Button - centered */}
               <a 
                 href="https://www.livedatatechnologies.com/api"
@@ -671,6 +656,23 @@ const SimpleJobsDisplay = () => {
               >
                 Access the API
               </a>
+
+              {/* Logo - positioned below button on mobile */}
+              <div style={{
+                position: isMobile ? 'relative' : 'absolute',
+                left: isMobile ? 'auto' : 0,
+                top: isMobile ? 'auto' : '50%',
+                transform: isMobile ? 'none' : 'translateY(-50%)',
+                marginTop: isMobile ? '8px' : 0
+              }}>
+                <Image
+                  src="/images/live_data_logo.svg"
+                  alt="Live Data Logo"
+                  width={127}
+                  height={31}
+                  priority
+                />
+              </div>
             </div>
           </li>
         </ul>
