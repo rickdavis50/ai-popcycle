@@ -98,35 +98,36 @@ export function useAirtableData() {
     // Helper to get random item from 3rd-5th position
     const getRandomMidTop = (arr: any[]) => arr[2 + Math.floor(Math.random() * 3)];
 
+    // Get companies first, then use their values
+    const retentionCompany = getRandomMidTop(byRetention);
+    const velocityCompany = getRandomMidTop(byEngVelocity);
+    const growthCompany = getRandomMidTop(byGrowth);
+    const declineCompany = getRandomMidTop(byGrowth.reverse());
+    const churnCompany = getRandomMidTop(byRetention.reverse());
+
     const insights = [
-      // High retention insight
       {
-        text: `**${getRandomMidTop(byRetention).fields.company}** has great employee retention at ${(getRandomMidTop(byRetention).fields.retention * 100).toFixed(0)}%`,
+        text: `**${retentionCompany.fields.company}** has great employee retention at ${(retentionCompany.fields.retention * 100).toFixed(0)}%`,
         type: 'retention'
       },
-      // Engineer velocity insight
       {
-        text: `**${getRandomMidTop(byEngVelocity).fields.company}**'s engineer hiring is up ${(getRandomMidTop(byEngVelocity).fields.eng_velocity + 1).toFixed(1)}x in the last 6m vs the previous 6m`,
+        text: `**${velocityCompany.fields.company}**'s engineer hiring is up ${(velocityCompany.fields.eng_velocity + 1).toFixed(1)}x in the last 6m vs the previous 6m`,
         type: 'eng_velocity'
       },
-      // High growth insight
       {
-        text: `**${getRandomMidTop(byGrowth).fields.company}** is ripping with ${(getRandomMidTop(byGrowth).fields.pct_change * 100).toFixed(0)}% YoY headcount growth`,
+        text: `**${growthCompany.fields.company}** is ripping with ${(growthCompany.fields.pct_change * 100).toFixed(0)}% YoY headcount growth`,
         type: 'growth'
       },
-      // Low growth insight
       {
-        text: `**${getRandomMidTop(byGrowth.reverse()).fields.company}**'s headcount is down ${Math.abs(getRandomMidTop(byGrowth).fields.pct_change * 100).toFixed(0)}% YoY`,
+        text: `**${declineCompany.fields.company}**'s headcount is down ${Math.abs(declineCompany.fields.pct_change * 100).toFixed(0)}% YoY`,
         type: 'decline'
       },
-      // Low retention insight
       {
-        text: `Why has ${((1 - getRandomMidTop(byRetention.reverse()).fields.retention) * 100).toFixed(0)}% of **${getRandomMidTop(byRetention).fields.company}**'s team left over time?`,
+        text: `Why has ${((1 - churnCompany.fields.retention) * 100).toFixed(0)}% of **${churnCompany.fields.company}**'s team left over time?`,
         type: 'churn'
       }
     ];
 
-    // Shuffle insights before returning
     return shuffleArray(insights);
   };
 
