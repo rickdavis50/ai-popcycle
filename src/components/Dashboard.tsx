@@ -127,8 +127,8 @@ export default function Dashboard() {
               onClick={() => setShowInfoPopup(true)}
               style={{
                 position: 'absolute',
-                bottom: '0', // Align with bottom of logo
-                right: -24,
+                bottom: '3px', // Move up 3px
+                right: -20, // Move left 4px
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -228,7 +228,7 @@ export default function Dashboard() {
               marginBottom: '8px',
               color: '#78401F',
               fontFamily: 'Montserrat, sans-serif'
-            }}>Outlier Insights</h2>
+            }}>Quick Insights</h2>
             <InsightsModule insights={displayInsights} />
           </div>
         </div>

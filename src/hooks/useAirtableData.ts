@@ -50,8 +50,12 @@ export function useAirtableData() {
           throw new Error(rawData.error || 'Failed to fetch data');
         }
 
+        // Process insights from the records
+        const processedInsights = processInsights(rawData.records);
+
         setData({
           ...rawData,
+          insights: processedInsights, // Use the processed insights
           loading: false,
           error: null,
         });
