@@ -1,5 +1,6 @@
 import { Montserrat } from 'next/font/google';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { Analytics } from "@vercel/analytics/react";
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -18,10 +19,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={montserrat.className}>
+      <head>
+        <link rel="icon" href="/images/favicon.svg" />
+        <title>AI Industry Pulse</title>
+      </head>
       <body>
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
+        <Analytics />
       </body>
     </html>
   );
