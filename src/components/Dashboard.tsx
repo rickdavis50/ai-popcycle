@@ -66,11 +66,11 @@ export default function Dashboard() {
     <div style={{ 
       minHeight: '100vh',
       backgroundColor: '#FFFBF7',
-      padding: '32px',
-      paddingBottom: '200px', // Fixed padding at bottom
+      padding: isMobile ? '16px' : '32px', // Reduce padding on mobile
+      paddingBottom: '200px',
       position: 'relative',
       overflow: 'hidden',
-      maxHeight: 'calc(100% + 200px)', // Prevent excessive scrolling
+      maxHeight: 'calc(100% + 200px)',
       overflowY: 'auto'
     }}>
       {/* Background image */}
@@ -89,14 +89,14 @@ export default function Dashboard() {
         opacity: 0.8
       }} />
 
-      {/* Content wrapper */}
+      {/* Content wrapper - remove mobile padding */}
       <div style={{ 
         position: 'relative',
         zIndex: 1,
         width: '100%',
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: isMobile ? '0' : '0', // Remove padding from wrapper
+        padding: 0, // Remove all padding here
         boxSizing: 'border-box'
       }}>
         {/* Header - Simple logo and info icon */}
@@ -166,9 +166,10 @@ export default function Dashboard() {
             borderRadius: '8px',
             padding: '24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: isMobile ? 'calc(100% - 32px)' : '100%', // Account for padding
+            width: isMobile ? '100%' : '100%', // Full width on mobile
+            maxWidth: isMobile ? '400px' : '100%', // Max width on mobile
             boxSizing: 'border-box',
-            margin: isMobile ? '0 16px' : '0 auto' // Add margin instead of padding
+            margin: '0 auto' // Center the module
           }}>
             <div style={{
               display: 'flex',
@@ -201,9 +202,10 @@ export default function Dashboard() {
             borderRadius: '8px',
             padding: '24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: isMobile ? 'calc(100% - 32px)' : '100%', // Account for padding
+            width: isMobile ? '100%' : '100%', // Full width on mobile
+            maxWidth: isMobile ? '400px' : '100%', // Max width on mobile
             boxSizing: 'border-box',
-            margin: isMobile ? '0 16px' : '0 auto' // Add margin instead of padding
+            margin: '0 auto' // Center the module
           }}>
             <h2 style={{
               fontSize: '20px',
@@ -221,9 +223,10 @@ export default function Dashboard() {
             borderRadius: '8px',
             padding: '24px 16px',
             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-            width: isMobile ? 'calc(100% - 32px)' : '100%', // Account for padding
+            width: isMobile ? '100%' : '100%', // Full width on mobile
+            maxWidth: isMobile ? '400px' : '100%', // Max width on mobile
             boxSizing: 'border-box',
-            margin: isMobile ? '0 16px' : '0 auto' // Add margin instead of padding
+            margin: '0 auto' // Center the module
           }}>
             <h2 style={{
               fontSize: '20px',
